@@ -178,7 +178,7 @@ app.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook"),
   (req, res) => {
-    res.redirect("/profile");
+    res.redirect("http://localhost:3000/profile");
   }
 );
 
@@ -192,7 +192,7 @@ app.get(
   "/auth/amazon/callback",
   passport.authenticate("amazon"),
   (req, res) => {
-    res.redirect("/profile");
+    res.redirect("http://localhost:3000/profile");
   }
 );
 
@@ -201,7 +201,8 @@ app.get(
   "/auth/github/callback",
   passport.authenticate("github"),
   (req, res) => {
-    res.redirect("/profile");
+    // res.redirect("http://localhost:3000/profile");
+    res.redirect("http://davi-silva-blog-backend.herokuapp.com/profile");
   }
 );
 
@@ -243,7 +244,7 @@ app.get(
   "/auth/twitch/callback",
   passport.authenticate("twitch.js"),
   (req, res) => {
-    res.redirect("/profile");
+    res.redirect("http://localhost:3000/profile");
   }
 );
 
