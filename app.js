@@ -257,7 +257,7 @@ app.get("/user", (req, res) => {
 app.get("/auth/logout", (req, res) => {
   console.log("logging out!");
   user = {};
-  res.redirect("http://localhost:3000");
+  res.redirect("http://davi-silva-blog-frontend.herokuapp.com");
 });
 
 console.log("Right before PORT 5000");
