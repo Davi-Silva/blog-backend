@@ -1,47 +1,57 @@
 {
-    "name": "mern-personal-blog",
-    "version": "1.0.0",
-    "engines": {
-        "node": "10.16.3"
-    },
-    "description": "Personal blog developed using React.js and Express.js",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node app.js",
-        "dev": "nodemon app.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Davi-Silva/mern-personal-blog.git"
-    },
-    "keywords": [
-        "personal",
-        "blog",
-        "personal",
-        "blog"
-    ],
-    "author": "Davi Silva",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/Davi-Silva/mern-personal-blog/issues"
-    },
-    "homepage": "https://github.com/Davi-Silva/mern-personal-blog#readme",
-    "dependencies": {
-        "bcryptjs": "^2.4.3",
-        "concurrently": "^4.1.2",
-        "connect-flash": "^0.1.1",
-        "cors": "^2.8.5",
-        "dotenv": "^8.1.0",
-        "ejs": "^2.7.1",
-        "express": "^4.17.1",
-        "express-session": "^1.16.2",
-        "mongoose": "^5.7.1",
-        "nodemon": "^1.19.2",
-        "passport": "^0.4.0",
-        "passport-github": "^1.1.0",
-        "passport-local": "^1.0.0",
-        "styled-components": "^4.3.2"
-    },
-    "devDependencies": {}
+  "name": "mern-personal-blog",
+  "version": "1.0.0",
+  "engines": {
+    "node": "10.16.3"
+  },
+  "description": "Personal blog developed using React.js and Express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Davi-Silva/mern-personal-blog.git"
+  },
+  "keywords": [
+    "personal",
+    "blog",
+    "personal",
+    "blog"
+  ],
+  "author": "Davi Silva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Davi-Silva/mern-personal-blog/issues"
+  },
+  "homepage": "https://github.com/Davi-Silva/mern-personal-blog#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "chalk": "^2.4.2",
+    "concurrently": "^4.1.2",
+    "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "http-proxy-middleware": "^0.20.0",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.1",
+    "nodemon": "^1.19.2",
+    "passport": "^0.4.0",
+    "passport-amazon": "^1.0.0",
+    "passport-facebook": "^3.0.0",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-instagram": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-spotify": "^1.1.0",
+    "passport-twitch.js": "^0.0.7",
+    "styled-components": "^4.3.2"
+  },
+  "devDependencies": {},
+  "proxy": "http://localhost:3000"
 }
