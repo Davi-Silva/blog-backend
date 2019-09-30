@@ -8,13 +8,13 @@ const GITHUB = {
   clientSecret: "61fe7e153412b3c46820d223d4f5a01ed409055a"
 };
 const FACEBOOK = {
-  clientID: "2503599789703821",
-  clientSecret: "645088b310270cf3abbda58e01f65e96"
+  clientID: "844383995956506",
+  clientSecret: "2a175dc2e88d991d51ccd3862e323c0e"
 };
 const GOOGLE = {
   clientID:
-    "767059472934-s7s2rfm1ck3auiq620h2amls0d1rucs9.apps.googleusercontent.com",
-  clientSecret: "NlNvTx6kCSq7B2_YLAog8jtG"
+    "15320986783-dbrsfhagc0n87jgdvhgeboju9386rbjk.apps.googleusercontent.com",
+  clientSecret: "LD9ACxQHjwiPytdo8Lb_j-N3"
 };
 const INSTAGRAM = {
   clientID: "0d517fd22d63445181091e63578caf92",

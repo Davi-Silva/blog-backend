@@ -178,7 +178,8 @@ app.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook"),
   (req, res) => {
-    res.redirect("http://localhost:3000/profile");
+    // res.redirect("http://localhost:3000/profile");
+    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -192,7 +193,8 @@ app.get(
   "/auth/amazon/callback",
   passport.authenticate("amazon"),
   (req, res) => {
-    res.redirect("http://localhost:3000/profile");
+    // res.redirect("http://localhost:3000/profile");
+    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -202,7 +204,7 @@ app.get(
   passport.authenticate("github"),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect("http://davi-silva-blog-backend.herokuapp.com/profile");
+    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -217,7 +219,8 @@ app.get(
   passport.authenticate("google"),
   (req, res) => {
     console.log("Google Profile Info", req.profile);
-    res.redirect("http://localhost:3000/profile");
+    // res.redirect("http://localhost:3000/profile");
+    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -226,7 +229,8 @@ app.get(
   "/auth/instagram/callback",
   passport.authenticate("instagram"),
   (req, res) => {
-    res.redirect("http://localhost:3000/profile");
+    // res.redirect("http://localhost:3000/profile");
+    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -235,7 +239,8 @@ app.get(
   "/auth/spotify/callback",
   passport.authenticate("spotify"),
   (req, res) => {
-    res.redirect("http://localhost:3000/profile");
+    // res.redirect("http://localhost:3000/profile");
+    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -244,7 +249,8 @@ app.get(
   "/auth/twitch/callback",
   passport.authenticate("twitch.js"),
   (req, res) => {
-    res.redirect("http://localhost:3000/profile");
+    // res.redirect("http://localhost:3000/profile");
+    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -257,6 +263,7 @@ app.get("/user", (req, res) => {
 app.get("/auth/logout", (req, res) => {
   console.log("logging out!");
   user = {};
+  // res.redirect("http://localhost:3000");
   res.redirect("http://davi-silva-blog-frontend.herokuapp.com");
 });
 
