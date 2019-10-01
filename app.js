@@ -153,7 +153,7 @@ passport.use(
 );
 
 const app = express();
-app.enable("trust proxy");
+// app.enable("trust proxy");
 app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
