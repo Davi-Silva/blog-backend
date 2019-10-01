@@ -153,6 +153,7 @@ passport.use(
 );
 
 const app = express();
+app.enable("trust proxy");
 app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
@@ -181,7 +182,7 @@ app.get(
   passport.authenticate("facebook"),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+    res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -206,7 +207,7 @@ app.get(
   passport.authenticate("github"),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+    res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -222,7 +223,7 @@ app.get(
   (req, res) => {
     console.log("Google Profile Info", req.profile);
     // res.redirect("http://localhost:3000/profile");
-    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+    res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
@@ -232,7 +233,7 @@ app.get(
   passport.authenticate("instagram"),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+    res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
   }
 );
 
