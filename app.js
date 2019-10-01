@@ -169,6 +169,8 @@ app.use(
   })
 );
 
+console.log("Test");
+
 // Routes
 // app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
