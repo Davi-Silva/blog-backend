@@ -111,7 +111,8 @@ passport.use(
     {
       clientID: keys.INSTAGRAM.clientID,
       clientSecret: keys.INSTAGRAM.clientSecret,
-      callbackURL: "/auth/instagram/callback"
+      callbackURL:
+        "https://davi-silva-blog-backend.herokuapp.com/auth/instagram/callback"
     },
     (accessToken, refreshToken, profile, cb) => {
       console.log(chalk.blue(JSON.stringify(profile)));
