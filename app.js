@@ -217,7 +217,7 @@ app.get(
   })
 );
 app.get(
-  "http://davi-silva-blog-backend.herokuapp.com/auth/google/callback",
+  "/auth/google/callback",
   passport.authenticate("google"),
   (req, res) => {
     console.log("Google Profile Info", req.profile);
