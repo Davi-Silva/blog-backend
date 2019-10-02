@@ -52,5 +52,4 @@
     "styled-components": "^4.3.2"
   },
   "devDependencies": {}
-  // "proxy": "http://localhost:3000"
 }
