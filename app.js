@@ -170,8 +170,6 @@ app.use(
   })
 );
 
-console.log("Test");
-
 // Routes
 // app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
@@ -218,7 +216,7 @@ app.get(
   })
 );
 app.get(
-  "/auth/google/callback",
+  "http://davi-silva-blog-frontend.herokuapp.com/auth/google/callback",
   passport.authenticate("google"),
   (req, res) => {
     console.log("Google Profile Info", req.profile);

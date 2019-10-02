@@ -51,6 +51,6 @@
     "passport-twitch.js": "^0.0.7",
     "styled-components": "^4.3.2"
   },
-  "devDependencies": {},
-  "proxy": "http://localhost:3000"
+  "devDependencies": {}
+  // "proxy": "http://localhost:3000"
 }
