@@ -92,7 +92,8 @@ passport.use(
     {
       clientID: keys.GOOGLE.clientID,
       clientSecret: keys.GOOGLE.clientSecret,
-      callbackURL: "/auth/google/callback"
+      callbackURL:
+        "https://davi-silva-blog-backend.herokuapp.com/auth/google/callback"
     },
     (accessToken, refreshToken, profile, cb) => {
       console.log(chalk.blue(JSON.stringify(profile)));
@@ -216,7 +217,7 @@ app.get(
   })
 );
 app.get(
-  "http://davi-silva-blog-frontend.herokuapp.com/auth/google/callback",
+  "http://davi-silva-blog-backend.herokuapp.com/auth/google/callback",
   passport.authenticate("google"),
   (req, res) => {
     console.log("Google Profile Info", req.profile);
