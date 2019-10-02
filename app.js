@@ -61,7 +61,8 @@ passport.use(
 		{
 			clientID: keys.AMAZON.clientID,
 			clientSecret: keys.AMAZON.clientSecret,
-			callbackURL: "/auth/amazon/callback"
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/amazon/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
@@ -77,7 +78,8 @@ passport.use(
 		{
 			clientID: keys.GITHUB.clientID,
 			clientSecret: keys.GITHUB.clientSecret,
-			callbackURL: "/auth/github/callback"
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/github/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
@@ -93,7 +95,8 @@ passport.use(
 		{
 			clientID: keys.GOOGLE.clientID,
 			clientSecret: keys.GOOGLE.clientSecret,
-			callbackURL: "/auth/google/callback"
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/google/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
@@ -111,7 +114,8 @@ passport.use(
 		{
 			clientID: keys.INSTAGRAM.clientID,
 			clientSecret: keys.INSTAGRAM.clientSecret,
-			callbackURL: "/auth/instagram/callback"
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/instagram/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
@@ -127,7 +131,8 @@ passport.use(
 		{
 			clientID: keys.SPOTIFY.clientID,
 			clientSecret: keys.SPOTIFY.clientSecret,
-			callbackURL: "/auth/spotify/callback"
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/spotify/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
@@ -143,7 +148,8 @@ passport.use(
 		{
 			clientID: keys.TWITCH.clientID,
 			clientSecret: keys.TWITCH.clientSecret,
-			callbackURL: "/auth/twitch/callback"
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/twitch/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
@@ -195,7 +201,7 @@ app.get(
 	passport.authenticate("amazon"),
 	(req, res) => {
 		// res.redirect("http://localhost:3000/profile");
-		res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
 	}
 );
 
@@ -205,7 +211,7 @@ app.get(
 	passport.authenticate("github"),
 	(req, res) => {
 		// res.redirect("http://localhost:3000/profile");
-		res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
 	}
 );
 
@@ -221,7 +227,7 @@ app.get(
 	(req, res) => {
 		console.log("Google Profile Info", req.profile);
 		// res.redirect("http://localhost:3000/profile");
-		res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
 	}
 );
 
@@ -231,7 +237,7 @@ app.get(
 	passport.authenticate("instagram"),
 	(req, res) => {
 		// res.redirect("http://localhost:3000/profile");
-		res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
 	}
 );
 
@@ -241,7 +247,7 @@ app.get(
 	passport.authenticate("spotify"),
 	(req, res) => {
 		// res.redirect("http://localhost:3000/profile");
-		res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
 	}
 );
 
@@ -251,7 +257,7 @@ app.get(
 	passport.authenticate("twitch.js"),
 	(req, res) => {
 		// res.redirect("http://localhost:3000/profile");
-		res.redirect("http://davi-silva-blog-frontend.herokuapp.com/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
 	}
 );
 
@@ -265,7 +271,7 @@ app.get("/auth/logout", (req, res) => {
 	console.log("logging out!");
 	user = {};
 	// res.redirect("http://localhost:3000");
-	res.redirect("http://davi-silva-blog-frontend.herokuapp.com");
+	res.redirect("https://davi-silva-blog-frontend.herokuapp.com");
 });
 
 console.log("Right before PORT 5000");
