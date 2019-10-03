@@ -16,10 +16,10 @@ const process = require("process");
 let user = {};
 
 // environment variables
-// process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "development";
 // process.env.NODE_ENV = "staging";
 // process.env.NODE_ENV = "testing".;
-process.env.NODE_ENV = "production";
+// process.env.NODE_ENV = "production";
 
 // config variables
 const config = require("./config/config.js");
@@ -276,7 +276,7 @@ app.get("/user", (req, res) => {
 	res.send(user);
 });
 
-app.get("/logout", (req, res) => {
+app.get("/auth/logout", (req, res) => {
 	console.log("logging out!");
 	user = {};
 	// res.redirect("http://localhost:3000");
