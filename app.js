@@ -2,15 +2,23 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const FacebookStrategy = require("passport-facebook").Strategy;
+const AmazonStrategy = require("passport-amazon").Strategy;
+const GithubStrategy = require("passport-github").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const InstagramStrategy = require("passport-instagram").Strategy;
+const SpotifyStrategy = require("passport-spotify").Strategy;
+const TwitchStrategy = require("passport-twitch.js").Strategy;
 const keys = require("./config/providers");
 const chalk = require("chalk");
 const session = require("express-session");
 const process = require("process");
+let user = {};
 
 // environment variables
 process.env.NODE_ENV = "development";
 // process.env.NODE_ENV = "staging";
-// process.env.NODE_ENV = "testing";
+// process.env.NODE_ENV = "testing".;
 // process.env.NODE_ENV = "production";
 
 // config variables
@@ -39,6 +47,127 @@ passport.deserializeUser((user, cb) => {
 	cb(null, user);
 });
 
+// Facebook Strategy
+passport.use(
+	new FacebookStrategy(
+		{
+			clientID: keys.FACEBOOK.clientID,
+			clientSecret: keys.FACEBOOK.clientSecret,
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/facebook/callback"
+		},
+		(accessToken, refreshToken, profile, cb) => {
+			console.log(chalk.blue(JSON.stringify(profile)));
+			user = { ...profile };
+			return cb(null, profile);
+		}
+	)
+);
+
+// Amazon Strategy
+passport.use(
+	new AmazonStrategy(
+		{
+			clientID: keys.AMAZON.clientID,
+			clientSecret: keys.AMAZON.clientSecret,
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/amazon/callback"
+		},
+		(accessToken, refreshToken, profile, cb) => {
+			console.log(chalk.blue(JSON.stringify(profile)));
+			user = { ...profile };
+			return cb(null, profile);
+		}
+	)
+);
+
+// Github Strategy
+passport.use(
+	new GithubStrategy(
+		{
+			clientID: keys.GITHUB.clientID,
+			clientSecret: keys.GITHUB.clientSecret,
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/github/callback"
+		},
+		(accessToken, refreshToken, profile, cb) => {
+			console.log(chalk.blue(JSON.stringify(profile)));
+			user = { ...profile };
+			return cb(null, profile);
+		}
+	)
+);
+
+// Google Strategy
+passport.use(
+	new GoogleStrategy(
+		{
+			clientID: keys.GOOGLE.clientID,
+			clientSecret: keys.GOOGLE.clientSecret,
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/google/callback"
+		},
+		(accessToken, refreshToken, profile, cb) => {
+			console.log(chalk.blue(JSON.stringify(profile)));
+			console.log("accessToken: ", accessToken);
+			console.log("refreshToken:", refreshToken);
+			user = { ...profile };
+			return cb(null, profile);
+		}
+	)
+);
+
+// Instagram Strategy
+passport.use(
+	new InstagramStrategy(
+		{
+			clientID: keys.INSTAGRAM.clientID,
+			clientSecret: keys.INSTAGRAM.clientSecret,
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/instagram/callback"
+		},
+		(accessToken, refreshToken, profile, cb) => {
+			console.log(chalk.blue(JSON.stringify(profile)));
+			user = { ...profile };
+			return cb(null, profile);
+		}
+	)
+);
+
+// Spotify Strategy
+passport.use(
+	new SpotifyStrategy(
+		{
+			clientID: keys.SPOTIFY.clientID,
+			clientSecret: keys.SPOTIFY.clientSecret,
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/spotify/callback"
+		},
+		(accessToken, refreshToken, profile, cb) => {
+			console.log(chalk.blue(JSON.stringify(profile)));
+			user = { ...profile };
+			return cb(null, profile);
+		}
+	)
+);
+
+// Twitch Strategy
+passport.use(
+	new TwitchStrategy(
+		{
+			clientID: keys.TWITCH.clientID,
+			clientSecret: keys.TWITCH.clientSecret,
+			callbackURL:
+				"https://davi-silva-blog-backend.herokuapp.com/auth/twitch/callback"
+		},
+		(accessToken, refreshToken, profile, cb) => {
+			console.log(chalk.blue(JSON.stringify(profile)));
+			user = { ...profile };
+			return cb(null, profile);
+		}
+	)
+);
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -59,7 +188,76 @@ app.use(
 // Routes
 // app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
-// app.use("/auth", require("./routes/auth/auths"));
+
+app.get("/facebook", passport.authenticate("facebook"));
+app.get("/facebook/callback", passport.authenticate("facebook"), (req, res) => {
+	// res.redirect("http://localhost:3000/profile");
+	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+});
+
+app.get(
+	"/amazon",
+	passport.authenticate("amazon", {
+		scope: ["profile"]
+	})
+);
+app.get("/amazon/callback", passport.authenticate("amazon"), (req, res) => {
+	// res.redirect("http://localhost:3000/profile");
+	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+});
+
+app.get("/github", passport.authenticate("github"));
+app.get("/github/callback", passport.authenticate("github"), (req, res) => {
+	// res.redirect("http://localhost:3000/profile");
+	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+});
+
+app.get(
+	"/google",
+	passport.authenticate("google", {
+		scope: ["profile", "email"]
+	})
+);
+app.get("/google/callback", passport.authenticate("google"), (req, res) => {
+	console.log("Google Profile Info", req.profile);
+	// res.redirect("http://localhost:3000/profile");
+	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+});
+
+app.get("/instagram", passport.authenticate("instagram"));
+app.get(
+	"/instagram/callback",
+	passport.authenticate("instagram"),
+	(req, res) => {
+		// res.redirect("http://localhost:3000/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+	}
+);
+
+app.get("/spotify", passport.authenticate("spotify"));
+app.get("/spotify/callback", passport.authenticate("spotify"), (req, res) => {
+	// res.redirect("http://localhost:3000/profile");
+	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+});
+
+app.get("/twitch", passport.authenticate("twitch.js"));
+app.get("/twitch/callback", passport.authenticate("twitch.js"), (req, res) => {
+	// res.redirect("http://localhost:3000/profile");
+	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+});
+
+app.get("/user", (req, res) => {
+	console.log("getting user data!");
+	console.log("user:", user);
+	res.send(user);
+});
+
+app.get("/logout", (req, res) => {
+	console.log("logging out!");
+	user = {};
+	// res.redirect("http://localhost:3000");
+	res.redirect("https://davi-silva-blog-frontend.herokuapp.com");
+});
 
 // const port = process.env.PORT || 5000;
 const port = global.gConfig.node_port;
