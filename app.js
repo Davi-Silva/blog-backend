@@ -189,44 +189,60 @@ app.use(
 // app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
 
-app.get("/facebook", passport.authenticate("facebook"));
-app.get("/facebook/callback", passport.authenticate("facebook"), (req, res) => {
-	// res.redirect("http://localhost:3000/profile");
-	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
-});
+app.get("/auth/facebook", passport.authenticate("facebook"));
+app.get(
+	"/auth/facebook/callback",
+	passport.authenticate("facebook"),
+	(req, res) => {
+		// res.redirect("http://localhost:3000/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+	}
+);
 
 app.get(
-	"/amazon",
+	"/auth/amazon",
 	passport.authenticate("amazon", {
 		scope: ["profile"]
 	})
 );
-app.get("/amazon/callback", passport.authenticate("amazon"), (req, res) => {
-	// res.redirect("http://localhost:3000/profile");
-	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
-});
+app.get(
+	"/auth/amazon/callback",
+	passport.authenticate("amazon"),
+	(req, res) => {
+		// res.redirect("http://localhost:3000/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+	}
+);
 
-app.get("/github", passport.authenticate("github"));
-app.get("/github/callback", passport.authenticate("github"), (req, res) => {
-	// res.redirect("http://localhost:3000/profile");
-	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
-});
+app.get("/auth/github", passport.authenticate("github"));
+app.get(
+	"/auth/github/callback",
+	passport.authenticate("github"),
+	(req, res) => {
+		// res.redirect("http://localhost:3000/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+	}
+);
 
 app.get(
-	"/google",
+	"/auth/google",
 	passport.authenticate("google", {
 		scope: ["profile", "email"]
 	})
 );
-app.get("/google/callback", passport.authenticate("google"), (req, res) => {
-	console.log("Google Profile Info", req.profile);
-	// res.redirect("http://localhost:3000/profile");
-	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
-});
-
-app.get("/instagram", passport.authenticate("instagram"));
 app.get(
-	"/instagram/callback",
+	"/auth/google/callback",
+	passport.authenticate("google"),
+	(req, res) => {
+		console.log("Google Profile Info", req.profile);
+		// res.redirect("http://localhost:3000/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+	}
+);
+
+app.get("/auth/instagram", passport.authenticate("instagram"));
+app.get(
+	"/auth/instagram/callback",
 	passport.authenticate("instagram"),
 	(req, res) => {
 		// res.redirect("http://localhost:3000/profile");
@@ -234,17 +250,25 @@ app.get(
 	}
 );
 
-app.get("/spotify", passport.authenticate("spotify"));
-app.get("/spotify/callback", passport.authenticate("spotify"), (req, res) => {
-	// res.redirect("http://localhost:3000/profile");
-	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
-});
+app.get("/auth/spotify", passport.authenticate("spotify"));
+app.get(
+	"/auth/spotify/callback",
+	passport.authenticate("spotify"),
+	(req, res) => {
+		// res.redirect("http://localhost:3000/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+	}
+);
 
-app.get("/twitch", passport.authenticate("twitch.js"));
-app.get("/twitch/callback", passport.authenticate("twitch.js"), (req, res) => {
-	// res.redirect("http://localhost:3000/profile");
-	res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
-});
+app.get("/auth/twitch", passport.authenticate("twitch.js"));
+app.get(
+	"/auth/twitch/callback",
+	passport.authenticate("twitch.js"),
+	(req, res) => {
+		// res.redirect("http://localhost:3000/profile");
+		res.redirect("https://davi-silva-blog-frontend.herokuapp.com/profile");
+	}
+);
 
 app.get("/user", (req, res) => {
 	console.log("getting user data!");
