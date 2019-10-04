@@ -284,7 +284,7 @@ app.get("/auth/logout", (req, res) => {
 });
 
 // const port = process.env.PORT || 5000;
-const port = global.gConfig.node_port;
+const port = process.env.PORT || global.gConfig.node_port;
 
 app.listen(port, () => {
 	console.log(`${global.gConfig.app_name} is listening on port: ${port}`);
