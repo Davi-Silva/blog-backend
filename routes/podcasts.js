@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const app = express();
+const cors = require("cors");
 const uuidv4 = require("uuid/v4");
+
+app.use(cors());
 
 // Load Podcast model
 const Podcast = require("../models/podcast/Podcast");
 
-router.get("/", (req, res) => {
+app.get("/", (req, res) => {
 	let podcast_list = [];
 	Podcast.find()
 		.then(podcasts => {
@@ -31,7 +35,7 @@ router.get("/", (req, res) => {
 	console.log("Get all podcasts");
 });
 
-router.post("/upload", (req, res) => {
+app.post("/upload", (req, res) => {
 	const { title, description, tags, filepath, length } = req.body;
 	let errors = [];
 	if (!title || !description || !tags || !filepath || !length) {
@@ -85,6 +89,6 @@ router.post("/upload", (req, res) => {
 	}
 });
 
-router.put("update/:", (req, res) => {});
+app.put("update/:", (req, res) => {});
 
-module.exports = router;
+module.exports = app;

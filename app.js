@@ -16,10 +16,10 @@ const process = require("process");
 let user = {};
 
 // environment variables
-// process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "development";
 // process.env.NODE_ENV = "staging";
 // process.env.NODE_ENV = "testing".;
-process.env.NODE_ENV = "production";
+// process.env.NODE_ENV = "production";
 
 // config variables
 const config = require("./config/config.js");
@@ -163,7 +163,7 @@ passport.use(
 );
 
 const app = express();
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
 
