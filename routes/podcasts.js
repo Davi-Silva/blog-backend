@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 		.catch(err => {
 			console.log(err);
 		});
-	console.log("Get all podcasts");
+	console.log("Getting all podcasts...");
 });
 
 app.post("/upload", (req, res) => {
@@ -49,7 +49,7 @@ app.post("/upload", (req, res) => {
 			error: errors
 		});
 	} else {
-		id = uuidv4();
+		const id = uuidv4();
 		const type = "podcast";
 		const uploaded_on = Date.now();
 		const updated_on = null;

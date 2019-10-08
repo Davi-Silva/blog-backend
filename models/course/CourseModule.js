@@ -1,15 +1,22 @@
 const mongoose = require("mongoose");
 
-const CourseModule = require("./CourseModule").schema;
+const Lesson = require("./Lesson").schema;
+const Course = require("./Course").schema;
 
-const CourseSchema = new mongoose.Schema({
+const CourseModuleSchema = new mongoose.Schema({
 	id: {
 		type: String,
 		required: true
 	},
-	type: {
-		type: String,
-		required: true
+	course: {
+		type: [Course],
+		required: false,
+		default: []
+	},
+	lessons: {
+		type: [Lesson],
+		required: false,
+		default: []
 	},
 	title: {
 		type: String,
@@ -18,10 +25,6 @@ const CourseSchema = new mongoose.Schema({
 	description: {
 		type: String,
 		required: true
-	},
-	tags: {
-		type: String,
-		required: false
 	},
 	// author: {
 	// 	type: mongoose.Schema.Types.ObjectId,
@@ -32,16 +35,7 @@ const CourseSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	modules: {
-		type: [CourseModule],
-		require: false,
-		default: []
-	},
-	thumbnail_path: {
-		type: String,
-		required: true
-	},
-	published_on: {
+	created_on: {
 		type: Date,
 		default: Date.now
 	},
@@ -51,6 +45,6 @@ const CourseSchema = new mongoose.Schema({
 	}
 });
 
-const Course = mongoose.model("Course", CourseSchema);
+const CourseModule = mongoose.model("CourseModule", CourseModuleSchema);
 
-module.exports = Course;
+module.exports = CourseModule;

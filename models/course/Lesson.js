@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
 
+const CourseModule = require("./CourseModule").schema;
+
 const LessonSchema = new mongoose.Schema({
+	module: {
+		type: [CourseModule],
+		required: false,
+		default: null
+	},
 	title: {
 		type: String,
 		required: true
@@ -13,9 +20,6 @@ const LessonSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
 		required: true
-	},
-	lessons: {
-		type: Array
 	},
 	created_on: {
 		type: Date,

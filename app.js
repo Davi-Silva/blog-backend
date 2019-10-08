@@ -16,10 +16,10 @@ const process = require("process");
 let user = {};
 
 // environment variables
-// process.env.NODE_ENV = "development";
+process.env.NODE_ENV = "development";
 // process.env.NODE_ENV = "staging";
 // process.env.NODE_ENV = "testing".;
-process.env.NODE_ENV = "production";
+// process.env.NODE_ENV = "production";
 
 // config variables
 const config = require("./config/config.js");
@@ -183,6 +183,7 @@ app.use(
 // app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
 app.use("/podcasts", require("./routes/podcasts"));
+app.use("/courses", require("./routes/courses"));
 
 app.get("/auth/facebook", passport.authenticate("facebook"));
 app.get(
