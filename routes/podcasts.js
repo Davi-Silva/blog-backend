@@ -89,6 +89,44 @@ app.get("/get/:slug", (req, res) => {
 		});
 });
 
+// Check if Podcast slug is valid
+app.get("/validation/slug/:slug", (req, res) => {
+	const slug = req.params.slug;
+	let podcast_list = [];
+	Podcast.find({ slug })
+		.then(podcasts => {
+			podcasts.map(podcast => {
+				podcast_list.push({
+					id: podcast.id,
+					type: podcast.type,
+					slug: podcast.slug,
+					category: podcast.category,
+					title: podcast.title,
+					description: podcast.description,
+					tags: podcast.tags,
+					filepath: podcast.filepath,
+					length: podcast.length,
+					uploaded_on: podcast.uploaded_on,
+					updated_on: podcast.updated_on
+				});
+			});
+			let valid = true;
+			if (podcast_list.length > 0) {
+				valid = false;
+				res.json({
+					valid
+				});
+			} else if (podcast_list.length == 0) {
+				res.json({
+					valid
+				});
+			}
+		})
+		.catch(err => {
+			console.log(err);
+		});
+});
+
 // Update Podcast
 app.post("/upload", (req, res) => {
 	const {
