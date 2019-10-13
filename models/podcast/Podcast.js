@@ -29,12 +29,9 @@ const PodcastSchema = new mongoose.Schema({
 		type: String,
 		required: false
 	},
-	filepath: {
-		type: String,
-		required: false
-	},
-	length: {
-		type: String,
+	audio_file: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "PodcastFile",
 		required: true
 	},
 	uploaded_on: {

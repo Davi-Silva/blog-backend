@@ -25,8 +25,6 @@ app.get("/", (req, res) => {
 					title: podcast.title,
 					description: podcast.description,
 					tags: podcast.tags,
-					filepath: podcast.filepath,
-					length: podcast.length,
 					uploaded_on: podcast.uploaded_on,
 					updated_on: podcast.updated_on
 				});
@@ -55,8 +53,6 @@ app.get("/:id", (req, res) => {
 				title: podcast.title,
 				description: podcast.description,
 				tags: podcast.tags,
-				filepath: podcast.filepath,
-				length: podcast.length,
 				uploaded_on: podcast.uploaded_on,
 				updated_on: podcast.updated_on
 			});
@@ -83,8 +79,6 @@ app.get("/get/:slug", (req, res) => {
 					title: podcast.title,
 					description: podcast.description,
 					tags: podcast.tags,
-					filepath: podcast.filepath,
-					length: podcast.length,
 					uploaded_on: podcast.uploaded_on,
 					updated_on: podcast.updated_on
 				});
@@ -113,8 +107,6 @@ app.get("/validation/slug/:slug", (req, res) => {
 					title: podcast.title,
 					description: podcast.description,
 					tags: podcast.tags,
-					filepath: podcast.filepath,
-					length: podcast.length,
 					uploaded_on: podcast.uploaded_on,
 					updated_on: podcast.updated_on
 				});
@@ -143,13 +135,10 @@ app.post("/upload", (req, res) => {
 		category,
 		title,
 		description,
-		tags,
-		filepath,
-		length
+		tags
 	} = req.body;
 	let errors = [];
-	console.log("filepath:", filepath)
-	if (!isSlugValid || !category || !title || !description || !tags || !filepath || !length) {
+	if (!isSlugValid || !category || !title || !description || !tags) {
 		errors.push({
 			errorMsg: "Please enter all fields."
 		});
@@ -182,8 +171,6 @@ app.post("/upload", (req, res) => {
 				title,
 				description,
 				tags,
-				filepath,
-				length,
 				uploaded_on,
 				updated_on
 			});
@@ -199,8 +186,6 @@ app.post("/upload", (req, res) => {
 						title,
 						description,
 						tags,
-						filepath,
-						length,
 						uploaded_on,
 						updated_on,
 						uploaded: true
@@ -262,8 +247,7 @@ app.put("/update/:id", (req, res) => {
 		title,
 		description,
 		tags,
-		filepath,
-		length
+
 	} = req.body;
 	const id = req.id;
 	Podcast.updateOne({
@@ -273,8 +257,6 @@ app.put("/update/:id", (req, res) => {
 			title,
 			description,
 			tags,
-			filepath,
-			length
 		}, {
 			runValidators: true
 		})
@@ -286,8 +268,6 @@ app.put("/update/:id", (req, res) => {
 				title,
 				description,
 				tags,
-				filepath,
-				length
 			});
 		})
 		.catch(err => {

@@ -38,6 +38,7 @@
 		"ejs": "^2.7.1",
 		"express": "^4.17.1",
 		"express-session": "^1.17.0",
+		"get-audio-duration": "^1.0.0",
 		"http-proxy-middleware": "^0.20.0",
 		"lodash": "^4.17.15",
 		"mongoose": "^5.7.4",

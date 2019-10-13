@@ -5,6 +5,9 @@ const path = require("path");
 const {
     promisify
 } = require("util");
+const {
+    getAudioDurationInSeconds
+} = require('get-audio-duration')
 
 const s3 = new aws.S3();
 
@@ -23,6 +26,7 @@ PodcastFileSchema.pre("save", function () {
     if (!this.url) {
         this.url = `${process.env.APP_URL}/files/${this.key}`;
     }
+
 });
 
 PodcastFileSchema.pre("remove", function () {
