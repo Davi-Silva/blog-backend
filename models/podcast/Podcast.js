@@ -31,7 +31,7 @@ const PodcastSchema = new mongoose.Schema({
 	},
 	filepath: {
 		type: String,
-		required: true
+		required: false
 	},
 	length: {
 		type: String,

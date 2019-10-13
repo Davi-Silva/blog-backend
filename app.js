@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
+const path = require("path");
 const passport = require("passport");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const AmazonStrategy = require("passport-amazon").Strategy;
@@ -49,15 +51,16 @@ passport.deserializeUser((user, cb) => {
 
 // Facebook Strategy
 passport.use(
-	new FacebookStrategy(
-		{
+	new FacebookStrategy({
 			clientID: keys.FACEBOOK.clientID,
 			clientSecret: keys.FACEBOOK.clientSecret,
 			callbackURL: "https://course-backend.herokuapp.com/auth/facebook/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
-			user = { ...profile };
+			user = {
+				...profile
+			};
 			return cb(null, profile);
 		}
 	)
@@ -65,15 +68,16 @@ passport.use(
 
 // Amazon Strategy
 passport.use(
-	new AmazonStrategy(
-		{
+	new AmazonStrategy({
 			clientID: keys.AMAZON.clientID,
 			clientSecret: keys.AMAZON.clientSecret,
 			callbackURL: "https://course-backend.herokuapp.com/auth/amazon/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
-			user = { ...profile };
+			user = {
+				...profile
+			};
 			return cb(null, profile);
 		}
 	)
@@ -81,15 +85,16 @@ passport.use(
 
 // Github Strategy
 passport.use(
-	new GithubStrategy(
-		{
+	new GithubStrategy({
 			clientID: keys.GITHUB.clientID,
 			clientSecret: keys.GITHUB.clientSecret,
 			callbackURL: "https://course-backend.herokuapp.com/auth/github/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
-			user = { ...profile };
+			user = {
+				...profile
+			};
 			return cb(null, profile);
 		}
 	)
@@ -97,8 +102,7 @@ passport.use(
 
 // Google Strategy
 passport.use(
-	new GoogleStrategy(
-		{
+	new GoogleStrategy({
 			clientID: keys.GOOGLE.clientID,
 			clientSecret: keys.GOOGLE.clientSecret,
 			callbackURL: "https://course-backend.herokuapp.com/auth/google/callback"
@@ -107,7 +111,9 @@ passport.use(
 			console.log(chalk.blue(JSON.stringify(profile)));
 			console.log("accessToken: ", accessToken);
 			console.log("refreshToken:", refreshToken);
-			user = { ...profile };
+			user = {
+				...profile
+			};
 			return cb(null, profile);
 		}
 	)
@@ -115,16 +121,16 @@ passport.use(
 
 // Instagram Strategy
 passport.use(
-	new InstagramStrategy(
-		{
+	new InstagramStrategy({
 			clientID: keys.INSTAGRAM.clientID,
 			clientSecret: keys.INSTAGRAM.clientSecret,
-			callbackURL:
-				"https://course-backend.herokuapp.com/auth/instagram/callback"
+			callbackURL: "https://course-backend.herokuapp.com/auth/instagram/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
-			user = { ...profile };
+			user = {
+				...profile
+			};
 			return cb(null, profile);
 		}
 	)
@@ -132,15 +138,16 @@ passport.use(
 
 // Spotify Strategy
 passport.use(
-	new SpotifyStrategy(
-		{
+	new SpotifyStrategy({
 			clientID: keys.SPOTIFY.clientID,
 			clientSecret: keys.SPOTIFY.clientSecret,
 			callbackURL: "https://course-backend.herokuapp.com/auth/spotify/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
-			user = { ...profile };
+			user = {
+				...profile
+			};
 			return cb(null, profile);
 		}
 	)
@@ -148,15 +155,16 @@ passport.use(
 
 // Twitch Strategy
 passport.use(
-	new TwitchStrategy(
-		{
+	new TwitchStrategy({
 			clientID: keys.TWITCH.clientID,
 			clientSecret: keys.TWITCH.clientSecret,
 			callbackURL: "https://course-backend.herokuapp.com/auth/twitch/callback"
 		},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
-			user = { ...profile };
+			user = {
+				...profile
+			};
 			return cb(null, profile);
 		}
 	)
@@ -168,7 +176,9 @@ app.use(express.json());
 app.use(passport.initialize());
 
 // Bodyparser
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+	extended: false
+}));
 
 // Express session
 app.use(
@@ -178,6 +188,14 @@ app.use(
 		saveUninitialized: true
 	})
 );
+
+
+app.use(morgan("dev"));
+app.use(
+	"/files",
+	express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
+);
+
 
 // Routes
 // app.use("/", require("./routes/index"));

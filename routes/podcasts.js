@@ -2,11 +2,14 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const uuidv4 = require("uuid/v4");
+const multer = require("multer");
+const multerConfig = require("../config/multer")
 
 app.use(cors());
 
 // Load Podcast model
 const Podcast = require("../models/podcast/Podcast");
+const PodcastFile = require("../models/podcast/PodcastFile");
 
 // Get All Podcasts
 app.get("/", (req, res) => {
@@ -40,7 +43,9 @@ app.get("/", (req, res) => {
 // Get Podcast by id
 app.get("/:id", (req, res) => {
 	const id = req.params.id;
-	Podcast.findOne({ id })
+	Podcast.findOne({
+			id
+		})
 		.then(podcast => {
 			res.status(302).send({
 				msg: "Requested Podcast has been found.",
@@ -65,7 +70,9 @@ app.get("/:id", (req, res) => {
 app.get("/get/:slug", (req, res) => {
 	const slug = req.params.slug;
 	let podcast_list = [];
-	Podcast.find({ slug })
+	Podcast.find({
+			slug
+		})
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -93,7 +100,9 @@ app.get("/get/:slug", (req, res) => {
 app.get("/validation/slug/:slug", (req, res) => {
 	const slug = req.params.slug;
 	let podcast_list = [];
-	Podcast.find({ slug })
+	Podcast.find({
+			slug
+		})
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -130,7 +139,7 @@ app.get("/validation/slug/:slug", (req, res) => {
 // Update Podcast
 app.post("/upload", (req, res) => {
 	const {
-		slug_exists,
+		isSlugValid,
 		category,
 		title,
 		description,
@@ -139,11 +148,14 @@ app.post("/upload", (req, res) => {
 		length
 	} = req.body;
 	let errors = [];
-	if (!category || !title || !description || !tags || !filepath || !length) {
+	console.log("filepath:", filepath)
+	if (!isSlugValid || !category || !title || !description || !tags || !filepath || !length) {
 		errors.push({
 			errorMsg: "Please enter all fields."
 		});
 	}
+
+	console.log("errors.length:", errors.length)
 
 	if (errors.length > 0) {
 		console.log("Errors:", errors);
@@ -155,78 +167,117 @@ app.post("/upload", (req, res) => {
 		const type = "podcast";
 		const uploaded_on = Date.now();
 		const updated_on = null;
-		const slug = title
-			.toLowerCase()
-			.split(" ")
-			.join("-");
 
 		console.log("Before if");
-		if (slug_exists) {
+		if (isSlugValid) {
+			const slug = title
+				.toLowerCase()
+				.split(" ")
+				.join("-");
+			const newPodcast = new Podcast({
+				id,
+				slug,
+				type,
+				category,
+				title,
+				description,
+				tags,
+				filepath,
+				length,
+				uploaded_on,
+				updated_on
+			});
+			newPodcast
+				.save()
+				.then(podcast => {
+					res.status(201).send({
+						msg: "Podcast successfully uploaded!",
+						id,
+						slug,
+						type,
+						category,
+						title,
+						description,
+						tags,
+						filepath,
+						length,
+						uploaded_on,
+						updated_on,
+						uploaded: true
+					});
+				})
+				.catch(err => {
+					res.json({
+						errorMsg: err
+					});
+				});
+		} else {
 			res.json({
-				slug_exists
-			});
-			return;
-		}
-		console.log("After if");
-		const newPodcast = new Podcast({
-			id,
-			slug,
-			type,
-			category,
-			title,
-			description,
-			tags,
-			filepath,
-			length,
-			uploaded_on,
-			updated_on
-		});
-		newPodcast
-			.save()
-			.then(podcast => {
-				res.status(201).send({
-					msg: "Podcast successfully uploaded!",
-					id,
-					slug,
-					type,
-					category,
-					title,
-					description,
-					tags,
-					filepath,
-					length,
-					uploaded_on,
-					updated_on
-				});
+				errorMsg: "Slug is invalid"
 			})
-			.catch(err => {
-				res.json({
-					errorMsg: err
-				});
-			});
+		}
 	}
 });
 
+app.post("/upload/cover", multer(multerConfig).single("file"), async (req, res) => {
+	const {
+		originalname: name,
+		size,
+		key,
+		location: url = ""
+	} = req.file;
+
+	const cover = await PodcastFile.create({
+		name,
+		size,
+		key,
+		url
+	});
+
+	return res.json(cover);
+})
+
+app.post("/upload/audio-file", multer(multerConfig).single("file"), async (req, res) => {
+	const {
+		originalname: name,
+		size,
+		key,
+		location: url = ""
+	} = req.file;
+
+	const audio_file = await PodcastFile.create({
+		name,
+		size,
+		key,
+		url
+	});
+
+	return res.json(audio_file);
+})
+
 // Update Podcast Info
 app.put("/update/:id", (req, res) => {
-	const { category, title, description, tags, filepath, length } = req.body;
+	const {
+		category,
+		title,
+		description,
+		tags,
+		filepath,
+		length
+	} = req.body;
 	const id = req.id;
-	Podcast.updateOne(
-		{
+	Podcast.updateOne({
 			id
-		},
-		{
+		}, {
 			category,
 			title,
 			description,
 			tags,
 			filepath,
 			length
-		},
-		{
+		}, {
 			runValidators: true
-		}
-	)
+		})
 		.then(() => {
 			res.json({
 				msg: "Podcast details has been successfully updated.",
@@ -248,7 +299,9 @@ app.put("/update/:id", (req, res) => {
 
 // Delete Podcast
 app.delete("/delete", (req, res) => {
-	const { id } = req.body;
+	const {
+		id
+	} = req.body;
 	Podcast.deleteOne({
 		id
 	}).then(() => {
@@ -263,5 +316,14 @@ app.delete("/delete", (req, res) => {
 			});
 	});
 });
+
+app.delete("/delete/audio-file/:id", async (req, res) => {
+	const audio_file = await PodcastFile.findById(req.params.id);
+
+	await audio_file.remove();
+
+	return res.send();
+});
+
 
 module.exports = app;
