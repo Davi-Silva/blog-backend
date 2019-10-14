@@ -38,6 +38,12 @@ app.get("/", (req, res) => {
 	console.log("Getting all podcasts...");
 });
 
+app.get("/audio", async (req, res) => {
+	const podcastFile = await PodcastFile.find();
+
+	return res.json(podcastFile);
+});
+
 // Get Podcast by id
 app.get("/:id", (req, res) => {
 	const id = req.params.id;
@@ -222,7 +228,7 @@ app.post("/upload/cover", multer(multerConfig).single("file"), async (req, res) 
 	return res.json(cover);
 })
 
-app.post("/upload/audio-file", multer(multerConfig).single("file"), async (req, res) => {
+app.post("/upload/audio", multer(multerConfig).single("file"), async (req, res) => {
 	const {
 		originalname: name,
 		size,
@@ -297,7 +303,7 @@ app.delete("/delete", (req, res) => {
 	});
 });
 
-app.delete("/delete/audio-file/:id", async (req, res) => {
+app.delete("/delete/audio/:id", async (req, res) => {
 	const audio_file = await PodcastFile.findById(req.params.id);
 
 	await audio_file.remove();
