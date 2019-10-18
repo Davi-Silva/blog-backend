@@ -805,11 +805,6 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-ffprobe-static@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ffprobe-static/-/ffprobe-static-3.0.0.tgz#479689c8a237987beca5627968f3d87429bf569d"
-  integrity sha512-LZ1Sj4RHS95t/ReZtRbCmMEWDDl7cfIMwmhNgCZcdtOgRlAHaGGOupoc166Q9AV+T7lXnUvu5HYczcsn69c6fw==
-
 file-type@^3.3.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/file-type/-/file-type-3.9.0.tgz#257a078384d1db8087bc449d107d52a52672b9e9"
@@ -914,15 +909,6 @@ gauge@~2.7.3:
     string-width "^1.0.1"
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
-
-get-audio-duration@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/get-audio-duration/-/get-audio-duration-1.0.0.tgz#24656f262a65c7ae282b7c610f385fcf9799fcad"
-  integrity sha512-9H4LmDf8IPwHFJ9gChZfrBk1qYMZm8vu6FK/LABJiAf4GwfKIAxxHpYXVn8MD7N6RbuBJCRBYC9AtLLo4re+iQ==
-  dependencies:
-    execa "^1.0.0"
-    ffprobe-static "^3.0.0"
-    is-stream "^1.1.0"
 
 get-caller-file@^1.0.1:
   version "1.0.3"

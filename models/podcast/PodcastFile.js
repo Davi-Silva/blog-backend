@@ -5,9 +5,6 @@ const path = require("path");
 const {
     promisify
 } = require("util");
-const {
-    getAudioDurationInSeconds
-} = require('get-audio-duration')
 
 const s3 = new aws.S3();
 
