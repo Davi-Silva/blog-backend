@@ -14,7 +14,7 @@ const PodcastFile = require("../models/podcast/PodcastFile");
 // Get All Podcasts
 app.get("/", (req, res) => {
 	let podcast_list = [];
-	Podcast.find()
+	Podcast.find().populate("audio_file")
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 					title: podcast.title,
 					description: podcast.description,
 					tags: podcast.tags,
+					audio_file: podcast.audio_file,
 					uploaded_on: podcast.uploaded_on,
 					updated_on: podcast.updated_on
 				});
@@ -141,8 +142,10 @@ app.post("/upload", (req, res) => {
 		category,
 		title,
 		description,
-		tags
+		tags,
+		audio_file
 	} = req.body;
+	console.log("audio_file:", audio_file)
 	let errors = [];
 	if (!isSlugValid || !category || !title || !description || !tags) {
 		errors.push({
@@ -177,6 +180,7 @@ app.post("/upload", (req, res) => {
 				title,
 				description,
 				tags,
+				audio_file,
 				uploaded_on,
 				updated_on
 			});
@@ -192,6 +196,7 @@ app.post("/upload", (req, res) => {
 						title,
 						description,
 						tags,
+						audio_file,
 						uploaded_on,
 						updated_on,
 						uploaded: true
