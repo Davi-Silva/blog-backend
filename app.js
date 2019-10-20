@@ -193,7 +193,7 @@ app.use(
 app.use(morgan("dev"));
 app.use(
 	"/files",
-	express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
+	express.static(path.resolve(__dirname, ".", "tmp", "uploads"))
 );
 
 
