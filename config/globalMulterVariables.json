@@ -1,0 +1,8 @@
+{
+    "multer": {
+        "type": "",
+        "podcast_title": "",
+        "folder_name": "",
+        "destination": ""
+    }
+}

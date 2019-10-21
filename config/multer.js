@@ -4,6 +4,8 @@ const crypto = require("crypto");
 const aws = require("aws-sdk");
 const multerS3 = require("multer-s3");
 
+const configMulter = require("../config/multerConfig");
+
 const storageTypes = {
   local: multer.diskStorage({
     destination: (req, file, cb) => {
@@ -28,7 +30,7 @@ const storageTypes = {
       crypto.randomBytes(16, (err, hash) => {
         if (err) cb(err);
 
-        const fileName = `${hash.toString("hex")}-${file.originalname}`;
+        const fileName = `${global.gConfigMulter.destination}/${hash.toString("hex")}-${file.originalname}`;
 
         cb(null, fileName);
       });

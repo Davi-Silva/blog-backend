@@ -10,9 +10,16 @@ app.use(cors());
 // Load Podcast model
 const Podcast = require("../models/podcast/Podcast");
 const PodcastAudioFile = require("../models/podcast/PodcastAudioFile");
+const PodcastCover = require("../models/podcast/PodcastCover");
+
+const configMulter = require("../config/multerConfig");
 
 // Get All Podcasts
 app.get("/", (req, res) => {
+	console.log("Listing all podcasts")
+	console.log("global.gConfigMulter.folderName:", global.gConfigMulter.folderName);
+	global.gConfigMulter.folderName = "Novo destinado"
+	console.log("global.gConfigMulter.folderName:", global.gConfigMulter.folderName);
 	let podcast_list = [];
 	Podcast.find().populate("audio_file")
 		.then(podcasts => {
@@ -43,6 +50,12 @@ app.get("/audio", async (req, res) => {
 	const podcastFile = await PodcastAudioFile.find();
 
 	return res.json(podcastFile);
+});
+
+app.get("/cover", async (req, res) => {
+	const podcastCover = await PodcastCover.find();
+
+	return res.json(podcastCover);
 });
 
 // Get Podcast by id
@@ -225,7 +238,7 @@ app.post("/upload/cover", multer(multerConfig).single("file"), async (req, res) 
 		location: url = ""
 	} = req.file;
 
-	const cover = await PodcastAudioFile.create({
+	const cover = await PodcastCover.create({
 		name,
 		size,
 		key,
@@ -236,6 +249,7 @@ app.post("/upload/cover", multer(multerConfig).single("file"), async (req, res) 
 })
 
 app.post("/upload/audio", multer(multerConfig).single("file"), async (req, res) => {
+
 	const {
 		originalname: name,
 		size,
@@ -251,6 +265,23 @@ app.post("/upload/audio", multer(multerConfig).single("file"), async (req, res) 
 	});
 
 	return res.json(audio_file);
+})
+
+app.post("/set/global-variable", async (req, res) => {
+	let {
+		type,
+		title
+	} = req.body;
+	global.gConfigMulter.type = type;
+	global.gConfigMulter.podcast_title = title;
+	global.gConfigMulter.folder_name = global.gConfigMulter.podcast_title
+	global.gConfigMulter.destination = `${global.gConfigMulter.type}/${global.gConfigMulter.folder_name}`
+	console.log("global.gConfigMulter.type:", global.gConfigMulter.type);
+	console.log("global.gConfigMulter.podcast_title:", global.gConfigMulter.podcast_title)
+	console.log("global.gConfigMulter.destination:", global.gConfigMulter.destination);
+	res.status(200).send({
+		ok: true
+	});
 })
 
 // Update Podcast Info
@@ -314,6 +345,14 @@ app.delete("/delete/audio/:id", async (req, res) => {
 	const audio_file = await PodcastAudioFile.findById(req.params.id);
 
 	await audio_file.remove();
+
+	return res.send();
+});
+
+app.delete("/delete/cover/:id", async (req, res) => {
+	const cover_file = await PodcastCover.findById(req.params.id);
+
+	await cover_file.remove();
 
 	return res.send();
 });
