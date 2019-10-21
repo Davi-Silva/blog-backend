@@ -31,9 +31,14 @@ const PodcastSchema = new mongoose.Schema({
 	},
 	audio_file: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "PodcastFile",
+		ref: "PodcastAudioFile",
 		required: true
 	},
+	// cover: {
+	// 	type: mongoose.Schema.Types.ObjectId,
+	// 	ref: "PodcastCover",
+	// 	required: true
+	// },
 	uploaded_on: {
 		type: Date,
 		default: Date.now,

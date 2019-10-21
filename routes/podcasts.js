@@ -9,7 +9,7 @@ app.use(cors());
 
 // Load Podcast model
 const Podcast = require("../models/podcast/Podcast");
-const PodcastFile = require("../models/podcast/PodcastFile");
+const PodcastAudioFile = require("../models/podcast/PodcastAudioFile");
 
 // Get All Podcasts
 app.get("/", (req, res) => {
@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/audio", async (req, res) => {
-	const podcastFile = await PodcastFile.find();
+	const podcastFile = await PodcastAudioFile.find();
 
 	return res.json(podcastFile);
 });
@@ -75,7 +75,7 @@ app.get("/get/:slug", (req, res) => {
 	let podcast_list = [];
 	Podcast.find({
 			slug
-		})
+		}).populate("audio_file")
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -90,10 +90,12 @@ app.get("/get/:slug", (req, res) => {
 					updated_on: podcast.updated_on
 				});
 			});
-			res.status(302).send(podcast_list);
+			res.status(302).send(podcasts);
 		})
 		.catch(err => {
-			console.log(err);
+			res.json({
+				found: false
+			});
 		});
 });
 
@@ -223,7 +225,7 @@ app.post("/upload/cover", multer(multerConfig).single("file"), async (req, res) 
 		location: url = ""
 	} = req.file;
 
-	const cover = await PodcastFile.create({
+	const cover = await PodcastAudioFile.create({
 		name,
 		size,
 		key,
@@ -241,7 +243,7 @@ app.post("/upload/audio", multer(multerConfig).single("file"), async (req, res) 
 		location: url = ""
 	} = req.file;
 
-	const audio_file = await PodcastFile.create({
+	const audio_file = await PodcastAudioFile.create({
 		name,
 		size,
 		key,
@@ -309,7 +311,7 @@ app.delete("/delete", (req, res) => {
 });
 
 app.delete("/delete/audio/:id", async (req, res) => {
-	const audio_file = await PodcastFile.findById(req.params.id);
+	const audio_file = await PodcastAudioFile.findById(req.params.id);
 
 	await audio_file.remove();
 

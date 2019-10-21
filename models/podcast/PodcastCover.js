@@ -8,7 +8,7 @@ const {
 
 const s3 = new aws.S3();
 
-const PodcastFileSchema = new mongoose.Schema({
+const PodcastCoverSchema = new mongoose.Schema({
     name: String,
     size: Number,
     key: String,
@@ -19,14 +19,14 @@ const PodcastFileSchema = new mongoose.Schema({
     }
 });
 
-PodcastFileSchema.pre("save", function () {
+PodcastCoverSchema.pre("save", function () {
     if (!this.url) {
         this.url = `${process.env.APP_URL}/files/${this.key}`;
     }
 
 });
 
-PodcastFileSchema.pre("remove", function () {
+PodcastCoverSchema.pre("remove", function () {
     if (process.env.STORAGE_TYPE === "s3") {
         return s3
             .deleteObject({
@@ -47,4 +47,4 @@ PodcastFileSchema.pre("remove", function () {
     }
 });
 
-module.exports = mongoose.model("PodcastFile", PodcastFileSchema);
+module.exports = mongoose.model("PodcastCover", PodcastCoverSchema);
