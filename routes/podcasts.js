@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 	global.gConfigMulter.folderName = "Novo destinado"
 	console.log("global.gConfigMulter.folderName:", global.gConfigMulter.folderName);
 	let podcast_list = [];
-	Podcast.find().populate("audio_file")
+	Podcast.find().populate("audio_file").populate("cover")
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -33,6 +33,7 @@ app.get("/", (req, res) => {
 					description: podcast.description,
 					tags: podcast.tags,
 					audio_file: podcast.audio_file,
+					cover: podcast.cover,
 					uploaded_on: podcast.uploaded_on,
 					updated_on: podcast.updated_on
 				});
@@ -84,11 +85,13 @@ app.get("/:id", (req, res) => {
 
 // Get Podcast by slug
 app.get("/get/:slug", (req, res) => {
+	console.log("Getting podcast by slug")
 	const slug = req.params.slug;
+	console.log("slug:", slug)
 	let podcast_list = [];
 	Podcast.find({
 			slug
-		}).populate("audio_file")
+		}).populate("audio_file").populate("cover")
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -158,7 +161,8 @@ app.post("/upload", (req, res) => {
 		title,
 		description,
 		tags,
-		audio_file
+		audio_file,
+		cover
 	} = req.body;
 	console.log("audio_file:", audio_file)
 	let errors = [];
@@ -196,6 +200,7 @@ app.post("/upload", (req, res) => {
 				description,
 				tags,
 				audio_file,
+				cover,
 				uploaded_on,
 				updated_on
 			});
@@ -212,6 +217,7 @@ app.post("/upload", (req, res) => {
 						description,
 						tags,
 						audio_file,
+						cover,
 						uploaded_on,
 						updated_on,
 						uploaded: true
@@ -322,10 +328,8 @@ app.put("/update/:id", (req, res) => {
 });
 
 // Delete Podcast
-app.delete("/delete", (req, res) => {
-	const {
-		id
-	} = req.body;
+app.delete("/delete/:id", (req, res) => {
+	const id = req.params.id;
 	Podcast.deleteOne({
 		id
 	}).then(() => {
