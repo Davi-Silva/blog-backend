@@ -196,7 +196,6 @@ app.post("/upload", (req, res) => {
 		const type = "Podcast";
 		const uploaded_on = Date.now();
 		const updated_on = null;
-
 		console.log("Before if");
 		if (isSlugValid) {
 			const slug = title
