@@ -48,13 +48,25 @@ app.get("/", (req, res) => {
 });
 
 app.get("/audio", async (req, res) => {
-	const podcastFile = await PodcastAudioFile.find();
+	const {
+		title
+	} = req.params.title;
+
+	const podcastFile = await PodcastAudioFile.find({
+		title
+	});
 
 	return res.json(podcastFile);
 });
 
 app.get("/cover", async (req, res) => {
-	const podcastCover = await PodcastCover.find();
+	const {
+		title
+	} = req.params.title;
+
+	const podcastCover = await PodcastCover.find({
+		title
+	});
 
 	return res.json(podcastCover);
 });
@@ -181,7 +193,7 @@ app.post("/upload", (req, res) => {
 		});
 	} else {
 		const id = uuidv4();
-		const type = "podcast";
+		const type = "Podcast";
 		const uploaded_on = Date.now();
 		const updated_on = null;
 
