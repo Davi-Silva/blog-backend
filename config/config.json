@@ -5,20 +5,20 @@
 		"app_desc": "Website for various online courses selling/hosting",
 		"node_port": 5000,
 		"json_indentation": 2,
-		"database": "my-app-db-dev"
+		"database": "MongoDB Atlas"
 	},
 	"testing": {
 		"config_id": "testing",
-		"database": "my-app-db-test"
+		"database": "MongoDB Atlas"
 	},
 	"staging": {
 		"config_id": "staging",
 		"node_port": 4000,
-		"database": "my-app-db-stag"
+		"database": "MongoDB Atlas"
 	},
 	"production": {
 		"config_id": "production",
 		"node_port": 8080,
-		"database": "my-app-db-prod"
+		"database": "MongoDB Atlas"
 	}
 }

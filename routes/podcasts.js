@@ -75,8 +75,8 @@ app.get("/cover", async (req, res) => {
 app.get("/:id", (req, res) => {
 	const id = req.params.id;
 	Podcast.findOne({
-			id
-		})
+		id
+	})
 		.then(podcast => {
 			res.status(302).send({
 				msg: "Requested Podcast has been found.",
@@ -102,8 +102,8 @@ app.get("/get/:slug", (req, res) => {
 	console.log("slug:", slug)
 	let podcast_list = [];
 	Podcast.find({
-			slug
-		}).populate("audio_file").populate("cover")
+		slug
+	}).populate("audio_file").populate("cover")
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -132,8 +132,8 @@ app.get("/validation/slug/:slug", (req, res) => {
 	const slug = req.params.slug;
 	let podcast_list = [];
 	Podcast.find({
-			slug
-		})
+		slug
+	})
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -254,8 +254,11 @@ app.post("/upload/cover", multer(multerConfig).single("file"), async (req, res) 
 		key,
 		location: url = ""
 	} = req.file;
+	const id = uuidv4();
+	console.log("id:", id)
 
 	const cover = await PodcastCover.create({
+		id,
 		name,
 		size,
 		key,
@@ -273,8 +276,11 @@ app.post("/upload/audio", multer(multerConfig).single("file"), async (req, res) 
 		key,
 		location: url = ""
 	} = req.file;
+	const id = uuidv4();
+	console.log("id:", id)
 
 	const audio_file = await PodcastAudioFile.create({
+		id,
 		name,
 		size,
 		key,
@@ -290,11 +296,11 @@ app.post("/set/global-variable", async (req, res) => {
 		title
 	} = req.body;
 	global.gConfigMulter.type = type;
-	global.gConfigMulter.podcast_title = title;
-	global.gConfigMulter.folder_name = global.gConfigMulter.podcast_title
+	global.gConfigMulter.title = title;
+	global.gConfigMulter.folder_name = global.gConfigMulter.title
 	global.gConfigMulter.destination = `${global.gConfigMulter.type}/${global.gConfigMulter.folder_name}`
 	console.log("global.gConfigMulter.type:", global.gConfigMulter.type);
-	console.log("global.gConfigMulter.podcast_title:", global.gConfigMulter.podcast_title)
+	console.log("global.gConfigMulter.title:", global.gConfigMulter.title)
 	console.log("global.gConfigMulter.destination:", global.gConfigMulter.destination);
 	res.status(200).send({
 		ok: true
@@ -312,15 +318,15 @@ app.put("/update/:id", (req, res) => {
 	} = req.body;
 	const id = req.id;
 	Podcast.updateOne({
-			id
-		}, {
-			category,
-			title,
-			description,
-			tags,
-		}, {
-			runValidators: true
-		})
+		id
+	}, {
+		category,
+		title,
+		description,
+		tags,
+	}, {
+		runValidators: true
+	})
 		.then(() => {
 			res.json({
 				msg: "Podcast details has been successfully updated.",
@@ -344,16 +350,14 @@ app.delete("/delete/:id", (req, res) => {
 	Podcast.deleteOne({
 		id
 	}).then(() => {
-		res
-			.json({
-				msg: "Podcast deleted successfully!"
-			})
-			.catch(err => {
-				res.json({
-					errorMsg: err
-				});
-			});
-	});
+		res.json({
+			msg: "Podcast deleted successfully!"
+		})
+	}).catch(err => {
+		res.json({
+			errorMgs: err
+		})
+	})
 });
 
 app.delete("/delete/audio/:id", async (req, res) => {
@@ -361,7 +365,9 @@ app.delete("/delete/audio/:id", async (req, res) => {
 
 	await audio_file.remove();
 
-	return res.send();
+	return res.send({
+		msg: "Pocast audio file successfully deleted."
+	});
 });
 
 app.delete("/delete/cover/:id", async (req, res) => {
@@ -369,7 +375,9 @@ app.delete("/delete/cover/:id", async (req, res) => {
 
 	await cover_file.remove();
 
-	return res.send();
+	return res.send({
+		msg: "Podcast cover file successfully deleted"
+	});
 });
 
 

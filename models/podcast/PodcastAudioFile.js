@@ -9,6 +9,7 @@ const {
 const s3 = new aws.S3();
 
 const PodcastAudioFileSchema = new mongoose.Schema({
+    id: String,
     name: String,
     size: Number,
     key: String,

@@ -1,7 +1,7 @@
 {
     "multer": {
         "type": "",
-        "podcast_title": "",
+        "title": "",
         "folder_name": "",
         "destination": ""
     }
