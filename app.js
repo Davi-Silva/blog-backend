@@ -52,10 +52,10 @@ passport.deserializeUser((user, cb) => {
 // Facebook Strategy
 passport.use(
 	new FacebookStrategy({
-			clientID: keys.FACEBOOK.clientID,
-			clientSecret: keys.FACEBOOK.clientSecret,
-			callbackURL: "https://course-backend.herokuapp.com/auth/facebook/callback"
-		},
+		clientID: keys.FACEBOOK.clientID,
+		clientSecret: keys.FACEBOOK.clientSecret,
+		callbackURL: "https://course-backend.herokuapp.com/auth/facebook/callback"
+	},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
 			user = {
@@ -69,10 +69,10 @@ passport.use(
 // Amazon Strategy
 passport.use(
 	new AmazonStrategy({
-			clientID: keys.AMAZON.clientID,
-			clientSecret: keys.AMAZON.clientSecret,
-			callbackURL: "https://course-backend.herokuapp.com/auth/amazon/callback"
-		},
+		clientID: keys.AMAZON.clientID,
+		clientSecret: keys.AMAZON.clientSecret,
+		callbackURL: "https://course-backend.herokuapp.com/auth/amazon/callback"
+	},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
 			user = {
@@ -86,10 +86,10 @@ passport.use(
 // Github Strategy
 passport.use(
 	new GithubStrategy({
-			clientID: keys.GITHUB.clientID,
-			clientSecret: keys.GITHUB.clientSecret,
-			callbackURL: "https://course-backend.herokuapp.com/auth/github/callback"
-		},
+		clientID: keys.GITHUB.clientID,
+		clientSecret: keys.GITHUB.clientSecret,
+		callbackURL: "https://course-backend.herokuapp.com/auth/github/callback"
+	},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
 			user = {
@@ -103,10 +103,10 @@ passport.use(
 // Google Strategy
 passport.use(
 	new GoogleStrategy({
-			clientID: keys.GOOGLE.clientID,
-			clientSecret: keys.GOOGLE.clientSecret,
-			callbackURL: "https://course-backend.herokuapp.com/auth/google/callback"
-		},
+		clientID: keys.GOOGLE.clientID,
+		clientSecret: keys.GOOGLE.clientSecret,
+		callbackURL: "https://course-backend.herokuapp.com/auth/google/callback"
+	},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
 			console.log("accessToken: ", accessToken);
@@ -122,10 +122,10 @@ passport.use(
 // Instagram Strategy
 passport.use(
 	new InstagramStrategy({
-			clientID: keys.INSTAGRAM.clientID,
-			clientSecret: keys.INSTAGRAM.clientSecret,
-			callbackURL: "https://course-backend.herokuapp.com/auth/instagram/callback"
-		},
+		clientID: keys.INSTAGRAM.clientID,
+		clientSecret: keys.INSTAGRAM.clientSecret,
+		callbackURL: "https://course-backend.herokuapp.com/auth/instagram/callback"
+	},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
 			user = {
@@ -139,10 +139,10 @@ passport.use(
 // Spotify Strategy
 passport.use(
 	new SpotifyStrategy({
-			clientID: keys.SPOTIFY.clientID,
-			clientSecret: keys.SPOTIFY.clientSecret,
-			callbackURL: "https://course-backend.herokuapp.com/auth/spotify/callback"
-		},
+		clientID: keys.SPOTIFY.clientID,
+		clientSecret: keys.SPOTIFY.clientSecret,
+		callbackURL: "https://course-backend.herokuapp.com/auth/spotify/callback"
+	},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
 			user = {
@@ -156,10 +156,10 @@ passport.use(
 // Twitch Strategy
 passport.use(
 	new TwitchStrategy({
-			clientID: keys.TWITCH.clientID,
-			clientSecret: keys.TWITCH.clientSecret,
-			callbackURL: "https://course-backend.herokuapp.com/auth/twitch/callback"
-		},
+		clientID: keys.TWITCH.clientID,
+		clientSecret: keys.TWITCH.clientSecret,
+		callbackURL: "https://course-backend.herokuapp.com/auth/twitch/callback"
+	},
 		(accessToken, refreshToken, profile, cb) => {
 			console.log(chalk.blue(JSON.stringify(profile)));
 			user = {
