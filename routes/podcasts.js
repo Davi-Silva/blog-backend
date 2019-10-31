@@ -75,8 +75,8 @@ app.get("/cover", async (req, res) => {
 app.get("/:id", (req, res) => {
 	const id = req.params.id;
 	Podcast.findOne({
-		id
-	})
+			id
+		})
 		.then(podcast => {
 			res.status(302).send({
 				msg: "Requested Podcast has been found.",
@@ -102,8 +102,8 @@ app.get("/get/:slug", (req, res) => {
 	console.log("slug:", slug)
 	let podcast_list = [];
 	Podcast.find({
-		slug
-	}).populate("audio_file").populate("cover")
+			slug
+		}).populate("audio_file").populate("cover")
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -132,8 +132,8 @@ app.get("/validation/slug/:slug", (req, res) => {
 	const slug = req.params.slug;
 	let podcast_list = [];
 	Podcast.find({
-		slug
-	})
+			slug
+		})
 		.then(podcasts => {
 			podcasts.map(podcast => {
 				podcast_list.push({
@@ -318,15 +318,15 @@ app.put("/update/:id", (req, res) => {
 	} = req.body;
 	const id = req.id;
 	Podcast.updateOne({
-		id
-	}, {
-		category,
-		title,
-		description,
-		tags,
-	}, {
-		runValidators: true
-	})
+			id
+		}, {
+			category,
+			title,
+			description,
+			tags,
+		}, {
+			runValidators: true
+		})
 		.then(() => {
 			res.json({
 				msg: "Podcast details has been successfully updated.",
