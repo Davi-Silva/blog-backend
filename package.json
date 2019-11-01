@@ -2,10 +2,20 @@
 	"name": "course-backend",
 	"version": "1.0.0",
 	"engines": {
-		"node": "13.0.1"
+		"node": "12.13.0"
 	},
 	"description": "Personal blog developed using React.js and Express.js",
 	"main": "index.js",
+    "husky": {
+        "hooks": {
+			"pre-commit": "echo 'testing'"
+        }
+    },
+    "lint-staged": {
+        "*.js": [
+            "eslint --fix", "git add ."
+        ]
+    },
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node app.js",
@@ -57,5 +67,11 @@
 		"passport-twitch.js": "^0.0.7",
 		"uuid": "^3.3.3"
 	},
-	"devDependencies": {}
+	"devDependencies": {
+		"eslint": "^6.6.0",
+		"eslint-config-airbnb-base": "^14.0.0",
+		"eslint-plugin-import": "^2.18.2",
+		"husky": "^3.0.9",
+		"lint-staged": "^9.4.2"
+	}
 }
