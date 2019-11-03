@@ -13,34 +13,39 @@ const Podcast = require('../models/podcast/Podcast');
 const PodcastAudioFile = require('../models/podcast/PodcastAudioFile');
 const PodcastCover = require('../models/podcast/PodcastCover');
 
-// const configMulter = require('../config/multerConfig');
+const configMulter = require('../config/multerConfig');
 
 // Get All Podcasts
 app.get('/', (req, res) => {
+  console.log('Listing all podcasts');
+  console.log('global.gConfigMulter.folderName:', global.gConfigMulter.folderName);
   global.gConfigMulter.folderName = 'Novo destinado';
-  const podcastList = [];
-  Podcast.find().populate('audio_file').populate('cover')
+  console.log('global.gConfigMulter.folderName:', global.gConfigMulter.folderName);
+  const podcast_list = [];
+  Podcast.find().populate('audioFile').populate('cover')
     .then((podcasts) => {
-      podcasts.map((podcast) => podcastList.push({
-        id: podcast.id,
-        type: podcast.type,
-        slug: podcast.slug,
-        category: podcast.category,
-        title: podcast.title,
-        description: podcast.description,
-        tags: podcast.tags,
-        audio_file: podcast.audio_file,
-        cover: podcast.cover,
-        uploaded_on: podcast.uploaded_on,
-        updated_on: podcast.updated_on,
-      }));
-      res.status(302).send(podcastList);
+      podcasts.map((podcast) => {
+        podcast_list.push({
+          id: podcast.id,
+          type: podcast.type,
+          slug: podcast.slug,
+          category: podcast.category,
+          title: podcast.title,
+          description: podcast.description,
+          tags: podcast.tags,
+          audioFile: podcast.audioFile,
+          cover: podcast.cover,
+          uploadedOn: podcast.uploadedOn,
+          updatedOn: podcast.updatedOn,
+        });
+        console.log(podcast_list);
+      });
+      res.status(302).send(podcast_list);
     })
     .catch((err) => {
-      res.json({
-        err,
-      });
+      console.log(err);
     });
+  console.log('Getting all podcasts...');
 });
 
 app.get('/audio', async (req, res) => {
@@ -82,8 +87,8 @@ app.get('/:id', (req, res) => {
         title: podcast.title,
         description: podcast.description,
         tags: podcast.tags,
-        uploaded_on: podcast.uploaded_on,
-        updated_on: podcast.updated_on,
+        uploadedOn: podcast.uploadedOn,
+        updatedOn: podcast.updatedOn,
       });
     })
     .catch((err) => {
@@ -93,29 +98,32 @@ app.get('/:id', (req, res) => {
 
 // Get Podcast by slug
 app.get('/get/:slug', (req, res) => {
+  console.log('Getting podcast by slug');
   const { slug } = req.params;
-  const podcastList = [];
+  console.log('slug:', slug);
+  const podcast_list = [];
   Podcast.find({
     slug,
-  }).populate('audio_file').populate('cover')
+  }).populate('audioFile').populate('cover')
     .then((podcasts) => {
-      podcasts.map((podcast) => podcastList.push({
-        id: podcast.id,
-        type: podcast.type,
-        slug: podcast.slug,
-        category: podcast.category,
-        title: podcast.title,
-        description: podcast.description,
-        tags: podcast.tags,
-        uploaded_on: podcast.uploaded_on,
-        updated_on: podcast.updated_on,
-      }));
+      podcasts.map((podcast) => {
+        podcast_list.push({
+          id: podcast.id,
+          type: podcast.type,
+          slug: podcast.slug,
+          category: podcast.category,
+          title: podcast.title,
+          description: podcast.description,
+          tags: podcast.tags,
+          uploadedOn: podcast.uploadedOn,
+          updatedOn: podcast.updatedOn,
+        });
+      });
       res.status(302).send(podcasts);
     })
     .catch((err) => {
       res.json({
         found: false,
-        err,
       });
     });
 });
@@ -123,38 +131,38 @@ app.get('/get/:slug', (req, res) => {
 // Check if Podcast slug is valid
 app.get('/validation/slug/:slug', (req, res) => {
   const { slug } = req.params;
-  const podcastList = [];
+  const podcast_list = [];
   Podcast.find({
     slug,
   })
     .then((podcasts) => {
-      podcasts.map((podcast) => podcastList.push({
-        id: podcast.id,
-        type: podcast.type,
-        slug: podcast.slug,
-        category: podcast.category,
-        title: podcast.title,
-        description: podcast.description,
-        tags: podcast.tags,
-        uploaded_on: podcast.uploaded_on,
-        updated_on: podcast.updated_on,
-      }));
+      podcasts.map((podcast) => {
+        podcast_list.push({
+          id: podcast.id,
+          type: podcast.type,
+          slug: podcast.slug,
+          category: podcast.category,
+          title: podcast.title,
+          description: podcast.description,
+          tags: podcast.tags,
+          uploadedOn: podcast.uploadedOn,
+          updatedOn: podcast.updatedOn,
+        });
+      });
       let valid = true;
-      if (podcastList.length > 0) {
+      if (podcast_list.length > 0) {
         valid = false;
         res.json({
           valid,
         });
-      } else if (podcastList.length === 0) {
+      } else if (podcast_list.length == 0) {
         res.json({
           valid,
         });
       }
     })
     .catch((err) => {
-      res.json({
-        err,
-      });
+      console.log(err);
     });
 });
 
@@ -169,6 +177,7 @@ app.post('/upload', (req, res) => {
     audioFile,
     cover,
   } = req.body;
+  console.log('audioFile:', audioFile);
   const errors = [];
   if (!isSlugValid || !category || !title || !description || !tags) {
     errors.push({
@@ -176,8 +185,10 @@ app.post('/upload', (req, res) => {
     });
   }
 
+  console.log('errors.length:', errors.length);
 
   if (errors.length > 0) {
+    console.log('Errors:', errors);
     res.json({
       error: errors,
     });
@@ -186,6 +197,7 @@ app.post('/upload', (req, res) => {
     const type = 'Podcast';
     const uploadedOn = Date.now();
     const updatedOn = null;
+    console.log('Before if');
     if (isSlugValid) {
       const slug = title
         .toLowerCase()
@@ -206,21 +218,23 @@ app.post('/upload', (req, res) => {
       });
       newPodcast
         .save()
-        .then(() => res.status(201).send({
-          msg: 'Podcast successfully uploaded!',
-          id,
-          slug,
-          type,
-          category,
-          title,
-          description,
-          tags,
-          audioFile,
-          cover,
-          uploadedOn,
-          updatedOn,
-          uploaded: true,
-        }))
+        .then((podcast) => {
+          res.status(201).send({
+            msg: 'Podcast successfully uploaded!',
+            id,
+            slug,
+            type,
+            category,
+            title,
+            description,
+            tags,
+            audioFile,
+            cover,
+            uploadedOn,
+            updatedOn,
+            uploaded: true,
+          });
+        })
         .catch((err) => {
           res.json({
             errorMsg: err,
@@ -242,6 +256,7 @@ app.post('/upload/cover', multer(multerConfig).single('file'), async (req, res) 
     location: url = '',
   } = req.file;
   const id = uuidv4();
+  console.log('id:', id);
 
   const cover = await PodcastCover.create({
     id,
@@ -262,6 +277,7 @@ app.post('/upload/audio', multer(multerConfig).single('file'), async (req, res) 
     location: url = '',
   } = req.file;
   const id = uuidv4();
+  console.log('id:', id);
 
   const audioFile = await PodcastAudioFile.create({
     id,
@@ -283,6 +299,9 @@ app.post('/set/global-variable', async (req, res) => {
   global.gConfigMulter.title = title;
   global.gConfigMulter.folder_name = global.gConfigMulter.title;
   global.gConfigMulter.destination = `${global.gConfigMulter.type}/${global.gConfigMulter.folder_name}`;
+  console.log('global.gConfigMulter.type:', global.gConfigMulter.type);
+  console.log('global.gConfigMulter.title:', global.gConfigMulter.title);
+  console.log('global.gConfigMulter.destination:', global.gConfigMulter.destination);
   res.status(200).send({
     ok: true,
   });

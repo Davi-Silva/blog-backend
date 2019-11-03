@@ -1,42 +1,43 @@
-const express = require("express");
+const express = require('express');
+
 const router = express.Router();
-const bcrypt = require("bcryptjs");
-const passport = require("passport");
+// const bcrypt = require('bcryptjs');
+// const passport = require('passport');
 
 // Load User model
-const User = require("../models/User");
+const User = require('../models/User');
 
-router.get("/all", (req, res) => {
-  let users_list = [];
+router.get('/all', (req, res) => {
+  const usersList = [];
   User.find()
-    .then(users => {
-      users.map(user => {
-        users_list.push({
+    .then((users) => {
+      users.map((user) => {
+        usersList.push({
           name: user.name,
           email: user.email,
-          created_on: user.created_on
+          created_on: user.created_on,
         });
-        console.log(users_list);
+        console.log(usersList);
       });
-      res.json(users_list);
+      res.json(usersList);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
-  console.log("Get All Users");
+  console.log('Get All Users');
 });
 
 // Get User
-router.post("/user", (req, res) => {
+router.post('/user', (req, res) => {
   const { email } = req.body;
-  User.findOne({ email: email }, (err, user) => {
-    console.log("Mongoose user:", user);
+  User.findOne({ email }, (err, user) => {
+    console.log('Mongoose user:', user);
     res.status(200).send({
       name: user.name,
       email: user.email,
-      created_on: user.created_on
+      created_on: user.created_on,
     });
-  }).catch(err => console.log(err));
+  }).catch((err) => console.log(err));
 });
 
 module.exports = router;
