@@ -314,9 +314,8 @@ app.put('/update/:id', (req, res) => {
     title,
     description,
     tags,
-
   } = req.body;
-  const { id } = req;
+  const { id } = req.params;
   Podcast.updateOne({
     id,
   }, {
@@ -324,10 +323,20 @@ app.put('/update/:id', (req, res) => {
     title,
     description,
     tags,
+    updatedOn: Date.now(),
   }, {
     runValidators: true,
   })
     .then(() => {
+      console.log('res:', {
+        msg: 'Podcast details has been successfully updated.',
+        id,
+        category,
+        title,
+        description,
+        tags,
+        updated: true,
+      });
       res.json({
         msg: 'Podcast details has been successfully updated.',
         id,
@@ -335,6 +344,7 @@ app.put('/update/:id', (req, res) => {
         title,
         description,
         tags,
+        updated: true,
       });
     })
     .catch((err) => {
