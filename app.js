@@ -45,7 +45,8 @@ let corsOptions = {
 
 const app = express();
 // Allowing only the domain contained in the corsOptions object
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors())
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
