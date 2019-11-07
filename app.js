@@ -31,6 +31,22 @@ require('dotenv').config();
 
 const uri = process.env.ATLAS_URI;
 
+// Set up a whitelist and check against it:
+let whitelist = ['https://course-frontend.herokuapp.com/', 'http://course-frontend.herokuapp.com/', 'http://course-backend.herokuapp.com/', 'https://course-backend.herokuapp.com/']
+let corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+const app = express();
+// Allowing only the domain contained in the corsOptions object
+app.use(cors(corsOptions));
+
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -164,8 +180,6 @@ passport.use(
   }),
 );
 
-const app = express();
-app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
 
