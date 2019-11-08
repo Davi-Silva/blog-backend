@@ -310,6 +310,7 @@ app.post('/set/global-variable', async (req, res) => {
 // Update Podcast Info
 app.put('/update/:id', (req, res) => {
   const {
+    slug,
     category,
     title,
     description,
@@ -319,6 +320,7 @@ app.put('/update/:id', (req, res) => {
   Podcast.updateOne({
     id,
   }, {
+    slug,
     category,
     title,
     description,
@@ -331,6 +333,7 @@ app.put('/update/:id', (req, res) => {
       console.log('res:', {
         msg: 'Podcast details has been successfully updated.',
         id,
+        slug,
         category,
         title,
         description,
