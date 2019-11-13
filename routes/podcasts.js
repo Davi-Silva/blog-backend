@@ -17,15 +17,12 @@ const configMulter = require('../config/multerConfig');
 
 // Get All Podcasts
 app.get('/', (req, res) => {
-  console.log('Listing all podcasts');
-  console.log('global.gConfigMulter.folderName:', global.gConfigMulter.folderName);
   global.gConfigMulter.folderName = 'Novo destinado';
-  console.log('global.gConfigMulter.folderName:', global.gConfigMulter.folderName);
-  const podcast_list = [];
+  const podcastList = [];
   Podcast.find().populate('audioFile').populate('cover')
     .then((podcasts) => {
       podcasts.map((podcast) => {
-        podcast_list.push({
+        podcastList.push({
           id: podcast.id,
           type: podcast.type,
           slug: podcast.slug,
@@ -38,9 +35,9 @@ app.get('/', (req, res) => {
           uploadedOn: podcast.uploadedOn,
           updatedOn: podcast.updatedOn,
         });
-        console.log(podcast_list);
+        console.log(podcastList);
       });
-      res.status(302).send(podcast_list);
+      res.status(302).send(podcastList);
     })
     .catch((err) => {
       console.log(err);
@@ -101,13 +98,13 @@ app.get('/get/:slug', (req, res) => {
   console.log('Getting podcast by slug');
   const { slug } = req.params;
   console.log('slug:', slug);
-  const podcast_list = [];
+  const podcastList = [];
   Podcast.find({
     slug,
   }).populate('audioFile').populate('cover')
     .then((podcasts) => {
       podcasts.map((podcast) => {
-        podcast_list.push({
+        podcastList.push({
           id: podcast.id,
           type: podcast.type,
           slug: podcast.slug,
@@ -124,6 +121,7 @@ app.get('/get/:slug', (req, res) => {
     .catch((err) => {
       res.json({
         found: false,
+        error: err,
       });
     });
 });
@@ -131,13 +129,13 @@ app.get('/get/:slug', (req, res) => {
 // Check if Podcast slug is valid
 app.get('/validation/slug/:slug', (req, res) => {
   const { slug } = req.params;
-  const podcast_list = [];
+  const podcastList = [];
   Podcast.find({
     slug,
   })
     .then((podcasts) => {
       podcasts.map((podcast) => {
-        podcast_list.push({
+        podcastList.push({
           id: podcast.id,
           type: podcast.type,
           slug: podcast.slug,
@@ -150,12 +148,12 @@ app.get('/validation/slug/:slug', (req, res) => {
         });
       });
       let valid = true;
-      if (podcast_list.length > 0) {
+      if (podcastList.length > 0) {
         valid = false;
         res.json({
           valid,
         });
-      } else if (podcast_list.length == 0) {
+      } else if (podcastList.length === 0) {
         res.json({
           valid,
         });
@@ -170,6 +168,7 @@ app.get('/validation/slug/:slug', (req, res) => {
 app.post('/upload', (req, res) => {
   const {
     isSlugValid,
+    slug,
     category,
     title,
     description,
@@ -197,12 +196,7 @@ app.post('/upload', (req, res) => {
     const type = 'Podcast';
     const uploadedOn = Date.now();
     const updatedOn = null;
-    console.log('Before if');
     if (isSlugValid) {
-      const slug = title
-        .toLowerCase()
-        .split(' ')
-        .join('-');
       const newPodcast = new Podcast({
         id,
         slug,
@@ -218,7 +212,7 @@ app.post('/upload', (req, res) => {
       });
       newPodcast
         .save()
-        .then((podcast) => {
+        .then(() => {
           res.status(201).send({
             msg: 'Podcast successfully uploaded!',
             id,
@@ -317,6 +311,7 @@ app.put('/update/:id', (req, res) => {
     tags,
   } = req.body;
   const { id } = req.params;
+  console.log('SLUG:', slug);
   Podcast.updateOne({
     id,
   }, {

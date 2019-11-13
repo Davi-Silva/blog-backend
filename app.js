@@ -32,21 +32,21 @@ require('dotenv').config();
 const uri = process.env.ATLAS_URI;
 
 // Set up a whitelist and check against it:
-let whitelist = ['https://course-frontend.herokuapp.com/', 'http://course-frontend.herokuapp.com/', 'http://course-backend.herokuapp.com/', 'https://course-backend.herokuapp.com/']
-let corsOptions = {
-  origin: function (origin, callback) {
+const whitelist = ['https://course-frontend.herokuapp.com/', 'http://course-frontend.herokuapp.com/', 'http://course-backend.herokuapp.com/', 'https://course-backend.herokuapp.com/'];
+const corsOptions = {
+  origin(origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(new Error('Not allowed by CORS'));
     }
-  }
-}
+  },
+};
 
 const app = express();
 // Allowing only the domain contained in the corsOptions object
 // app.use(cors(corsOptions));
-app.use(cors())
+app.use(cors());
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -211,6 +211,7 @@ app.use(
 app.use('/users', require('./routes/users'));
 app.use('/podcasts', require('./routes/podcasts'));
 app.use('/courses', require('./routes/courses'));
+app.use('/blog', require('./routes/blog'));
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
 app.get(
