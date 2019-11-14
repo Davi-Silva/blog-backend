@@ -17,7 +17,6 @@ const process = require('process');
 const keys = require('./config/providers');
 
 let user = {};
-
 // environment variables
 process.env.NODE_ENV = 'development';
 // process.env.NODE_ENV = "staging";
