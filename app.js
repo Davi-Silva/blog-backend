@@ -32,7 +32,7 @@ require('dotenv').config();
 const uri = process.env.ATLAS_URI;
 
 // Set up a whitelist and check against it:
-const whitelist = ['https://course-frontend.herokuapp.com/', 'http://course-frontend.herokuapp.com/', 'http://course-backend.herokuapp.com/', 'https://course-backend.herokuapp.com/'];
+const whitelist = ['https://cryptic-activist-frontend.herokuapp.com/', 'http://cryptic-activist-frontend.herokuapp.com/', 'http://cryptic-activist-backend.herokuapp.com/', 'https://cryptic-activist-backend.herokuapp.com/'];
 const corsOptions = {
   origin(origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -72,7 +72,7 @@ passport.use(
   new FacebookStrategy({
     clientID: keys.FACEBOOK.clientID,
     clientSecret: keys.FACEBOOK.clientSecret,
-    callbackURL: 'https://course-backend.herokuapp.com/auth/facebook/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/facebook/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -88,7 +88,7 @@ passport.use(
   new AmazonStrategy({
     clientID: keys.AMAZON.clientID,
     clientSecret: keys.AMAZON.clientSecret,
-    callbackURL: 'https://course-backend.herokuapp.com/auth/amazon/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/amazon/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -104,7 +104,7 @@ passport.use(
   new GithubStrategy({
     clientID: keys.GITHUB.clientID,
     clientSecret: keys.GITHUB.clientSecret,
-    callbackURL: 'https://course-backend.herokuapp.com/auth/github/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/github/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -120,7 +120,7 @@ passport.use(
   new GoogleStrategy({
     clientID: keys.GOOGLE.clientID,
     clientSecret: keys.GOOGLE.clientSecret,
-    callbackURL: 'https://course-backend.herokuapp.com/auth/google/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/google/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -138,7 +138,7 @@ passport.use(
   new InstagramStrategy({
     clientID: keys.INSTAGRAM.clientID,
     clientSecret: keys.INSTAGRAM.clientSecret,
-    callbackURL: 'https://course-backend.herokuapp.com/auth/instagram/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/instagram/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -154,7 +154,7 @@ passport.use(
   new SpotifyStrategy({
     clientID: keys.SPOTIFY.clientID,
     clientSecret: keys.SPOTIFY.clientSecret,
-    callbackURL: 'https://course-backend.herokuapp.com/auth/spotify/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/spotify/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -170,7 +170,7 @@ passport.use(
   new TwitchStrategy({
     clientID: keys.TWITCH.clientID,
     clientSecret: keys.TWITCH.clientSecret,
-    callbackURL: 'https://course-backend.herokuapp.com/auth/twitch/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/twitch/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -219,7 +219,7 @@ app.get(
   passport.authenticate('facebook'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect('https://course-frontend.herokuapp.com/profile');
+    res.redirect('https://cryptic-activist-frontend.herokuapp.com/profile');
   },
 );
 
@@ -234,7 +234,7 @@ app.get(
   passport.authenticate('amazon'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect('https://course-frontend.herokuapp.com/profile');
+    res.redirect('https://cryptic-activist-frontend.herokuapp.com/profile');
   },
 );
 
@@ -244,7 +244,7 @@ app.get(
   passport.authenticate('github'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect('https://course-frontend.herokuapp.com/profile');
+    res.redirect('https://cryptic-activist-frontend.herokuapp.com/profile');
   },
 );
 
@@ -260,7 +260,7 @@ app.get(
   (req, res) => {
     console.log('Google Profile Info', req.profile);
     // res.redirect("http://localhost:3000/profile");
-    res.redirect('https://course-frontend.herokuapp.com/profile');
+    res.redirect('https://cryptic-activist-frontend.herokuapp.com/profile');
   },
 );
 
@@ -270,7 +270,7 @@ app.get(
   passport.authenticate('instagram'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect('https://course-frontend.herokuapp.com/profile');
+    res.redirect('https://cryptic-activist-frontend.herokuapp.com/profile');
   },
 );
 
@@ -280,7 +280,7 @@ app.get(
   passport.authenticate('spotify'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect('https://course-frontend.herokuapp.com/profile');
+    res.redirect('https://cryptic-activist-frontend.herokuapp.com/profile');
   },
 );
 
@@ -290,7 +290,7 @@ app.get(
   passport.authenticate('twitch.js'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect('https://course-frontend.herokuapp.com/profile');
+    res.redirect('https://cryptic-activist-frontend.herokuapp.com/profile');
   },
 );
 
@@ -304,7 +304,7 @@ app.get('/auth/logout', (req, res) => {
   console.log('logging out!');
   user = {};
   // res.redirect("http://localhost:3000");
-  res.redirect('https://course-frontend.herokuapp.com');
+  res.redirect('https://cryptic-activist-frontend.herokuapp.com');
 });
 
 // const port = process.env.PORT || 5000;
