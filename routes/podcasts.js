@@ -45,6 +45,31 @@ app.get('/', (req, res) => {
   console.log('Getting all podcasts...');
 });
 
+app.get('/short', (req, res) => {
+  global.gConfigMulter.folderName = 'Novo destinado';
+  const podcastList = [];
+  Podcast.find().populate('audioFile').populate('cover')
+    .then((podcasts) => {
+      podcasts.map((podcast) => {
+        podcastList.push({
+          id: podcast.id,
+          slug: podcast.slug,
+          category: podcast.category,
+          title: podcast.title,
+          cover: podcast.cover,
+          uploadedOn: podcast.uploadedOn,
+          updatedOn: podcast.updatedOn,
+        });
+        console.log(podcastList);
+      });
+      res.status(302).send(podcastList);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  console.log('Getting all podcasts...');
+});
+
 app.get('/audio', async (req, res) => {
   const {
     title,
