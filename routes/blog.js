@@ -13,13 +13,15 @@ const PostCover = require('../models/blog/PostCover');
 
 app.get('/', async (req, res) => {
   const postsList = [];
-  Post.find()
+  Post.find().populate('cover')
     .then((posts) => {
       posts.map((post) => {
         postsList.push({
           title: post.title,
           shortContent: post.shortContent,
           content: post.content,
+          slug: post.slug,
+          cover: post.cover,
           author: post.author,
           publishedOn: post.publishedOn,
           updateOn: post.updateOn,
@@ -41,8 +43,7 @@ app.get('/short', async (req, res) => {
       posts.map((post) => {
         postsList.push({
           title: post.title,
-          shortContent: post.shortContent,
-          author: post.author,
+          slug: post.slug,
           publishedOn: post.publishedOn,
           updateOn: post.updateOn,
         });
@@ -68,6 +69,39 @@ app.get('/cover', async (req, res) => {
   return res.json(postCover);
 });
 
+// Get Podcast by slug
+app.get('/get/:slug', (req, res) => {
+  console.log('Getting post by slug');
+  const { slug } = req.params;
+  console.log('slug:', slug);
+  const postsList = [];
+  Post.find({
+    slug,
+  })
+    .then((posts) => {
+      posts.map((post) => {
+        postsList.push({
+          id: post.id,
+          type: post.type,
+          slug: post.slug,
+          category: post.category,
+          title: post.title,
+          content: post.description,
+          tags: post.tags,
+          uploadedOn: post.uploadedOn,
+          updatedOn: post.updatedOn,
+        });
+      });
+      res.status(302).send(posts);
+    })
+    .catch((err) => {
+      res.json({
+        found: false,
+        error: err,
+      });
+    });
+});
+
 
 app.post('/publish', async (req, res) => {
   const {
@@ -76,7 +110,6 @@ app.post('/publish', async (req, res) => {
     title,
     slug,
     tags,
-    shortContent,
     content,
     author,
   } = req.body;
@@ -87,7 +120,6 @@ app.post('/publish', async (req, res) => {
     || !tags
     || !title
     || !slug
-    || !shortContent
     || !content
     || !author) {
     errors.push({
@@ -100,6 +132,13 @@ app.post('/publish', async (req, res) => {
 
   if (errors.length > 0) {
     console.log('Errors:', errors);
+    console.log('isSlugValid:', isSlugValid);
+    console.log('category:', category);
+    console.log('tags:', tags);
+    console.log('title:', title);
+    console.log('slug:', slug);
+    console.log('content:', content);
+    console.log('author:', author);
     res.json({
       error: errors,
     });
@@ -117,7 +156,6 @@ app.post('/publish', async (req, res) => {
         title,
         slug,
         tags,
-        shortContent,
         content,
         author,
         publishedOn,
@@ -135,7 +173,6 @@ app.post('/publish', async (req, res) => {
             title,
             slug,
             tags,
-            shortContent,
             content,
             author,
             publishedOn,
@@ -197,6 +234,7 @@ app.get('/validation/slug/:slug', (req, res) => {
           updateOn: post.updateOn,
         });
       });
+      console.log('posts:', postList);
       let valid = true;
       if (postList.length > 0) {
         valid = false;

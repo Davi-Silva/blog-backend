@@ -21,16 +21,17 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  shortContent: {
-    type: String,
-    required: true,
-  },
   content: {
     type: String,
     required: true,
   },
   author: {
     type: String,
+    required: true,
+  },
+  cover: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'PostCover',
     required: true,
   },
   publishedOn: {
