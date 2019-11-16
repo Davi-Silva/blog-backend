@@ -119,7 +119,7 @@ app.get('/:id', (req, res) => {
 });
 
 // Get Podcast by slug
-app.get('/get/:slug', (req, res) => {
+app.get('/get/slug/:slug', (req, res) => {
   console.log('Getting podcast by slug');
   const { slug } = req.params;
   console.log('slug:', slug);
@@ -150,6 +150,32 @@ app.get('/get/:slug', (req, res) => {
       });
     });
 });
+
+app.get('/get/category/:category', async (req, res) => {
+  const { category } = req.params;
+  const podcastList = [];
+  console.log('categoy:', category)
+  Podcast.find(
+    { 'category': { '$regex': `${category}`, '$options': 'i' } },
+    function(err, docs){
+
+    }
+  )
+  .populate('cover')
+  .then((podcasts) => {
+    podcasts.map((podcast) => {
+      podcastList.push({
+        title: podcast.title
+      });
+    });
+    res.status(302).send(podcasts);
+  })
+  .catch((err) => {
+    res.json({
+      err
+    })
+  })
+})
 
 // Check if Podcast slug is valid
 app.get('/validation/slug/:slug', (req, res) => {

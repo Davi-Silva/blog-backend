@@ -29,6 +29,10 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tags: {
+    type: String,
+    required: false,
+  },
   cover: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'PostCover',

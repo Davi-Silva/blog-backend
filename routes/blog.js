@@ -18,15 +18,17 @@ app.get('/', async (req, res) => {
       posts.map((post) => {
         postsList.push({
           title: post.title,
-          shortContent: post.shortContent,
+          category: post.category,
           content: post.content,
           slug: post.slug,
           cover: post.cover,
+          type: post.type,
           author: post.author,
           publishedOn: post.publishedOn,
           updateOn: post.updateOn,
         });
       });
+      console.log("postsList:", posts)
       res.status(302).send(postsList);
     })
     .catch((err) => {
@@ -38,12 +40,13 @@ app.get('/', async (req, res) => {
 
 app.get('/short', async (req, res) => {
   const postsList = [];
-  Post.find()
+  Post.find().populate('cover')
     .then((posts) => {
       posts.map((post) => {
         postsList.push({
           title: post.title,
           slug: post.slug,
+          cover: post.cover,
           publishedOn: post.publishedOn,
           updateOn: post.updateOn,
         });
@@ -70,14 +73,14 @@ app.get('/cover', async (req, res) => {
 });
 
 // Get Podcast by slug
-app.get('/get/:slug', (req, res) => {
+app.get('/get/slug/:slug', (req, res) => {
   console.log('Getting post by slug');
   const { slug } = req.params;
   console.log('slug:', slug);
   const postsList = [];
   Post.find({
     slug,
-  })
+  }).populate('cover')
     .then((posts) => {
       posts.map((post) => {
         postsList.push({
@@ -102,6 +105,32 @@ app.get('/get/:slug', (req, res) => {
     });
 });
 
+app.get('/get/category/:category', async (req, res) => {
+  const { category } = req.params;
+  const postsList = [];
+  console.log('categoy:', category)
+  Post.find(
+    { 'category': { '$regex': `${category}`, '$options': 'i' } },
+    function(err, docs){
+
+    }
+  )
+  .populate('cover')
+  .then((posts) => {
+    posts.map((post) => {
+      postsList.push({
+        title: post.title
+      });
+    });
+    res.status(302).send(posts);
+  })
+  .catch((err) => {
+    res.json({
+      err
+    })
+  })
+})
+
 
 app.post('/publish', async (req, res) => {
   const {
@@ -111,8 +140,10 @@ app.post('/publish', async (req, res) => {
     slug,
     tags,
     content,
+    cover,
     author,
   } = req.body;
+  console.log("tags:", tags);
 
   const errors = [];
   if (!isSlugValid
@@ -131,14 +162,6 @@ app.post('/publish', async (req, res) => {
 
 
   if (errors.length > 0) {
-    console.log('Errors:', errors);
-    console.log('isSlugValid:', isSlugValid);
-    console.log('category:', category);
-    console.log('tags:', tags);
-    console.log('title:', title);
-    console.log('slug:', slug);
-    console.log('content:', content);
-    console.log('author:', author);
     res.json({
       error: errors,
     });
@@ -155,6 +178,7 @@ app.post('/publish', async (req, res) => {
         category,
         title,
         slug,
+        cover,
         tags,
         content,
         author,
@@ -261,9 +285,6 @@ app.post('/set/global-variable', async (req, res) => {
   global.gConfigMulter.title = title;
   global.gConfigMulter.folder_name = global.gConfigMulter.title;
   global.gConfigMulter.destination = `${global.gConfigMulter.type}/${global.gConfigMulter.folder_name}`;
-  console.log('global.gConfigMulter.type:', global.gConfigMulter.type);
-  console.log('global.gConfigMulter.title:', global.gConfigMulter.title);
-  console.log('global.gConfigMulter.destination:', global.gConfigMulter.destination);
   res.status(200).send({
     ok: true,
   });
