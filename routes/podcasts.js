@@ -154,28 +154,71 @@ app.get('/get/slug/:slug', (req, res) => {
 app.get('/get/category/:category', async (req, res) => {
   const { category } = req.params;
   const podcastList = [];
-  console.log('categoy:', category)
+  console.log('categoy:', category);
   Podcast.find(
-    { 'category': { '$regex': `${category}`, '$options': 'i' } },
-    function(err, docs){
+    { category: { $regex: `${category}`, $options: 'i' } },
+    (err, docs) => {
 
-    }
+    },
   )
-  .populate('cover')
-  .then((podcasts) => {
-    podcasts.map((podcast) => {
-      podcastList.push({
-        title: podcast.title
+    .populate('cover')
+    .then((podcasts) => {
+      podcasts.map((podcast) => {
+        podcastList.push({
+          title: podcast.title,
+        });
+      });
+      res.status(302).send(podcasts);
+    })
+    .catch((err) => {
+      res.json({
+        err,
       });
     });
-    res.status(302).send(podcasts);
-  })
-  .catch((err) => {
-    res.json({
-      err
+});
+
+app.get('/get/category/newest/:slug/:category', async (req, res) => {
+  const { slug, category } = req.params;
+  let podcastList = [];
+  console.log('categoy:', category);
+  Podcast.find(
+    { category: { $regex: `${category}`, $options: 'i' } },
+    (err, docs) => {
+
+    },
+  )
+    .populate('cover')
+    .then((podcasts) => {
+      podcasts.map((podcast) => {
+        if (slug !== podcast.slug) {
+          podcastList.push({
+            id: podcast.id,
+            type: podcast.type,
+            slug: podcast.slug,
+            category: podcast.category,
+            title: podcast.title,
+            description: podcast.description,
+            tags: podcast.tags,
+            audioFile: podcast.audioFile,
+            cover: podcast.cover,
+            uploadedOn: podcast.uploadedOn,
+            updatedOn: podcast.updatedOn,
+          });
+        }
+      });
+      podcastList = podcastList.reverse();
+      console.log('podcastList:', podcastList);
+      if (podcastList.length > 4) {
+        podcastList = podcastList.slice(0, 4);
+      }
+      res.status(302).send(podcastList);
     })
-  })
-})
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
 
 // Check if Podcast slug is valid
 app.get('/validation/slug/:slug', (req, res) => {

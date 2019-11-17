@@ -28,7 +28,7 @@ app.get('/', async (req, res) => {
           updateOn: post.updateOn,
         });
       });
-      console.log("postsList:", posts)
+      console.log('postsList:', posts);
       res.status(302).send(postsList);
     })
     .catch((err) => {
@@ -108,29 +108,77 @@ app.get('/get/slug/:slug', (req, res) => {
 app.get('/get/category/:category', async (req, res) => {
   const { category } = req.params;
   const postsList = [];
-  console.log('categoy:', category)
+  console.log('categoy:', category);
   Post.find(
-    { 'category': { '$regex': `${category}`, '$options': 'i' } },
-    function(err, docs){
+    { category: { $regex: `${category}`, $options: 'i' } },
+    (err, docs) => {
 
-    }
+    },
   )
-  .populate('cover')
-  .then((posts) => {
-    posts.map((post) => {
-      postsList.push({
-        title: post.title
+    .populate('cover')
+    .then((posts) => {
+      posts.map((post) => {
+        postsList.push({
+          title: post.title,
+        });
+      });
+      res.status(302).send(posts);
+    })
+    .catch((err) => {
+      res.json({
+        err,
       });
     });
-    res.status(302).send(posts);
-  })
-  .catch((err) => {
-    res.json({
-      err
-    })
-  })
-})
+});
 
+app.get('/get/category/newest/:slug/:category', async (req, res) => {
+  const { slug, category } = req.params;
+  let postList = [];
+  console.log('categoy:', category);
+  Post.find(
+    { category: { $regex: `${category}`, $options: 'i' } },
+    (err, docs) => {
+
+    },
+  )
+    .populate('cover')
+    .then((posts) => {
+      console.log('posts:', posts);
+      posts.map((post) => {
+        if (slug !== post.slug) {
+          postList.push({
+            id: post.id,
+            type: post.type,
+            slug: post.slug,
+            category: post.category,
+            title: post.title,
+            description: post.description,
+            tags: post.tags,
+            audioFile: post.audioFile,
+            cover: post.cover,
+            uploadedOn: post.uploadedOn,
+            updatedOn: post.updatedOn,
+          });
+        }
+      });
+      postList = postList.reverse();
+      console.log('podcastList:', postList);
+      if (postList.length === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      }
+      if (postList.length > 4) {
+        postList = postList.slice(0, 4);
+      }
+      res.status(302).send(postList);
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
 
 app.post('/publish', async (req, res) => {
   const {
@@ -143,7 +191,7 @@ app.post('/publish', async (req, res) => {
     cover,
     author,
   } = req.body;
-  console.log("tags:", tags);
+  console.log('tags:', tags);
 
   const errors = [];
   if (!isSlugValid
