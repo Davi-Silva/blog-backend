@@ -17,6 +17,7 @@ app.get('/', async (req, res) => {
     .then((posts) => {
       posts.map((post) => {
         postsList.push({
+          id: post.id,
           title: post.title,
           category: post.category,
           content: post.content,
@@ -89,7 +90,7 @@ app.get('/get/slug/:slug', (req, res) => {
           slug: post.slug,
           category: post.category,
           title: post.title,
-          content: post.description,
+          content: post.content,
           tags: post.tags,
           uploadedOn: post.uploadedOn,
           updatedOn: post.updatedOn,
@@ -344,7 +345,7 @@ app.put('/update/:id', (req, res) => {
     slug,
     category,
     title,
-    description,
+    content,
     tags,
   } = req.body;
   const { id } = req.params;
@@ -355,31 +356,33 @@ app.put('/update/:id', (req, res) => {
     slug,
     category,
     title,
-    description,
+    content,
     tags,
     updatedOn: Date.now(),
   }, {
     runValidators: true,
   })
-    .then(() => {
+    .then((post) => {
       console.log('res:', {
-        msg: 'Podcast details has been successfully updated.',
+        msg: 'Post details has been successfully updated.',
         id,
         slug,
         category,
         title,
-        description,
+        content,
         tags,
         updated: true,
+        updatedOn: post.updatedOn,
       });
       res.json({
-        msg: 'Podcast details has been successfully updated.',
+        msg: 'Post details has been successfully updated.',
         id,
         category,
         title,
-        description,
+        content,
         tags,
         updated: true,
+        updatedOn: post.updatedOnOn,
       });
     })
     .catch((err) => {
@@ -388,6 +391,28 @@ app.put('/update/:id', (req, res) => {
       });
     });
 });
+
+app.post('/upload/cover', multer(multerConfig).single('file'), async (req, res) => {
+  const {
+    originalname: name,
+    size,
+    key,
+    location: url = '',
+  } = req.file;
+  const id = uuidv4();
+  console.log('id:', id);
+
+  const cover = await PodcastCover.create({
+    id,
+    name,
+    size,
+    key,
+    url,
+  });
+
+  return res.json(cover);
+});
+
 
 // Delete Podcast
 app.delete('/delete/:id', (req, res) => {
