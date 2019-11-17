@@ -398,8 +398,7 @@ app.post('/upload/cover', multer(multerConfig).single('file'), async (req, res) 
   } = req.file;
   const id = uuidv4();
   console.log('id:', id);
-
-  const cover = await PodcastCover.create({
+  const cover = await Post.create({
     id,
     name,
     size,
@@ -429,9 +428,7 @@ app.delete('/delete/:id', (req, res) => {
 
 app.delete('/delete/cover/:id', async (req, res) => {
   const coverFile = await Post.findById(req.params.id);
-
   await coverFile.remove();
-
   return res.send({
     msg: 'Blog Post cover file successfully deleted',
   });
