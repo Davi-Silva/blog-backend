@@ -206,10 +206,7 @@ app.post('/publish', async (req, res) => {
       errorMsg: 'Please enter all fields.',
     });
   }
-
   console.log('errors.length:', errors.length);
-
-
   if (errors.length > 0) {
     res.json({
       error: errors,
