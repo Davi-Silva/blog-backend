@@ -48,7 +48,7 @@ In order to get everything working as planned a .env file with some environment 
 
 #### 1.3.1 Create your own environment variables:
 
-Navigate to `cryptic-activist/backend` and create a `.env` file then copy and paste the following piece fo code and replace it with your own environment variables:
+Navigate to `cryptic-activist/backend` and create a `.env` file then copy and paste the following piece of code and replace it with your own environment variables:
 
 ```env
 APP_URL=WEBSITE_URL
