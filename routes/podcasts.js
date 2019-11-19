@@ -56,6 +56,7 @@ app.get('/short', (req, res) => {
   global.gConfigMulter.folderName = 'Novo destinado';
   const podcastList = [];
   Podcast.find()
+    .sort('-date')
     .skip((page - 1) * pagination)
     .limit(pagination)
     .populate('audioFile')
