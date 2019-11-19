@@ -12,8 +12,13 @@ const Post = require('../models/blog/Post');
 const PostCover = require('../models/blog/PostCover');
 
 app.get('/', async (req, res) => {
+  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const postsList = [];
-  Post.find().populate('cover')
+  Post.find()
+    .skip((page - 1) * pagination)
+    .limit(pagination)
+    .populate('cover')
     .then((posts) => {
       posts.map((post) => {
         postsList.push({
@@ -40,8 +45,13 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/short', async (req, res) => {
+  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const postsList = [];
-  Post.find().populate('cover')
+  Post.find()
+    .skip((page - 1) * pagination)
+    .limit(pagination)
+    .populate('cover')
     .then((posts) => {
       posts.map((post) => {
         postsList.push({

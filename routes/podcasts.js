@@ -17,9 +17,14 @@ const configMulter = require('../config/multerConfig');
 
 // Get All Podcasts
 app.get('/', (req, res) => {
+  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   global.gConfigMulter.folderName = 'Novo destinado';
   const podcastList = [];
-  Podcast.find().populate('audioFile').populate('cover')
+  Podcast.find().populate('audioFile')
+    .skip((page - 1) * pagination)
+    .limit(pagination)
+    .populate('cover')
     .then((podcasts) => {
       podcasts.map((podcast) => {
         podcastList.push({
@@ -46,9 +51,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/short', (req, res) => {
+  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   global.gConfigMulter.folderName = 'Novo destinado';
   const podcastList = [];
-  Podcast.find().populate('audioFile').populate('cover')
+  Podcast.find()
+    .skip((page - 1) * pagination)
+    .limit(pagination)
+    .populate('audioFile')
+    .populate('cover')
     .then((podcasts) => {
       podcasts.map((podcast) => {
         podcastList.push({
