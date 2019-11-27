@@ -26,23 +26,29 @@ app.get('/', (req, res) => {
     .limit(pagination)
     .populate('cover')
     .then((podcasts) => {
-      podcasts.map((podcast) => {
-        podcastList.push({
-          id: podcast.id,
-          type: podcast.type,
-          slug: podcast.slug,
-          category: podcast.category,
-          title: podcast.title,
-          description: podcast.description,
-          tags: podcast.tags,
-          audioFile: podcast.audioFile,
-          cover: podcast.cover,
-          uploadedOn: podcast.uploadedOn,
-          updatedOn: podcast.updatedOn,
+      if (podcasts.length === 0) {
+        res.status(200).send({
+          found: false,
         });
-        console.log(podcastList);
-      });
-      res.status(302).send(podcastList);
+      } else if (podcasts.length > 0) {
+        podcasts.reverse().map((podcast) => {
+          podcastList.push({
+            id: podcast.id,
+            type: podcast.type,
+            slug: podcast.slug,
+            category: podcast.category,
+            title: podcast.title,
+            description: podcast.description,
+            tags: podcast.tags,
+            audioFile: podcast.audioFile,
+            cover: podcast.cover,
+            uploadedOn: podcast.uploadedOn,
+            updatedOn: podcast.updatedOn,
+          });
+          console.log(podcastList);
+        });
+        res.status(302).send(podcastList);
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -62,19 +68,25 @@ app.get('/short', (req, res) => {
     .populate('audioFile')
     .populate('cover')
     .then((podcasts) => {
-      podcasts.map((podcast) => {
-        podcastList.push({
-          id: podcast.id,
-          slug: podcast.slug,
-          category: podcast.category,
-          title: podcast.title,
-          cover: podcast.cover,
-          uploadedOn: podcast.uploadedOn,
-          updatedOn: podcast.updatedOn,
+      if (podcasts.length === 0) {
+        res.status(200).send({
+          found: false,
+        })
+      } else if (podcasts.length > 0) {
+        podcasts.reverse().map((podcast) => {
+          podcastList.push({
+            id: podcast.id,
+            slug: podcast.slug,
+            category: podcast.category,
+            title: podcast.title,
+            cover: podcast.cover,
+            uploadedOn: podcast.uploadedOn,
+            updatedOn: podcast.updatedOn,
+          });
+          console.log(podcastList);
         });
-        console.log(podcastList);
-      });
-      res.status(302).send(podcastList);
+        res.status(302).send(podcastList);
+      }
     })
     .catch((err) => {
       console.log(err);
