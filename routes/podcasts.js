@@ -71,7 +71,7 @@ app.get('/short', (req, res) => {
       if (podcasts.length === 0) {
         res.status(200).send({
           found: false,
-        })
+        });
       } else if (podcasts.length > 0) {
         podcasts.reverse().map((podcast) => {
           podcastList.push({
