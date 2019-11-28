@@ -19,7 +19,7 @@ const configMulter = require('../config/multerConfig');
 app.get('/', (req, res) => {
   const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
-  global.gConfigMulter.folderName = 'Novo destinado';
+  global.gConfigMulter.folderName = 'New Destination';
   const podcastList = [];
   Podcast.find().populate('audioFile')
     .skip((page - 1) * pagination)
@@ -59,7 +59,7 @@ app.get('/', (req, res) => {
 app.get('/short', (req, res) => {
   const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
-  global.gConfigMulter.folderName = 'Novo destinado';
+  global.gConfigMulter.folderName = 'New Destination';
   const podcastList = [];
   Podcast.find()
     .sort('-date')
