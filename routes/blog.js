@@ -136,14 +136,19 @@ app.get('/get/category/:category', async (req, res) => {
 
     },
   )
+    .sort({publishedOn: -1})
     .populate('cover')
     .then((posts) => {
       posts.map((post) => {
         postsList.push({
           title: post.title,
+          slug: post.slug,
+          cover: post.cover,
+          publishedOn: post.publishedOn,
+          updateOn: post.updateOn,
         });
       });
-      res.status(302).send(posts);
+      res.status(302).send(postsList);
     })
     .catch((err) => {
       res.json({
@@ -154,7 +159,7 @@ app.get('/get/category/:category', async (req, res) => {
 
 app.get('/get/category/newest/:slug/:category', async (req, res) => {
   const { slug, category } = req.params;
-  let postList = [];
+  let postsList = [];
   console.log('categoy:', category);
   Post.find(
     { category: { $regex: `${category}`, $options: 'i' } },
@@ -167,7 +172,7 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
       console.log('posts:', posts);
       posts.map((post) => {
         if (slug !== post.slug) {
-          postList.push({
+          postsList.push({
             id: post.id,
             type: post.type,
             slug: post.slug,
@@ -182,17 +187,17 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
           });
         }
       });
-      postList = postList.reverse();
-      console.log('podcastList:', postList);
-      if (postList.length === 0) {
+      postsList = postsList.reverse();
+      if (postsList.length === 0) {
+        console.log('EMPTY')
         res.status(200).send({
           found: false,
         });
       }
-      if (postList.length > 4) {
-        postList = postList.slice(0, 4);
+      if (postsList.length > 4) {
+        postsList = postsList.slice(0, 4);
       }
-      res.status(302).send(postList);
+      res.status(302).send(postsList);
     })
     .catch((err) => {
       res.json({
@@ -204,6 +209,28 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
 app.get('/category/:category', async (req, res) => {
   const { category } = req.params;
   console.log('category:', category);
+  const postsList = [];
+  Post.find({
+    category,
+  })
+    .then((posts) => {
+      console.log('posts latest:', posts)
+      posts.map((post) => {
+        postsList.push({
+          title: post.title,
+          slug: post.slug,
+          cover: post.cover,
+          publishedOn: post.publishedOn,
+          updateOn: post.updateOn,
+        });
+      });
+      res.status(200).send(postsList);
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
 });
 
 app.get('/categories/newest/:number', async (req, res) => {
@@ -211,12 +238,25 @@ app.get('/categories/newest/:number', async (req, res) => {
   const postList = [];
   let tempCategory;
   Post.find()
+    .sort({publishedOn: -1})
     .then((posts) => {
-      posts.reverse().map((post) => {
-        postList.push({
-          category: post.category,
-        });
+
+      posts.map((post) => {
+        if (postList.length !== 0) {
+          postList.map((item) => {
+            if (item.category !== post.category) {
+              postList.push({
+                category: post.category,
+              });
+            }
+          })
+        } else {
+          postList.push({
+            category: post.category,
+          });
+        }
       });
+      console.log('postList:', postList)
       res.status(302).send(postList);
     })
     .catch((err) => {
