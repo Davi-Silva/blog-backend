@@ -266,7 +266,8 @@ app.get('/categories/newest/:number', async (req, res) => {
 });
 
 app.get('/get/tags/:tags', async (req, res)=> {
-  
+  const {tags} = req.params;
+  console.log("tags:", tags);
 });
 
 app.post('/publish', async (req, res) => {
