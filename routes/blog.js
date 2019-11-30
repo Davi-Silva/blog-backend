@@ -136,7 +136,7 @@ app.get('/get/category/:category', async (req, res) => {
 
     },
   )
-    .sort({publishedOn: -1})
+    .sort({ publishedOn: -1 })
     .populate('cover')
     .then((posts) => {
       posts.map((post) => {
@@ -189,7 +189,7 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
       });
       postsList = postsList.reverse();
       if (postsList.length === 0) {
-        console.log('EMPTY')
+        console.log('EMPTY');
         res.status(200).send({
           found: false,
         });
@@ -214,7 +214,7 @@ app.get('/category/:category', async (req, res) => {
     category,
   })
     .then((posts) => {
-      console.log('posts latest:', posts)
+      console.log('posts latest:', posts);
       posts.map((post) => {
         postsList.push({
           title: post.title,
@@ -238,9 +238,8 @@ app.get('/categories/newest/:number', async (req, res) => {
   const postList = [];
   let tempCategory;
   Post.find()
-    .sort({publishedOn: -1})
+    .sort({ publishedOn: -1 })
     .then((posts) => {
-
       posts.map((post) => {
         if (postList.length !== 0) {
           postList.map((item) => {
@@ -249,14 +248,14 @@ app.get('/categories/newest/:number', async (req, res) => {
                 category: post.category,
               });
             }
-          })
+          });
         } else {
           postList.push({
             category: post.category,
           });
         }
       });
-      console.log('postList:', postList)
+      console.log('postList:', postList);
       res.status(302).send(postList);
     })
     .catch((err) => {
@@ -264,6 +263,10 @@ app.get('/categories/newest/:number', async (req, res) => {
         err,
       });
     });
+});
+
+app.get('/get/tags/:tags', async (req, res)=> {
+  
 });
 
 app.post('/publish', async (req, res) => {
