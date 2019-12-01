@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 const express = require('express');
 
 const app = express();
@@ -200,7 +201,7 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
       res.status(302).send(postsList);
     })
     .catch((err) => {
-      res.json({
+      res.status(500).send({
         err,
       });
     });
@@ -265,9 +266,34 @@ app.get('/categories/newest/:number', async (req, res) => {
     });
 });
 
-app.get('/get/tags/:tags', async (req, res)=> {
-  const {tags} = req.params;
-  console.log("tags:", tags);
+app.get('/get/tag/:tag', async (req, res) => {
+  const { tag } = req.params;
+  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  const postsList = [];
+  Post.find({
+    tags: tag,
+  })
+    .skip((page - 1) * pagination)
+    .limit(pagination)
+    .sort()
+    .populate('cover')
+    .then((posts) => {
+      posts.map((post) => {
+        postsList.push({
+          title: post.title,
+          slug: post.slug,
+          coverUrl: post.cover.url,
+          publishedOn: post.publishedOn,
+        });
+      });
+      res.status(302).send(postsList);
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
 });
 
 app.post('/publish', async (req, res) => {
@@ -286,7 +312,7 @@ app.post('/publish', async (req, res) => {
   const errors = [];
   if (!isSlugValid
     || !category
-    || !tags
+    || tags.length === 0
     || !title
     || !slug
     || !content
