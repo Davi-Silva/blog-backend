@@ -54,6 +54,7 @@ app.get('/short', async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const postsList = [];
   Post.find()
+    .sort({ publishedOn: -1 })
     .skip((page - 1) * pagination)
     .limit(pagination)
     .populate('cover')
@@ -72,6 +73,7 @@ app.get('/short', async (req, res) => {
             updateOn: post.updateOn,
           });
         });
+
         res.status(302).send(postsList);
       }
     })
@@ -201,7 +203,7 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
       res.status(302).send(postsList);
     })
     .catch((err) => {
-      res.status(500).send({
+      res.json({
         err,
       });
     });
@@ -234,30 +236,17 @@ app.get('/category/:category', async (req, res) => {
     });
 });
 
-app.get('/categories/newest/:number', async (req, res) => {
+app.get('/get/categories/newest/:number', async (req, res) => {
   const { number } = req.params;
-  const postList = [];
-  let tempCategory;
+  const postsList = [];
   Post.find()
     .sort({ publishedOn: -1 })
     .then((posts) => {
       posts.map((post) => {
-        if (postList.length !== 0) {
-          postList.map((item) => {
-            if (item.category !== post.category) {
-              postList.push({
-                category: post.category,
-              });
-            }
-          });
-        } else {
-          postList.push({
-            category: post.category,
-          });
-        }
+        postsList.push(post.category);
       });
-      console.log('postList:', postList);
-      res.status(302).send(postList);
+      const uniquePostsList = postsList.filter((v, i, a) => a.indexOf(v) === i);
+      res.status(302).send(uniquePostsList.splice(0, number));
     })
     .catch((err) => {
       res.json({
@@ -279,15 +268,21 @@ app.get('/get/tag/:tag', async (req, res) => {
     .sort()
     .populate('cover')
     .then((posts) => {
-      posts.map((post) => {
-        postsList.push({
-          title: post.title,
-          slug: post.slug,
-          coverUrl: post.cover.url,
-          publishedOn: post.publishedOn,
+      if (posts.length === 0) {
+        res.status(200).send({
+          found: false,
         });
-      });
-      res.status(302).send(postsList);
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            coverUrl: post.cover.url,
+            publishedOn: post.publishedOn,
+          });
+        });
+        res.status(302).send(postsList);
+      }
     })
     .catch((err) => {
       res.json({
