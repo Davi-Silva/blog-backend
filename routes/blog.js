@@ -132,20 +132,25 @@ app.get('/get/slug/:slug', (req, res) => {
 app.get('/get/category/:category', async (req, res) => {
   const { category } = req.params;
   const postsList = [];
+  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   console.log('categoy:', category);
   Post.find(
     { category: { $regex: `${category}`, $options: 'i' } },
     (err, docs) => {
-
+      console.log('err:', err);
     },
   )
-    .sort({ publishedOn: -1 })
+    // .sort({ publishedOn: -1 })
+    .skip((page - 1) * pagination)
+    .limit(pagination)
     .populate('cover')
     .then((posts) => {
       posts.map((post) => {
         postsList.push({
           title: post.title,
           slug: post.slug,
+          category: post.category,
           cover: post.cover,
           publishedOn: post.publishedOn,
           updateOn: post.updateOn,
@@ -220,33 +225,6 @@ app.get('/get/categories/newest/:number', async (req, res) => {
       });
       const uniquePostsList = postsList.filter((v, i, a) => a.indexOf(v) === i);
       res.status(302).send(uniquePostsList.splice(0, number));
-    })
-    .catch((err) => {
-      res.json({
-        err,
-      });
-    });
-});
-
-app.get('/get/category/:category', async (req, res) => {
-  const { category } = req.params;
-  console.log('category:', category);
-  const postsList = [];
-  Post.find({
-    category,
-  })
-    .then((posts) => {
-      console.log('posts latest:', posts);
-      posts.map((post) => {
-        postsList.push({
-          title: post.title,
-          slug: post.slug,
-          cover: post.cover,
-          publishedOn: post.publishedOn,
-          updateOn: post.updateOn,
-        });
-      });
-      res.status(200).send(postsList);
     })
     .catch((err) => {
       res.json({
