@@ -26,7 +26,7 @@ const PodcastSchema = new mongoose.Schema({
     required: true,
   },
   tags: {
-    type: String,
+    type: [],
     required: false,
   },
   audioFile: {

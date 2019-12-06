@@ -296,7 +296,12 @@ app.post('/upload', (req, res) => {
   } = req.body;
   console.log('audioFile:', audioFile);
   const errors = [];
-  if (!isSlugValid || !category || !title || !description || !tags) {
+  if (
+    !isSlugValid
+    || !category
+    || !title
+    || !description
+    || !tags.length === 0) {
     errors.push({
       errorMsg: 'Please enter all fields.',
     });
