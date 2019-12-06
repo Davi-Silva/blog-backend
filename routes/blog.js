@@ -209,7 +209,26 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
     });
 });
 
-app.get('/category/:category', async (req, res) => {
+app.get('/get/categories/newest/:number', async (req, res) => {
+  const { number } = req.params;
+  const postsList = [];
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .then((posts) => {
+      posts.map((post) => {
+        postsList.push(post.category);
+      });
+      const uniquePostsList = postsList.filter((v, i, a) => a.indexOf(v) === i);
+      res.status(302).send(uniquePostsList.splice(0, number));
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+app.get('/get/category/:category', async (req, res) => {
   const { category } = req.params;
   console.log('category:', category);
   const postsList = [];
@@ -228,25 +247,6 @@ app.get('/category/:category', async (req, res) => {
         });
       });
       res.status(200).send(postsList);
-    })
-    .catch((err) => {
-      res.json({
-        err,
-      });
-    });
-});
-
-app.get('/get/categories/newest/:number', async (req, res) => {
-  const { number } = req.params;
-  const postsList = [];
-  Post.find()
-    .sort({ publishedOn: -1 })
-    .then((posts) => {
-      posts.map((post) => {
-        postsList.push(post.category);
-      });
-      const uniquePostsList = postsList.filter((v, i, a) => a.indexOf(v) === i);
-      res.status(302).send(uniquePostsList.splice(0, number));
     })
     .catch((err) => {
       res.json({
