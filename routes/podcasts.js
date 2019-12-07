@@ -94,10 +94,30 @@ app.get('/short', (req, res) => {
   console.log('Getting all podcasts...');
 });
 
+app.get('/get/categories/newest/:number', async (req, res) => {
+  const { number } = req.params;
+  const podcastsList = [];
+  Podcast.find()
+    .sort({ publishedOn: -1 })
+    .then((podcasts) => {
+      podcasts.map((podcast) => {
+        podcastsList.push(podcast.category);
+      });
+      const uniquePostsList = podcastsList.filter((v, i, a) => a.indexOf(v) === i);
+      res.status(302).send(uniquePostsList.splice(0, number));
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
 app.get('/audio', async (req, res) => {
   const {
     title,
   } = req.params.title;
+  console.log('AUDIO MAROTO:', title);
 
   const podcastFile = await PodcastAudioFile.find({
     title,
@@ -178,21 +198,66 @@ app.get('/get/slug/:slug', (req, res) => {
 app.get('/get/category/:category', async (req, res) => {
   const { category } = req.params;
   const podcastList = [];
+  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   console.log('categoy:', category);
   Podcast.find(
     { category: { $regex: `${category}`, $options: 'i' } },
     (err, docs) => {
-
+      console.log('err:', err);
     },
   )
+    .skip((page - 1) * pagination)
+    .limit(pagination)
     .populate('cover')
     .then((podcasts) => {
       podcasts.map((podcast) => {
         podcastList.push({
           title: podcast.title,
+          slug: podcast.slug,
+          category: podcast.category,
+          cover: podcast.cover,
+          publishedOn: podcast.publishedOn,
+          updateOn: podcast.updateOn,
         });
       });
       res.status(302).send(podcasts);
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+app.get('/get/tag/:tag', async (req, res) => {
+  const { tag } = req.params;
+  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  const podcastsList = [];
+  Podcast.find({
+    tags: tag,
+  })
+    .skip((page - 1) * pagination)
+    .limit(pagination)
+    .sort()
+    .populate('cover')
+    .then((podcasts) => {
+      if (podcasts.length === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (podcasts.length > 0) {
+        podcasts.map((podcast) => {
+          podcastsList.push({
+            title: podcast.title,
+            slug: podcast.slug,
+            coverUrl: podcast.cover.url,
+            uploadedOn: podcast.uploadedOn,
+          });
+        });
+        res.status(302).send(podcastsList);
+      }
     })
     .catch((err) => {
       res.json({
