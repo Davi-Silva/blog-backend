@@ -269,6 +269,45 @@ app.get('/get/tag/:tag', async (req, res) => {
     });
 });
 
+// Check if Podcast slug is valid
+app.get('/validation/slug/:slug', (req, res) => {
+  const { slug } = req.params;
+  const postList = [];
+  Post.find({
+    slug,
+  })
+    .then((posts) => {
+      posts.map((post) => {
+        postList.push({
+          id: post.id,
+          type: post.type,
+          slug: post.slug,
+          category: post.category,
+          title: post.title,
+          description: post.description,
+          tags: post.tags,
+          publishedOn: post.publishedOn,
+          updateOn: post.updateOn,
+        });
+      });
+      console.log('posts:', postList);
+      let valid = true;
+      if (postList.length > 0) {
+        valid = false;
+        res.json({
+          valid,
+        });
+      } else if (postList.length === 0) {
+        res.json({
+          valid,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 app.post('/publish', async (req, res) => {
   const {
     isSlugValid,
@@ -371,45 +410,6 @@ app.post('/publish/cover', multer(multerConfig).single('file'), async (req, res)
   return res.json(cover);
 });
 
-// Check if Podcast slug is valid
-app.get('/validation/slug/:slug', (req, res) => {
-  const { slug } = req.params;
-  const postList = [];
-  Post.find({
-    slug,
-  })
-    .then((posts) => {
-      posts.map((post) => {
-        postList.push({
-          id: post.id,
-          type: post.type,
-          slug: post.slug,
-          category: post.category,
-          title: post.title,
-          description: post.description,
-          tags: post.tags,
-          publishedOn: post.publishedOn,
-          updateOn: post.updateOn,
-        });
-      });
-      console.log('posts:', postList);
-      let valid = true;
-      if (postList.length > 0) {
-        valid = false;
-        res.json({
-          valid,
-        });
-      } else if (postList.length === 0) {
-        res.json({
-          valid,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
 app.post('/set/global-variable', async (req, res) => {
   const {
     type,
@@ -422,6 +422,26 @@ app.post('/set/global-variable', async (req, res) => {
   res.status(200).send({
     ok: true,
   });
+});
+
+app.post('/upload/cover', multer(multerConfig).single('file'), async (req, res) => {
+  const {
+    originalname: name,
+    size,
+    key,
+    location: url = '',
+  } = req.file;
+  const id = uuidv4();
+  console.log('id:', id);
+  const cover = await Post.create({
+    id,
+    name,
+    size,
+    key,
+    url,
+  });
+
+  return res.json(cover);
 });
 
 // Update Podcast Info
@@ -477,27 +497,6 @@ app.put('/update/:id', (req, res) => {
     });
 });
 
-app.post('/upload/cover', multer(multerConfig).single('file'), async (req, res) => {
-  const {
-    originalname: name,
-    size,
-    key,
-    location: url = '',
-  } = req.file;
-  const id = uuidv4();
-  console.log('id:', id);
-  const cover = await Post.create({
-    id,
-    name,
-    size,
-    key,
-    url,
-  });
-
-  return res.json(cover);
-});
-
-
 // Delete Podcast
 app.delete('/delete/:id', (req, res) => {
   const { id } = req.params;
@@ -515,7 +514,10 @@ app.delete('/delete/:id', (req, res) => {
 });
 
 app.delete('/delete/cover/:id', async (req, res) => {
-  const coverFile = await Post.findById(req.params.id);
+  const { id } = req.params;
+  const coverFile = await Post.findById(id);
+  console.log('id:', id);
+  console.log('coverFile:', coverFile);
   await coverFile.remove();
   return res.send({
     msg: 'Blog Post cover file successfully deleted',

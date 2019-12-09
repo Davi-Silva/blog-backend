@@ -568,7 +568,7 @@ app.delete('/delete/audio/:id', async (req, res) => {
 
 app.delete('/delete/cover/:id', async (req, res) => {
   const coverFile = await PodcastCover.findById(req.params.id);
-
+  console.log('coverFile:', coverFile);
   await coverFile.remove();
 
   return res.send({
