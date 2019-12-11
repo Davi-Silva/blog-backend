@@ -5,7 +5,7 @@ const router = express.Router();
 // const passport = require('passport');
 
 // Load User model
-const User = require('../models/User');
+const User = require('../models/user/User');
 
 router.get('/all', (req, res) => {
   const usersList = [];

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -18,6 +19,8 @@ const jwt = require('jsonwebtoken');
 const keys = require('./config/providers');
 
 const authConfig = require('./config/auth');
+
+const User = require('./models/user/User');
 
 let user = {};
 // environment variables
@@ -108,12 +111,51 @@ passport.use(
     clientSecret: keys.GITHUB.clientSecret,
     callbackURL: 'http://localhost:5000/auth/github/callback',
   },
-  (accessToken, refreshToken, profile, cb) => {
-    console.log(chalk.blue(JSON.stringify(profile)));
-    user = {
-      ...profile,
-    };
-    console.log(chalk.green(JSON.stringify(user)));
+  async (accessToken, refreshToken, profile, cb) => {
+    console.log('START FUNC');
+    const profileId = profile.id;
+    console.log('profileId:', profileId);
+    const tempUser = await User.find({
+      id: profileId,
+    });
+
+    console.log('BEFORE tempUser:', tempUser);
+    if (tempUser.length === 0) {
+      console.log('AFTER tempUser:', tempUser);
+      let tempEmail = '';
+      if (profile._json.email !== null) {
+        tempEmail = profile._json.email;
+      }
+      const newUser = new User({
+        id: profile.id,
+        name: profile.displayName,
+        email: tempEmail,
+        username: profile._json.login,
+        password: '',
+      });
+      await newUser
+        .save()
+        .then(() => {
+          User.findOne({
+            profileId,
+          })
+            .then((userInfo) => {
+              console.log('userInfo PROFILE HAS BEEN FOUND AFTER REGISTRATION:', userInfo);
+              user = {
+                ...userInfo,
+              };
+            });
+        })
+        .catch((err) => {
+          console.log('err:', err);
+        });
+    } else {
+      user = {
+        ...tempUser,
+      };
+    }
+
+
     return cb(null, profile);
   }),
 );
@@ -257,6 +299,7 @@ app.get(
   (req, res) => {
     user.token = generateToken(user.id);
     // res.redirect("http://localhost:3000/profile");
+
     res.redirect('http://localhost:3000/profile');
   },
 );
@@ -309,7 +352,7 @@ app.get(
 
 app.get('/user', (req, res) => {
   console.log('getting user data!');
-  console.log('user:', user);
+  // console.log('user:', user);
   res.send(user);
 });
 
