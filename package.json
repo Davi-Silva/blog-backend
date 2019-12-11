@@ -51,6 +51,7 @@
 		"express-session": "^1.17.0",
 		"get-audio-duration": "^1.0.0",
 		"http-proxy-middleware": "^0.20.0",
+		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.15",
 		"mongoose": "^5.7.4",
 		"morgan": "^1.9.1",
