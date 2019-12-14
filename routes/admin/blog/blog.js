@@ -10,7 +10,7 @@ const multerConfig = require('../../../config/multer');
 const authMiddleware = require('../../../middleware/auth');
 
 app.use(cors());
-app.use(authMiddleware);
+// app.use(authMiddleware);
 
 const Post = require('../../../models/blog/Post');
 const PostCover = require('../../../models/blog/PostCover');

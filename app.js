@@ -112,17 +112,20 @@ passport.use(
     callbackURL: 'http://localhost:5000/auth/github/callback',
   },
   async (accessToken, refreshToken, profile, cb) => {
-    console.log('START FUNC');
     const profileId = profile.id;
-    console.log('profileId:', profileId);
+    const {
+      photos,
+    } = profile;
     const tempUser = await User.find({
       id: profileId,
     });
 
-    console.log('BEFORE tempUser:', tempUser);
+    console.log('photos:', photos[0].value);
+
     if (tempUser.length === 0) {
-      console.log('AFTER tempUser:', tempUser);
       let tempEmail = '';
+      const image = photos[0].value;
+      console.log('INSIDE photos:', image);
       if (profile._json.email !== null) {
         tempEmail = profile._json.email;
       }
@@ -132,6 +135,7 @@ passport.use(
         email: tempEmail,
         username: profile._json.login,
         password: '',
+        profileImage: image,
       });
       await newUser
         .save()
@@ -140,10 +144,10 @@ passport.use(
             profileId,
           })
             .then((userInfo) => {
-              console.log('userInfo PROFILE HAS BEEN FOUND AFTER REGISTRATION:', userInfo);
               user = {
                 ...userInfo,
               };
+              console.log('userInfo PROFILE HAS BEEN FOUND AFTER REGISTRATION:', user);
             });
         })
         .catch((err) => {
