@@ -37,7 +37,7 @@ require('dotenv').config();
 const uri = process.env.ATLAS_URI;
 
 // Set up a whitelist and check against it:
-const whitelist = ['http://localhost:3000/profile/', 'http://cryptic-activist-frontend.herokuapp.com/', 'http://cryptic-activist-backend.herokuapp.com/', 'https://cryptic-activist-backend.herokuapp.com/'];
+const whitelist = ['http://localhost:3000/profile/', 'http://cryptic-activist-frontend.herokuapp.com/', 'http://cryptic-activist-backend.herokuapp.com/', 'https://cryptic-activist-backend.herokuapp.com/', 'https://hardcore-tesla-e87eac.netlify.com/', 'https://hardcore-tesla-e87eac.netlify.com/profile'];
 const corsOptions = {
   origin(origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -109,7 +109,7 @@ passport.use(
   new GithubStrategy({
     clientID: keys.GITHUB.clientID,
     clientSecret: keys.GITHUB.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/github/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/github/callback',
   },
   async (accessToken, refreshToken, profile, cb) => {
     const profileId = profile.id;
@@ -304,7 +304,7 @@ app.get(
     user.token = generateToken(user.id);
     // res.redirect("http://localhost:3000/profile");
 
-    res.redirect('http://localhost:3000/profile');
+    res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
   },
 );
 
@@ -364,7 +364,7 @@ app.get('/auth/logout', (req, res) => {
   console.log('logging out!');
   user = {};
   // res.redirect("http://localhost:3000");
-  res.redirect('http://localhost:3000/profile');
+  res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
 });
 
 // const port = process.env.PORT || 5000;
