@@ -361,7 +361,12 @@ app.get('/user', (req, res) => {
 app.get('/auth/logout', (req, res) => {
   console.log('logging out!');
   user = {};
-  res.redirect('http://localhost:3000');
+  res.status(200).send({
+    signedout: true,
+  })
+    .catch(() => {
+      res.status(500);
+    });
 });
 
 // const port = process.env.PORT || 5000;
