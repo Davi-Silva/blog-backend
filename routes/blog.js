@@ -72,6 +72,7 @@ app.get('/short', async (req, res) => {
           postsList.push({
             title: post.title,
             slug: post.slug,
+            category: post.category,
             cover: post.cover,
             publishedOn: post.publishedOn,
             updateOn: post.updateOn,
