@@ -60,7 +60,7 @@ app.get('/short', async (req, res) => {
   Post.find()
     .sort({ publishedOn: -1 })
     .skip((page - 1) * pagination)
-    .limit(pagination)
+    .limit(6)
     .populate('cover')
     .then((posts) => {
       if (posts.lenth === 0) {
