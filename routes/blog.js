@@ -73,6 +73,7 @@ app.get('/short', async (req, res) => {
             title: post.title,
             slug: post.slug,
             cover: post.cover,
+            category: post.category,
             publishedOn: post.publishedOn,
             updateOn: post.updateOn,
           });
