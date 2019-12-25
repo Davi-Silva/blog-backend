@@ -89,6 +89,145 @@ app.get('/short', async (req, res) => {
     });
 });
 
+
+app.get('/home/main-post', async (req, res) => {
+  const postsList = [];
+  console.log('/home/main-post');
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(5)
+    .populate('cover')
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+
+app.get('/home/news', async (req, res) => {
+  const postsList = [];
+  console.log('userId:', req.userId);
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(6)
+    .populate('cover')
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+app.get('/home/tutorials', async (req, res) => {
+  const postsList = [];
+  console.log('userId:', req.userId);
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(6)
+    .populate('cover')
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+app.get('/home/articles', async (req, res) => {
+  const postsList = [];
+  console.log('userId:', req.userId);
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(6)
+    .populate('cover')
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+
 app.get('/cover', async (req, res) => {
   const {
     title,
