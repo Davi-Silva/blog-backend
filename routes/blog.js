@@ -249,6 +249,7 @@ app.get('/get/slug/:slug', (req, res) => {
   Post.find({
     slug,
   }).populate('cover')
+    .populate('author')
     .then((posts) => {
       posts.map((post) => {
         postsList.push({

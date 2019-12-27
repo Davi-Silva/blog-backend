@@ -136,6 +136,7 @@ passport.use(
         username: profile._json.login,
         password: '',
         profileImage: image,
+        isAdmin: false,
       });
       await newUser
         .save()
@@ -264,6 +265,8 @@ app.use('/blog', require('./routes/blog'));
 // app.use('/admin/podcasts', require('./routes/admin/podcasts/podcasts'));
 // app.use('/admin/courses', require('./routes/admin/courses/courses'));
 app.use('/admin/blog', require('./routes/admin/blog/blog'));
+app.use('/admin/user', require('./routes/admin/user/user'));
+
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
 app.get(
