@@ -250,6 +250,13 @@ app.get('/get/slug/:slug', (req, res) => {
     slug,
   }).populate('cover')
     .populate('author')
+    .populate({
+      path: 'author',
+      populate: {
+        path: 'profileImage',
+        model: 'UserProfileImage',
+      },
+    })
     .then((posts) => {
       posts.map((post) => {
         postsList.push({

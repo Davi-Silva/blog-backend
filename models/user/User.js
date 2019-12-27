@@ -22,12 +22,17 @@ const UserSchema = new mongoose.Schema({
     required: false,
   },
   profileImage: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserProfileImage',
     required: false,
   },
   isAdmin: {
     type: Boolean,
     require: true,
+  },
+  origin: {
+    type: String,
+    required: true,
   },
   createdOn: {
     type: Date,

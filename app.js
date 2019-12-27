@@ -21,6 +21,7 @@ const keys = require('./config/providers');
 const authConfig = require('./config/auth');
 
 const User = require('./models/user/User');
+const UserProfileImage = require('./models/user/UserProfileImage');
 
 let user = {};
 // environment variables
@@ -37,16 +38,16 @@ require('dotenv').config();
 const uri = process.env.ATLAS_URI;
 
 // Set up a whitelist and check against it:
-const whitelist = ['http://localhost:3000/profile/'];
-const corsOptions = {
-  origin(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
+// const whitelist = ['http://localhost:3000/profile/'];
+// const corsOptions = {
+//   origin(origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+// };
 
 const app = express();
 // Allowing only the domain contained in the corsOptions object
@@ -112,13 +113,16 @@ passport.use(
     callbackURL: 'http://localhost:5000/auth/github/callback',
   },
   async (accessToken, refreshToken, profile, cb) => {
+    console.log(chalk.red(JSON.stringify(accessToken)));
     const profileId = profile.id;
+    let userImage = {};
     const {
       photos,
     } = profile;
     const tempUser = await User.find({
       id: profileId,
-    });
+    })
+      .populate('profileImage');
 
     console.log('photos:', photos[0].value);
 
@@ -129,14 +133,35 @@ passport.use(
       if (profile._json.email !== null) {
         tempEmail = profile._json.email;
       }
+      const newUserProfileImage = new UserProfileImage({
+        id: profile.id,
+        name: `${profile.displayName} profile picture`,
+        url: image,
+        origin: 'Github',
+      });
+      await newUserProfileImage
+        .save()
+        .then(async () => {
+          const img = await UserProfileImage.findOne({
+            id: profile.id,
+          });
+          userImage = {
+            ...img,
+          };
+        })
+        .catch((err) => {
+          console.log('err:', err);
+        });
+
       const newUser = new User({
         id: profile.id,
         name: profile.displayName,
         email: tempEmail,
         username: profile._json.login,
         password: '',
-        profileImage: image,
+        profileImage: userImage._doc._id,
         isAdmin: false,
+        origin: 'Github',
       });
       await newUser
         .save()
@@ -148,7 +173,7 @@ passport.use(
               user = {
                 ...userInfo,
               };
-              console.log('userInfo PROFILE HAS BEEN FOUND AFTER REGISTRATION:', user);
+              // console.log('userInfo PROFILE HAS BEEN FOUND AFTER REGISTRATION:', user);
             });
         })
         .catch((err) => {
@@ -358,6 +383,8 @@ app.get(
 app.get('/user', (req, res) => {
   console.log('getting user data!');
   // console.log('user:', user);
+
+
   res.send(user);
 });
 
@@ -366,10 +393,7 @@ app.get('/auth/logout', (req, res) => {
   user = {};
   res.status(200).send({
     signedout: true,
-  })
-    .catch(() => {
-      res.status(500);
-    });
+  });
 });
 
 // const port = process.env.PORT || 5000;
