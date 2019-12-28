@@ -1,8 +1,7 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-underscore-dangle */
 const express = require('express');
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
-const morgan = require('morgan');
-const path = require('path');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const AmazonStrategy = require('passport-amazon').Strategy;
@@ -13,19 +12,19 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 const TwitchStrategy = require('passport-twitch.js').Strategy;
 const chalk = require('chalk');
 const session = require('express-session');
-const process = require('process');
+const jwt = require('jsonwebtoken');
 const keys = require('../../config/providers');
-const authConfig = require('../../config/auth');
 
+const authConfig = require('../../config/auth');
 
 const User = require('../../models/user/User');
 const UserProfileImage = require('../../models/user/UserProfileImage');
 
-const user = {};
+let user = {};
 
 const app = express();
-
 app.use(cors());
+
 
 passport.serializeUser((user, cb) => {
   cb(null, user);
@@ -232,28 +231,9 @@ app.use(
 );
 
 
-app.use(morgan('dev'));
-app.use(
-  '/files',
-  express.static(path.resolve(__dirname, '.', 'tmp', 'uploads')),
-);
-
-
-// Routes
-// app.use("/", require("./routes/index"));
-app.use('/users', require('./routes/users'));
-app.use('/podcasts', require('./routes/podcasts'));
-app.use('/courses', require('./routes/courses'));
-app.use('/blog', require('./routes/blog'));
-// app.use('/admin/podcasts', require('./routes/admin/podcasts/podcasts'));
-// app.use('/admin/courses', require('./routes/admin/courses/courses'));
-app.use('/admin/blog', require('./routes/admin/blog/blog'));
-app.use('/admin/user', require('./routes/admin/user/user'));
-
-
-app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/facebook', passport.authenticate('facebook'));
 app.get(
-  '/auth/facebook/callback',
+  '/facebook/callback',
   passport.authenticate('facebook'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
@@ -262,13 +242,13 @@ app.get(
 );
 
 app.get(
-  '/auth/amazon',
+  '/amazon',
   passport.authenticate('amazon', {
     scope: ['profile'],
   }),
 );
 app.get(
-  '/auth/amazon/callback',
+  '/amazon/callback',
   passport.authenticate('amazon'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
@@ -282,9 +262,9 @@ function generateToken(params = {}) {
   });
 }
 
-app.get('/auth/github', passport.authenticate('github'));
+app.get('/github', passport.authenticate('github'));
 app.get(
-  '/auth/github/callback',
+  '/github/callback',
   passport.authenticate('github'),
   (req, res) => {
     user.token = generateToken(user.id);
@@ -293,13 +273,13 @@ app.get(
 );
 
 app.get(
-  '/auth/google',
+  '/google',
   passport.authenticate('google', {
     scope: ['profile', 'email'],
   }),
 );
 app.get(
-  '/auth/google/callback',
+  '/google/callback',
   passport.authenticate('google'),
   (req, res) => {
     console.log('Google Profile Info', req.profile);
@@ -308,9 +288,9 @@ app.get(
   },
 );
 
-app.get('/auth/instagram', passport.authenticate('instagram'));
+app.get('/instagram', passport.authenticate('instagram'));
 app.get(
-  '/auth/instagram/callback',
+  '/instagram/callback',
   passport.authenticate('instagram'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
@@ -318,19 +298,19 @@ app.get(
   },
 );
 
-app.get('/auth/spotify', passport.authenticate('spotify'));
+app.get('/spotify', passport.authenticate('spotify'));
 app.get(
-  '/auth/spotify/callback',
+  '/spotify/callback',
   passport.authenticate('spotify'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
-    res.redirect('http://localhost:3000/profile');
+    res.redirect('http://localhost:3000');
   },
 );
 
-app.get('/auth/twitch', passport.authenticate('twitch.js'));
+app.get('/twitch', passport.authenticate('twitch.js'));
 app.get(
-  '/auth/twitch/callback',
+  '/twitch/callback',
   passport.authenticate('twitch.js'),
   (req, res) => {
     // res.redirect("http://localhost:3000/profile");
@@ -340,13 +320,11 @@ app.get(
 
 app.get('/user', (req, res) => {
   console.log('getting user data!');
-  // console.log('user:', user);
-
-
+  console.log('user:', user);
   res.send(user);
 });
 
-app.get('/auth/logout', (req, res) => {
+app.get('/logout', (req, res) => {
   console.log('logging out!');
   user = {};
   res.status(200).send({
@@ -354,4 +332,4 @@ app.get('/auth/logout', (req, res) => {
   });
 });
 
-// con
+module.exports = app;
