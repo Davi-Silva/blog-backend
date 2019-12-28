@@ -2,36 +2,95 @@ const express = require('express');
 
 const app = express();
 const cors = require('cors');
+const uuidv4 = require('uuid/v4');
 const multer = require('multer');
 const multerConfig = require('../../../config/multer');
 
 app.use(cors());
 
 const UserProfileImage = require('../../../models/user/UserProfileImage');
+const User = require('../../../models/user/User');
 
 app.post('/verify/su', (req, res) => {
   const {
     user,
     password,
   } = req.body;
-  const admin = {
-    user: 'admin',
-    password: 'admin',
+  const su = {
+    user: 'su',
+    password: 'su',
   };
-  if (user === admin.user && password === admin.password) {
+  if (user === su.user && password === su.password) {
     res.status(200).send({
-      isAdmin: true,
+      isSU: true,
     });
   } else {
     res.status(200).send({
-      isAdmin: false,
+      isSU: false,
     });
   }
 });
 
-// app.post('/register/admin', (req, res) => {
+app.get('/verify/admin/username/:username', (req, res) => {
+  const { username } = req.params;
+  console.log('username:', username);
+  let valid = true;
+  User.find({
+    username,
+  })
+    .then((users) => {
+      console.log('users:', users);
+      if (users.length > 0) {
+        valid = false;
+      }
+      res.json({
+        valid,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
 
-// });
+app.post('/register/admin', (req, res) => {
+  const {
+    user,
+    password,
+  } = req.body;
+  const errors = [];
+  if (!user || !password) {
+    errors.push({
+      errorMsg: 'Please enter all fields.',
+    });
+  }
+
+  if (errors.length > 0) {
+    res.json({
+      error: errors,
+    });
+  } else {
+    const id = uuidv4();
+    const newUser = new User({
+      id,
+      name: '',
+      username: user,
+      email: '',
+      password,
+      isAdmin: true,
+      origin: 'Local',
+    });
+    newUser
+      .save()
+      .then(() => {
+        res.status(200).send({
+          msg: 'New admin user has been successfully created.',
+          id,
+        });
+      });
+  }
+});
 
 app.post('/upload/profile-image', multer(multerConfig).single('file'), async (req, res) => {
   const {

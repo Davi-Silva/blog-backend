@@ -7,15 +7,23 @@ const router = express.Router();
 // Load User model
 const User = require('../models/user/User');
 
+const user = {};
+
 router.get('/all', (req, res) => {
   const usersList = [];
   User.find()
+    .populate('profileImage')
     .then((users) => {
       users.map((user) => {
         usersList.push({
+          id: user.id,
           name: user.name,
           email: user.email,
-          created_on: user.created_on,
+          username: user.username,
+          profileImage: user.profileImage,
+          isAdmin: user.isAdmin,
+          origin: user.origin,
+          createdOn: user.createdOn,
         });
         console.log(usersList);
       });

@@ -1,7 +1,6 @@
-/* eslint-disable no-underscore-dangle */
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const path = require('path');
 const passport = require('passport');
@@ -15,55 +14,18 @@ const TwitchStrategy = require('passport-twitch.js').Strategy;
 const chalk = require('chalk');
 const session = require('express-session');
 const process = require('process');
-const jwt = require('jsonwebtoken');
-const keys = require('./config/providers');
+const keys = require('../../config/providers');
+const authConfig = require('../../config/auth');
 
-const authConfig = require('./config/auth');
 
-const User = require('./models/user/User');
-const UserProfileImage = require('./models/user/UserProfileImage');
+const User = require('../../models/user/User');
+const UserProfileImage = require('../../models/user/UserProfileImage');
 
-let user = {};
-// environment variables
-process.env.NODE_ENV = 'development';
-// process.env.NODE_ENV = "staging";
-// process.env.NODE_ENV = "testing".;
-// process.env.NODE_ENV = "production";
-
-// config variables
-const config = require('./config/config.js');
-
-require('dotenv').config();
-
-const uri = process.env.ATLAS_URI;
-
-// Set up a whitelist and check against it:
-// const whitelist = ['http://localhost:3000/profile/'];
-// const corsOptions = {
-//   origin(origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-// };
+const user = {};
 
 const app = express();
-// Allowing only the domain contained in the corsOptions object
-// app.use(cors(corsOptions));
+
 app.use(cors());
-
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-});
-
-const { connection } = mongoose;
-connection.once('open', () => {
-  console.log('MongoDB Atlas database connection established successfully.');
-});
 
 passport.serializeUser((user, cb) => {
   cb(null, user);
@@ -392,9 +354,4 @@ app.get('/auth/logout', (req, res) => {
   });
 });
 
-// const port = process.env.PORT || 5000;
-const port = process.env.PORT || global.gConfig.node_port;
-
-app.listen(port, () => {
-  console.log(`${global.gConfig.app_name} is listening on port: ${port}`);
-});
+// con
