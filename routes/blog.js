@@ -14,6 +14,7 @@ app.use(cors());
 
 const Post = require('../models/blog/Post');
 const PostCover = require('../models/blog/PostCover');
+const User = require('../models/user/User');
 
 app.get('/', async (req, res) => {
   const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
@@ -41,7 +42,7 @@ app.get('/', async (req, res) => {
           publishedOn: post.publishedOn,
           updateOn: post.updateOn,
         }));
-        console.log('postsList:', posts);
+        // console.log('postsList:', posts);
         res.status(302).send(postsList);
       }
     })
@@ -56,11 +57,10 @@ app.get('/short', async (req, res) => {
   const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const postsList = [];
-  console.log('userId:', req.userId);
   Post.find()
     .sort({ publishedOn: -1 })
     .skip((page - 1) * pagination)
-    .limit(pagination)
+    .limit(6)
     .populate('cover')
     .then((posts) => {
       if (posts.lenth === 0) {
@@ -72,6 +72,145 @@ app.get('/short', async (req, res) => {
           postsList.push({
             title: post.title,
             slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+
+app.get('/home/main-post', async (req, res) => {
+  const postsList = [];
+  console.log('/home/main-post');
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(5)
+    .populate('cover')
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+
+app.get('/home/news', async (req, res) => {
+  const postsList = [];
+  console.log('userId:', req.userId);
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(6)
+    .populate('cover')
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+app.get('/home/most-recent-videos', async (req, res) => {
+  const postsList = [];
+  console.log('userId:', req.userId);
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(4)
+    .populate('cover')
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+app.get('/home/tutorials', async (req, res) => {
+  const postsList = [];
+  console.log('userId:', req.userId);
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(6)
+    .populate('cover')
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
             cover: post.cover,
             category: post.category,
             publishedOn: post.publishedOn,
@@ -88,6 +227,59 @@ app.get('/short', async (req, res) => {
       });
     });
 });
+
+app.get('/home/articles', async (req, res) => {
+  const postsList = [];
+  console.log('userId:', req.userId);
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(6)
+    .populate('cover')
+    .populate({
+      path: 'author',
+      populate: {
+        path: 'profileImage',
+        model: 'UserProfileImage',
+      },
+    })
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            author: post.author,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
+app.get('/get/top-authors', async (req, res) => {
+  User.find()
+    .then((users) => {
+      res.status(200).send(users);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 
 app.get('/cover', async (req, res) => {
   const {
@@ -110,6 +302,14 @@ app.get('/get/slug/:slug', (req, res) => {
   Post.find({
     slug,
   }).populate('cover')
+    .populate('author')
+    .populate({
+      path: 'author',
+      populate: {
+        path: 'profileImage',
+        model: 'UserProfileImage',
+      },
+    })
     .then((posts) => {
       posts.map((post) => {
         postsList.push({
@@ -181,6 +381,7 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
     },
   )
     .populate('cover')
+    .limit(4)
     .then((posts) => {
       console.log('posts:', posts);
       posts.map((post) => {

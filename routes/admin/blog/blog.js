@@ -66,7 +66,7 @@ app.post('/publish', async (req, res) => {
     cover,
     author,
   } = req.body;
-  console.log('tags:', tags);
+  console.log('author:', author);
 
   const errors = [];
   if (!isSlugValid
@@ -74,8 +74,7 @@ app.post('/publish', async (req, res) => {
     || tags.length === 0
     || !title
     || !slug
-    || !content
-    || !author) {
+    || !content) {
     errors.push({
       errorMsg: 'Please enter all fields.',
     });
