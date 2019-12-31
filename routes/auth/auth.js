@@ -39,7 +39,7 @@ passport.use(
   new FacebookStrategy({
     clientID: keys.FACEBOOK.clientID,
     clientSecret: keys.FACEBOOK.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/facebook/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/facebook/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -55,7 +55,7 @@ passport.use(
   new AmazonStrategy({
     clientID: keys.AMAZON.clientID,
     clientSecret: keys.AMAZON.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/amazon/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/amazon/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -71,7 +71,7 @@ passport.use(
   new GithubStrategy({
     clientID: keys.GITHUB.clientID,
     clientSecret: keys.GITHUB.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/github/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/github/callback',
   },
   async (accessToken, refreshToken, profile, cb) => {
     const profileId = profile.id;
@@ -152,7 +152,7 @@ passport.use(
   new GoogleStrategy({
     clientID: keys.GOOGLE.clientID,
     clientSecret: keys.GOOGLE.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/google/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/google/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -170,7 +170,7 @@ passport.use(
   new InstagramStrategy({
     clientID: keys.INSTAGRAM.clientID,
     clientSecret: keys.INSTAGRAM.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/instagram/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/instagram/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -186,7 +186,7 @@ passport.use(
   new SpotifyStrategy({
     clientID: keys.SPOTIFY.clientID,
     clientSecret: keys.SPOTIFY.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/spotify/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/spotify/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -202,7 +202,7 @@ passport.use(
   new TwitchStrategy({
     clientID: keys.TWITCH.clientID,
     clientSecret: keys.TWITCH.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/twitch/callback',
+    callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/twitch/callback',
   },
   (accessToken, refreshToken, profile, cb) => {
     console.log(chalk.blue(JSON.stringify(profile)));
@@ -236,8 +236,8 @@ app.get(
   '/facebook/callback',
   passport.authenticate('facebook'),
   (req, res) => {
-    // res.redirect("http://localhost:3000/profile");
-    res.redirect('http://localhost:3000/profile');
+    // res.redirect("https://hardcore-tesla-e87eac.netlify.com/profile");
+    res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
   },
 );
 
@@ -251,8 +251,8 @@ app.get(
   '/amazon/callback',
   passport.authenticate('amazon'),
   (req, res) => {
-    // res.redirect("http://localhost:3000/profile");
-    res.redirect('http://localhost:3000/profile');
+    // res.redirect("https://hardcore-tesla-e87eac.netlify.com/profile");
+    res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
   },
 );
 
@@ -268,7 +268,7 @@ app.get(
   passport.authenticate('github'),
   (req, res) => {
     user.token = generateToken(user.id);
-    res.redirect('http://localhost:3000/profile');
+    res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
   },
 );
 
@@ -283,8 +283,8 @@ app.get(
   passport.authenticate('google'),
   (req, res) => {
     console.log('Google Profile Info', req.profile);
-    // res.redirect("http://localhost:3000/profile");
-    res.redirect('http://localhost:3000/profile');
+    // res.redirect("https://hardcore-tesla-e87eac.netlify.com/profile");
+    res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
   },
 );
 
@@ -293,8 +293,8 @@ app.get(
   '/instagram/callback',
   passport.authenticate('instagram'),
   (req, res) => {
-    // res.redirect("http://localhost:3000/profile");
-    res.redirect('http://localhost:3000/profile');
+    // res.redirect("https://hardcore-tesla-e87eac.netlify.com/profile");
+    res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
   },
 );
 
@@ -303,8 +303,8 @@ app.get(
   '/spotify/callback',
   passport.authenticate('spotify'),
   (req, res) => {
-    // res.redirect("http://localhost:3000/profile");
-    res.redirect('http://localhost:3000');
+    // res.redirect("https://hardcore-tesla-e87eac.netlify.com/profile");
+    res.redirect('https://hardcore-tesla-e87eac.netlify.com');
   },
 );
 
@@ -313,8 +313,8 @@ app.get(
   '/twitch/callback',
   passport.authenticate('twitch.js'),
   (req, res) => {
-    // res.redirect("http://localhost:3000/profile");
-    res.redirect('http://localhost:3000/profile');
+    // res.redirect("https://hardcore-tesla-e87eac.netlify.com/profile");
+    res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
   },
 );
 
