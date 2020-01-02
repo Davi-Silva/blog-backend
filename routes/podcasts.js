@@ -170,7 +170,8 @@ app.get('/get/slug/:slug', (req, res) => {
   const podcastList = [];
   Podcast.find({
     slug,
-  }).populate('audioFile').populate('cover')
+  }).populate('audioFile')
+    .populate('cover')
     .then((podcasts) => {
       podcasts.map((podcast) => {
         podcastList.push({
@@ -180,6 +181,9 @@ app.get('/get/slug/:slug', (req, res) => {
           category: podcast.category,
           title: podcast.title,
           description: podcast.description,
+          googleEpisodeUrl: podcast.googleEpisodeUrl,
+          spotifyEpisodeUrl: podcast.spotifyEpisodeUrl,
+          itunesEpisodeUrl: podcast.itunesEpisodeUrl,
           tags: podcast.tags,
           uploadedOn: podcast.uploadedOn,
           updatedOn: podcast.updatedOn,
@@ -355,6 +359,9 @@ app.post('/upload', (req, res) => {
     category,
     title,
     description,
+    googleEpisodeUrl,
+    spotifyEpisodeUrl,
+    itunesEpisodeUrl,
     tags,
     audioFile,
     cover,
@@ -371,8 +378,6 @@ app.post('/upload', (req, res) => {
       errorMsg: 'Please enter all fields.',
     });
   }
-
-  console.log('errors.length:', errors.length);
 
   if (errors.length > 0) {
     console.log('Errors:', errors);
@@ -392,6 +397,9 @@ app.post('/upload', (req, res) => {
         category,
         title,
         description,
+        googleEpisodeUrl,
+        spotifyEpisodeUrl,
+        itunesEpisodeUrl,
         tags,
         audioFile,
         cover,
@@ -409,6 +417,9 @@ app.post('/upload', (req, res) => {
             category,
             title,
             description,
+            googleEpisodeUrl,
+            spotifyEpisodeUrl,
+            itunesEpisodeUrl,
             tags,
             audioFile,
             cover,
