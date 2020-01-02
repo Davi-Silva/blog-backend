@@ -39,6 +39,21 @@ const PodcastSchema = new mongoose.Schema({
     ref: 'PodcastCover',
     required: true,
   },
+  googleEpisodeUrl: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  spotifyEpisodeUrl: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  itunesEpisodeUrl: {
+    type: String,
+    required: false,
+    default: '',
+  },
   uploadedOn: {
     type: Date,
     default: Date.now,
