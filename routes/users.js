@@ -48,4 +48,20 @@ router.post('/user', (req, res) => {
   }).catch((err) => console.log(err));
 });
 
+router.get('/public-profile/:username', (req, res) => {
+  const { username } = req.params;
+  console.log('username:', username);
+  User.findOne({
+    username,
+  })
+    .populate('profileImage')
+    .then((userInfo) => {
+      console.log('userInfo:', userInfo);
+      res.json(userInfo);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 module.exports = router;
