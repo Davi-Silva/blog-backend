@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable array-callback-return */
 const express = require('express');
 
@@ -106,21 +107,12 @@ app.post('/publish', async (req, res) => {
       });
       newPost
         .save()
-        .then(() => {
-          res.status(201).send({
+        .then((post) => {
+          console.log('post:', {
             msg: 'Blog Post successfully published!',
-            id,
-            type,
-            isSlugValid,
-            category,
-            title,
-            slug,
-            tags,
-            content,
-            author,
-            publishedOn,
-            updatedOn,
+            _id: post._id,
           });
+          res.status(201).send(post._id);
         })
         .catch((err) => {
           res.json({

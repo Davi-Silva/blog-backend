@@ -113,4 +113,27 @@ app.post('/upload/profile-image', multer(multerConfig).single('file'), async (re
   return res.json(profileImage);
 });
 
+app.put('/post/to/author', (req, res) => {
+  const {
+    userId,
+    postsArray,
+  } = req.body;
+  console.log('userId author:', userId);
+  console.log('postsArray:', postsArray);
+  let user;
+  User.updateOne({
+    _id: userId,
+  }, {
+    posts: postsArray,
+  }, {
+    runValidators: true,
+  })
+    .then(() => {
+      res.status(200).send(user.posts);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 module.exports = app;
