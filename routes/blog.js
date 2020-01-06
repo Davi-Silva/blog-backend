@@ -270,6 +270,48 @@ app.get('/home/articles', async (req, res) => {
     });
 });
 
+app.get('/most/recent/post', async (req, res) => {
+  const postsList = [];
+  console.log('userId:', req.userId);
+  Post.find()
+    .sort({ publishedOn: -1 })
+    .limit(1)
+    .populate('cover')
+    .populate({
+      path: 'author',
+      populate: {
+        path: 'profileImage',
+        model: 'UserProfileImage',
+      },
+    })
+    .then((posts) => {
+      if (posts.lenth === 0) {
+        res.status(200).send({
+          found: false,
+        });
+      } else if (posts.length > 0) {
+        posts.map((post) => {
+          postsList.push({
+            title: post.title,
+            slug: post.slug,
+            category: post.category,
+            cover: post.cover,
+            author: post.author,
+            publishedOn: post.publishedOn,
+            updateOn: post.updateOn,
+          });
+        });
+
+        res.status(302).send(postsList);
+      }
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      });
+    });
+});
+
 app.get('/get/top-authors', async (req, res) => {
   User.find()
     .then((users) => {
@@ -414,9 +456,7 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
       res.status(302).send(postsList);
     })
     .catch((err) => {
-      res.json({
-        err,
-      });
+      console.log(err);
     });
 });
 
@@ -472,6 +512,28 @@ app.get('/get/tag/:tag', async (req, res) => {
       res.json({
         err,
       });
+    });
+});
+
+app.put('/update/post/how-many-read', (req, res) => {
+  const {
+    slug,
+    howManyReadNumber,
+  } = req.body;
+  console.log('slug:', slug);
+  console.log('howManyReadNumber:', howManyReadNumber);
+  Post.updateOne({
+    slug,
+  }, {
+    howManyRead: howManyReadNumber + 1,
+  }, {
+    runValidators: true,
+  })
+    .then(() => {
+      res.status(200).send({ howManyReadNumber: howManyReadNumber + 1 });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 });
 

@@ -34,6 +34,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  posts: {
+    type: [],
+    required: false,
+  },
   createdOn: {
     type: Date,
     default: Date.now,

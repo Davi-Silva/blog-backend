@@ -39,6 +39,11 @@ const PostSchema = new mongoose.Schema({
     ref: 'PostCover',
     required: true,
   },
+  howManyRead: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   publishedOn: {
     type: Date,
     default: Date.now,

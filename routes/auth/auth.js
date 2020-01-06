@@ -327,8 +327,8 @@ app.get('/user', (req, res) => {
 app.get('/logout', (req, res) => {
   console.log('logging out!');
   user = {};
-  res.status(200).send({
-    signedout: true,
+  res.json({
+    user,
   });
 });
 
