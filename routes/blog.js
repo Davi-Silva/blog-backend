@@ -422,7 +422,15 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
     },
   )
     .populate('cover')
-    .limit(4)
+    .populate('author')
+    .populate({
+      path: 'author',
+      populate: {
+        path: 'profileImage',
+        model: 'UserProfileImage',
+      },
+    })
+    .limit(3)
     .then((posts) => {
       console.log('posts:', posts);
       posts.map((post) => {
@@ -437,7 +445,8 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
             tags: post.tags,
             audioFile: post.audioFile,
             cover: post.cover,
-            uploadedOn: post.uploadedOn,
+            author: post.author,
+            publishedOn: post.publishedOn,
             updatedOn: post.updatedOn,
           });
         }
