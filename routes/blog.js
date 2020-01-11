@@ -70,6 +70,7 @@ app.get('/short', async (req, res) => {
       } else if (posts.length > 0) {
         posts.map((post) => {
           postsList.push({
+            id: post.id,
             title: post.title,
             slug: post.slug,
             category: post.category,
@@ -105,6 +106,7 @@ app.get('/home/main-post', async (req, res) => {
       } else if (posts.length > 0) {
         posts.map((post) => {
           postsList.push({
+            id: post.id,
             title: post.title,
             slug: post.slug,
             category: post.category,
@@ -140,6 +142,7 @@ app.get('/home/news', async (req, res) => {
       } else if (posts.length > 0) {
         posts.map((post) => {
           postsList.push({
+            id: post.id,
             title: post.title,
             slug: post.slug,
             category: post.category,
@@ -174,6 +177,7 @@ app.get('/home/most-recent-videos', async (req, res) => {
       } else if (posts.length > 0) {
         posts.map((post) => {
           postsList.push({
+            id: post.id,
             title: post.title,
             slug: post.slug,
             category: post.category,
@@ -208,6 +212,7 @@ app.get('/home/tutorials', async (req, res) => {
       } else if (posts.length > 0) {
         posts.map((post) => {
           postsList.push({
+            id: post.id,
             title: post.title,
             slug: post.slug,
             category: post.category,
@@ -250,6 +255,7 @@ app.get('/home/articles', async (req, res) => {
       } else if (posts.length > 0) {
         posts.map((post) => {
           postsList.push({
+            id: post.id,
             title: post.title,
             slug: post.slug,
             category: post.category,
@@ -292,6 +298,7 @@ app.get('/most/recent/post', async (req, res) => {
       } else if (posts.length > 0) {
         posts.map((post) => {
           postsList.push({
+            id: post.id,
             title: post.title,
             slug: post.slug,
             category: post.category,
@@ -336,13 +343,23 @@ app.get('/cover', async (req, res) => {
 });
 
 // Get Podcast by slug
-app.get('/get/slug/:slug', (req, res) => {
+app.get('/get/slug/:year/:month/:day/:slug', (req, res) => {
   console.log('Getting post by slug');
-  const { slug } = req.params;
+  const {
+    year,
+    month,
+    day,
+    slug,
+  } = req.params;
+  console.log('year:', year);
+  console.log('month:', month);
+  console.log('day:', day);
   console.log('slug:', slug);
+
+  const fullSlug = `${year}/${month}/${day}/${slug}`;
   const postsList = [];
   Post.find({
-    slug,
+    slug: fullSlug,
   }).populate('cover')
     .populate('author')
     .populate({
@@ -412,8 +429,16 @@ app.get('/get/category/:category', async (req, res) => {
     });
 });
 
-app.get('/get/category/newest/:slug/:category', async (req, res) => {
-  const { slug, category } = req.params;
+app.get('/get/category/newest/:category/:year/:month/:day/:slug', async (req, res) => {
+  const {
+    year,
+    month,
+    day,
+    slug,
+    category,
+  } = req.params;
+
+  const fullSlug = `${year}/${month}/${day}/${slug}`;
   let postsList = [];
   console.log('categoy:', category);
   Post.find(
@@ -433,9 +458,8 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
     })
     .limit(3)
     .then((posts) => {
-      console.log('posts:', posts);
       posts.map((post) => {
-        if (slug !== post.slug) {
+        if (fullSlug !== post.slug) {
           postsList.push({
             id: post.id,
             type: post.type,

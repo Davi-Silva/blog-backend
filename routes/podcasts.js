@@ -163,13 +163,22 @@ app.get('/:id', (req, res) => {
 });
 
 // Get Podcast by slug
-app.get('/get/slug/:slug', (req, res) => {
-  console.log('Getting podcast by slug');
-  const { slug } = req.params;
+app.get('/get/slug/:year/:month/:day/:slug', (req, res) => {
+  const {
+    year,
+    month,
+    day,
+    slug,
+  } = req.params;
+  console.log('year:', year);
+  console.log('month:', month);
+  console.log('day:', day);
   console.log('slug:', slug);
+
+  const fullSlug = `${year}/${month}/${day}/${slug}`;
   const podcastList = [];
   Podcast.find({
-    slug,
+    slug: fullSlug,
   }).populate('audioFile')
     .populate('cover')
     .then((podcasts) => {
@@ -270,8 +279,15 @@ app.get('/get/tag/:tag', async (req, res) => {
     });
 });
 
-app.get('/get/category/newest/:slug/:category', async (req, res) => {
-  const { slug, category } = req.params;
+app.get('/get/category/newest/:category/:year/:month/:day/:slug', async (req, res) => {
+  const {
+    year,
+    month,
+    day,
+    slug,
+    category,
+  } = req.params;
+  const fullSlug = `${year}/${month}/${day}/${slug}`;
   let podcastList = [];
   console.log('categoy:', category);
   Podcast.find(
@@ -283,7 +299,7 @@ app.get('/get/category/newest/:slug/:category', async (req, res) => {
     .populate('cover')
     .then((podcasts) => {
       podcasts.map((podcast) => {
-        if (slug !== podcast.slug) {
+        if (fullSlug !== podcast.slug) {
           podcastList.push({
             id: podcast.id,
             type: podcast.type,
@@ -390,9 +406,11 @@ app.post('/upload', (req, res) => {
     const uploadedOn = Date.now();
     const updatedOn = null;
     if (isSlugValid) {
+      const date = new Date();
+      const fullSlug = `${date.getUTCFullYear()}/${date.getUTCDay()}/${date.getUTCMonth() + 1}/${slug}`;
       const newPodcast = new Podcast({
         id,
-        slug,
+        slug: fullSlug,
         type,
         category,
         title,
