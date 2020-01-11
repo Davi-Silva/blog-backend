@@ -20,8 +20,11 @@ const PostCover = require('../../../models/blog/PostCover');
 app.get('/validation/slug/:slug', (req, res) => {
   const { slug } = req.params;
   const postList = [];
+  const date = new Date();
+  const fullSlug = `${date.getUTCFullYear()}/${date.getUTCDay()}/${date.getUTCMonth() + 1}/${slug}`;
+  console.log('fullSlug:', fullSlug);
   Post.find({
-    slug,
+    slug: fullSlug,
   })
     .then((posts) => {
       posts.map((post) => {
@@ -91,13 +94,15 @@ app.post('/publish', async (req, res) => {
     const publishedOn = Date.now();
     const updatedOn = null;
     if (isSlugValid) {
+      const date = new Date();
+      const fullSlug = `${date.getUTCFullYear()}/${date.getUTCDay()}/${date.getUTCMonth() + 1}/${slug}`;
       const newPost = new Post({
         id,
         type,
         isSlugValid,
         category,
         title,
-        slug,
+        slug: fullSlug,
         cover,
         tags,
         content,
