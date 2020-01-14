@@ -17,30 +17,24 @@ const configMulter = require('../config/multerConfig');
 
 // Get All Podcasts
 app.get('/', (req, res) => {
-  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
-  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  // const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  // const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   global.gConfigMulter.folderName = 'New Destination';
   const podcastList = [];
   Podcast.find().populate('audioFile')
-    .skip((page - 1) * pagination)
-    .limit(pagination)
+    // .skip((page - 1) * pagination)
+    // .limit(pagination)
     .populate('cover')
     .then((podcasts) => {
       if (podcasts.length === 0) {
-        res.status(200).send({
-          found: false,
-        });
+        res.status(200).send([]);
       } else if (podcasts.length > 0) {
         podcasts.reverse().map((podcast) => {
           podcastList.push({
             id: podcast.id,
-            type: podcast.type,
             slug: podcast.slug,
             category: podcast.category,
             title: podcast.title,
-            description: podcast.description,
-            tags: podcast.tags,
-            audioFile: podcast.audioFile,
             cover: podcast.cover,
             uploadedOn: podcast.uploadedOn,
             updatedOn: podcast.updatedOn,
@@ -57,14 +51,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/short', (req, res) => {
-  const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
-  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  // const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
+  // const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   global.gConfigMulter.folderName = 'New Destination';
   const podcastList = [];
   Podcast.find()
     .sort({ publishedOn: -1 })
-    .skip((page - 1) * pagination)
-    .limit(pagination)
+    // .skip((page - 1) * pagination)
+    // .limit(pagination)
     .populate('audioFile')
     .populate('cover')
     .then((podcasts) => {
@@ -407,7 +401,7 @@ app.post('/upload', (req, res) => {
     const updatedOn = null;
     if (isSlugValid) {
       const date = new Date();
-      const fullSlug = `${date.getUTCFullYear()}/${date.getUTCDay()}/${date.getUTCMonth() + 1}/${slug}`;
+      const fullSlug = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}/${slug}`;
       const newPodcast = new Podcast({
         id,
         slug: fullSlug,
