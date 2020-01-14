@@ -21,7 +21,7 @@ app.get('/validation/slug/:slug', (req, res) => {
   const { slug } = req.params;
   const postList = [];
   const date = new Date();
-  const fullSlug = `${date.getUTCFullYear()}/${date.getUTCDay()}/${date.getUTCMonth() + 1}/${slug}`;
+  const fullSlug = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}/${slug}`;
   console.log('fullSlug:', fullSlug);
   Post.find({
     slug: fullSlug,
@@ -57,7 +57,6 @@ app.get('/validation/slug/:slug', (req, res) => {
       console.log(err);
     });
 });
-
 
 app.post('/publish', async (req, res) => {
   const {
@@ -95,7 +94,9 @@ app.post('/publish', async (req, res) => {
     const updatedOn = null;
     if (isSlugValid) {
       const date = new Date();
-      const fullSlug = `${date.getUTCFullYear()}/${date.getUTCDay()}/${date.getUTCMonth() + 1}/${slug}`;
+      const fullSlug = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}/${slug}`;
+      console.log('fullSlug:', fullSlug);
+      console.log('publishedOn:', publishedOn);
       const newPost = new Post({
         id,
         type,
