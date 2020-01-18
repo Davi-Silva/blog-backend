@@ -61,6 +61,7 @@ app.get('/validation/slug/:slug', (req, res) => {
 app.post('/publish', async (req, res) => {
   const {
     isSlugValid,
+    type,
     category,
     title,
     slug,
@@ -69,10 +70,10 @@ app.post('/publish', async (req, res) => {
     cover,
     author,
   } = req.body;
-  console.log('author:', author);
 
   const errors = [];
   if (!isSlugValid
+    || !type
     || !category
     || tags.length === 0
     || !title
@@ -82,6 +83,7 @@ app.post('/publish', async (req, res) => {
       errorMsg: 'Please enter all fields.',
     });
   }
+  console.log('type:', type);
   console.log('errors.length:', errors.length);
   if (errors.length > 0) {
     res.json({
@@ -89,7 +91,6 @@ app.post('/publish', async (req, res) => {
     });
   } else {
     const id = uuidv4();
-    const type = 'Blog';
     const publishedOn = Date.now();
     const updatedOn = null;
     if (isSlugValid) {

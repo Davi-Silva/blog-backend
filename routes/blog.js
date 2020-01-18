@@ -95,10 +95,11 @@ app.get('/home/main-post', async (req, res) => {
   const postsList = [];
   console.log('/home/main-post');
   Post.find()
-    .sort({ publishedOn: -1 })
+    .sort('-howManyRead')
     .limit(5)
     .populate('cover')
     .then((posts) => {
+      console.log('post main:', posts);
       if (posts.lenth === 0) {
         res.status(200).send({
           found: false,
@@ -130,7 +131,9 @@ app.get('/home/main-post', async (req, res) => {
 app.get('/home/news', async (req, res) => {
   const postsList = [];
   console.log('userId:', req.userId);
-  Post.find()
+  Post.find({
+    type: 'News',
+  })
     .sort({ publishedOn: -1 })
     .limit(6)
     .populate('cover')
@@ -165,7 +168,9 @@ app.get('/home/news', async (req, res) => {
 app.get('/home/most-recent-videos', async (req, res) => {
   const postsList = [];
   console.log('userId:', req.userId);
-  Post.find()
+  Post.find({
+    type: 'Video',
+  })
     .sort({ publishedOn: -1 })
     .limit(4)
     .populate('cover')
@@ -200,7 +205,9 @@ app.get('/home/most-recent-videos', async (req, res) => {
 app.get('/home/tutorials', async (req, res) => {
   const postsList = [];
   console.log('userId:', req.userId);
-  Post.find()
+  Post.find({
+    type: 'Tutorial',
+  })
     .sort({ publishedOn: -1 })
     .limit(6)
     .populate('cover')
@@ -235,7 +242,9 @@ app.get('/home/tutorials', async (req, res) => {
 app.get('/home/articles', async (req, res) => {
   const postsList = [];
   console.log('userId:', req.userId);
-  Post.find()
+  Post.find({
+    type: 'Article',
+  })
     .sort({ publishedOn: -1 })
     .limit(6)
     .populate('cover')
@@ -350,10 +359,6 @@ app.get('/get/slug/:year/:month/:day/:slug', (req, res) => {
     day,
     slug,
   } = req.params;
-  console.log('year:', year);
-  console.log('month:', month);
-  console.log('day:', day);
-  console.log('slug:', slug);
 
   const fullSlug = `${year}/${month}/${day}/${slug}`;
   const postsList = [];
@@ -398,8 +403,14 @@ app.get('/get/category/:category', async (req, res) => {
   const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   console.log('categoy:', category);
+  let newCategory;
+  if (category.indexOf('-') !== -1) {
+    newCategory = category.split('-').join(' ');
+  } else if (category.indexOf('-') === -1) {
+    newCategory = category;
+  }
   Post.find(
-    { category: { $regex: `${category}`, $options: 'i' } },
+    { category: { $regex: `${newCategory}`, $options: 'i' } },
     (err, docs) => {
       console.log('err:', err);
     },
@@ -478,14 +489,14 @@ app.get('/get/category/newest/:category/:year/:month/:day/:slug', async (req, re
       postsList = postsList.reverse();
       if (postsList.length === 0) {
         console.log('EMPTY');
-        res.status(200).send({
+        res.json({
           found: false,
         });
       }
       if (postsList.length > 4) {
         postsList = postsList.slice(0, 4);
       }
-      res.status(302).send(postsList);
+      res.json(postsList);
     })
     .catch((err) => {
       console.log(err);
@@ -516,8 +527,14 @@ app.get('/get/tag/:tag', async (req, res) => {
   const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const postsList = [];
+  let newTag;
+  if (tag.indexOf('-') !== -1) {
+    newTag = tag.split('-').join(' ');
+  } else if (tag.indexOf('-') === -1) {
+    newTag = tag;
+  }
   Post.find({
-    tags: tag,
+    tags: newTag,
   })
     .skip((page - 1) * pagination)
     .limit(pagination)
@@ -525,9 +542,7 @@ app.get('/get/tag/:tag', async (req, res) => {
     .populate('cover')
     .then((posts) => {
       if (posts.length === 0) {
-        res.status(200).send({
-          found: false,
-        });
+        res.status(200).send([]);
       } else if (posts.length > 0) {
         posts.map((post) => {
           postsList.push({
@@ -552,8 +567,6 @@ app.put('/update/post/how-many-read', (req, res) => {
     slug,
     howManyReadNumber,
   } = req.body;
-  console.log('slug:', slug);
-  console.log('howManyReadNumber:', howManyReadNumber);
   Post.updateOne({
     slug,
   }, {
