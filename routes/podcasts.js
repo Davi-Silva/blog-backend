@@ -242,8 +242,14 @@ app.get('/get/tag/:tag', async (req, res) => {
   const pagination = req.query.pagination ? parseInt(req.query.pagination, 10) : 10;
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const podcastsList = [];
+  let newTag;
+  if (tag.indexOf('-') !== -1) {
+    newTag = tag.split('-').join(' ');
+  } else if (tag.indexOf('-') === -1) {
+    newTag = tag;
+  }
   Podcast.find({
-    tags: tag,
+    tags: newTag,
   })
     .skip((page - 1) * pagination)
     .limit(pagination)
