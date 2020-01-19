@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
     type: [],
     required: false,
   },
+  quote: {
+    type: String,
+    required: false,
+  },
   createdOn: {
     type: Date,
     default: Date.now,

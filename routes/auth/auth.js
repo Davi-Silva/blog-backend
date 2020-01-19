@@ -79,12 +79,13 @@ passport.use(
     const {
       photos,
     } = profile;
-
     const tempUser = await User.find({
       id: profileId,
     })
       .populate('profileImage');
 
+    console.log('tempUser:', tempUser);
+    console.log('tempUser:', tempUser[0]);
     if (tempUser.length === 0) {
       let tempEmail = '';
       const image = photos[0].value;
@@ -115,6 +116,7 @@ passport.use(
         id: profile.id,
         name: profile.displayName,
         email: tempEmail,
+        quote: '',
         username: profile._json.login,
         password: '',
         profileImage: userImage._doc._id,
@@ -128,18 +130,16 @@ passport.use(
             profileId,
           })
             .then((userInfo) => {
-              user = {
-                ...userInfo,
-              };
+              console.log('GITHUB FIRST LOGIN userInfo:', userInfo);
+              user = userInfo;
+              console.log('GITHUB FIRST LOGIN user:', user);
             });
         })
         .catch((err) => {
           console.log('err:', err);
         });
     } else {
-      user = {
-        ...tempUser,
-      };
+      user = tempUser[0];
     }
 
 
@@ -321,7 +321,34 @@ app.get(
 app.get('/user', (req, res) => {
   console.log('getting user data!');
   console.log('user:', user);
-  res.send(user);
+  User.findOne({
+    _id: user._id,
+  })
+    .populate('profileImage')
+    .then((userInfo) => {
+      res.send(userInfo);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+app.post('/user/refresh', (req, res) => {
+  const {
+    id,
+  } = req.body;
+  console.log('REFRESHING USER DATA:', id);
+  User.findOne({
+    _id: id,
+  })
+    .populate('profileImage')
+    .then((user) => {
+      console.log('profileImage:', user.profileImage);
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.get('/logout', (req, res) => {

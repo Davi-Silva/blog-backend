@@ -65,4 +65,34 @@ router.get('/public-profile/:username', (req, res) => {
 });
 
 
+router.put('/update/quote', (req, res) => {
+  const {
+    userId,
+    quote,
+    email,
+  } = req.body;
+  console.log('userId:', userId);
+  console.log('quote:', quote);
+  User.updateOne({
+    _id: userId,
+  }, {
+    quote,
+    // email,
+  }, {
+    runValidators: true,
+  })
+    .then(() => {
+      res.status(200).send({
+        updated: true,
+        quote,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        updated: false,
+        err,
+      });
+    });
+});
+
 module.exports = router;
