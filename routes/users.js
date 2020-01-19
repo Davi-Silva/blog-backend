@@ -65,4 +65,67 @@ router.get('/public-profile/:username', (req, res) => {
 });
 
 
+router.put('/update', (req, res) => {
+  const { userId } = req.body;
+  let {
+    quote,
+    email,
+    github,
+    linkedin,
+    twitter,
+  } = req.body;
+  console.log('userId:', userId);
+  console.log('email:', email);
+  console.log('quote:', quote);
+  console.log('github:', github);
+  console.log('linkedin:', linkedin);
+  console.log('twitter:', twitter);
+
+  if (quote === undefined) {
+    quote = '';
+  }
+  if (email === undefined) {
+    email = '';
+  }
+  if (github === undefined) {
+    github = '';
+  }
+  if (linkedin === undefined) {
+    linkedin = '';
+  }
+  if (twitter === undefined) {
+    twitter = '';
+  }
+
+  User.updateOne({
+    _id: userId,
+  }, {
+    quote,
+    email,
+    socialMedia: {
+      github,
+      linkedin,
+      twitter,
+    },
+  }, {
+    runValidators: true,
+  })
+    .then(() => {
+      res.status(200).send({
+        updated: true,
+        quote,
+        email,
+        github,
+        linkedin,
+        twitter,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        updated: false,
+        err,
+      });
+    });
+});
+
 module.exports = router;
