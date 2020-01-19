@@ -122,6 +122,11 @@ passport.use(
         profileImage: userImage._doc._id,
         isAdmin: false,
         origin: 'Github',
+        socialMedia: {
+          github: '',
+          linkedin: '',
+          twitter: '',
+        },
       });
       await newUser
         .save()

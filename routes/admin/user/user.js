@@ -129,7 +129,7 @@ app.put('/post/to/author', (req, res) => {
     runValidators: true,
   })
     .then(() => {
-      res.status(200).send(user.posts);
+      res.status(200);
     })
     .catch((err) => {
       console.log(err);

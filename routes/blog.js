@@ -350,6 +350,23 @@ app.get('/cover', async (req, res) => {
   return res.json(postCover);
 });
 
+app.post('/get/user/activities', (req, res) => {
+  const {
+    posts,
+  } = req.body;
+  console.log('posts:', posts);
+  Post.find({ _id: { $in: posts } })
+    .populate('cover')
+    .sort({ publishedOn: -1 })
+    .limit(6)
+    .then((activities) => {
+      res.status(200).send(activities);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 // Get Podcast by slug
 app.get('/get/slug/:year/:month/:day/:slug', (req, res) => {
   console.log('Getting post by slug');

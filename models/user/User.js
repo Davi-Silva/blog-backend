@@ -42,6 +42,20 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  socialMedia: {
+    github: {
+      type: String,
+      required: false,
+    },
+    linkedin: {
+      type: String,
+      required: false,
+    },
+    twitter: {
+      type: String,
+      required: false,
+    },
+  },
   createdOn: {
     type: Date,
     default: Date.now,
