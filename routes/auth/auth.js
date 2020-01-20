@@ -83,9 +83,6 @@ passport.use(
       id: profileId,
     })
       .populate('profileImage');
-
-    console.log('tempUser:', tempUser);
-    console.log('tempUser:', tempUser[0]);
     if (tempUser.length === 0) {
       let tempEmail = '';
       const image = photos[0].value;
@@ -122,6 +119,8 @@ passport.use(
         profileImage: userImage._doc._id,
         isAdmin: false,
         origin: 'Github',
+        following: [],
+        followed: [],
         socialMedia: {
           github: '',
           linkedin: '',
@@ -159,10 +158,79 @@ passport.use(
     clientSecret: keys.GOOGLE.clientSecret,
     callbackURL: 'http://localhost:5000/auth/google/callback',
   },
-  (accessToken, refreshToken, profile, cb) => {
-    console.log(chalk.blue(JSON.stringify(profile)));
-    console.log('accessToken: ', accessToken);
-    console.log('refreshToken:', refreshToken);
+  async (accessToken, refreshToken, profile, cb) => {
+    const profileId = profile.id;
+    const userImage = {};
+    const {
+      photos,
+    } = profile;
+    const tempUser = await User.find({
+      id: profileId,
+    })
+      .populate('profileImage');
+    console.log('OH BOY NIGGA profile.id:', profileId);
+    // if (tempUser.length === 0) {
+    //   let tempEmail = '';
+    //   const image = photos[0].value;
+    //   if (profile._json.email !== null) {
+    //     tempEmail = profile._json.email;
+    //   }
+    //   const newUserProfileImage = new UserProfileImage({
+    //     id: profile.id,
+    //     name: `${profile.displayName} profile picture`,
+    //     url: image,
+    //     origin: 'Github',
+    //   });
+    //   await newUserProfileImage
+    //     .save()
+    //     .then(async () => {
+    //       const img = await UserProfileImage.findOne({
+    //         id: profile.id,
+    //       });
+    //       userImage = {
+    //         ...img,
+    //       };
+    //     })
+    //     .catch((err) => {
+    //       console.log('err:', err);
+    //     });
+
+    //   const newUser = new User({
+    //     id: profile.id,
+    //     name: profile.displayName,
+    //     email: tempEmail,
+    //     quote: '',
+    //     username: profile._json.login,
+    //     password: '',
+    //     profileImage: userImage._doc._id,
+    //     isAdmin: false,
+    //     origin: 'Github',
+    //     following: [],
+    //     followed: [],
+    //     socialMedia: {
+    //       github: '',
+    //       linkedin: '',
+    //       twitter: '',
+    //     },
+    //   });
+    //   await newUser
+    //     .save()
+    //     .then(() => {
+    //       User.findOne({
+    //         profileId,
+    //       })
+    //         .then((userInfo) => {
+    //           console.log('GITHUB FIRST LOGIN userInfo:', userInfo);
+    //           user = userInfo;
+    //           console.log('GITHUB FIRST LOGIN user:', user);
+    //         });
+    //     })
+    //     .catch((err) => {
+    //       console.log('err:', err);
+    //     });
+    // } else {
+    //   user = tempUser[0];
+    // }
     user = {
       ...profile,
     };
@@ -287,7 +355,7 @@ app.get(
   '/google/callback',
   passport.authenticate('google'),
   (req, res) => {
-    console.log('Google Profile Info', req.profile);
+    // console.log('Google Profile Info', req.profile);
     // res.redirect("http://localhost:3000/profile");
     res.redirect('http://localhost:3000/profile');
   },

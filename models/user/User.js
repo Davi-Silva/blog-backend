@@ -42,6 +42,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  following: {
+    type: [],
+    required: false,
+  },
+  followed: {
+    type: [],
+    required: false,
+  },
   socialMedia: {
     github: {
       type: String,
