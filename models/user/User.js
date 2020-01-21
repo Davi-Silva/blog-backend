@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true,
+    required: false,
   },
   password: {
     type: String,
@@ -46,7 +46,7 @@ const UserSchema = new mongoose.Schema({
     type: [],
     required: false,
   },
-  followed: {
+  followers: {
     type: [],
     required: false,
   },

@@ -1,7 +1,9 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-shadow */
 /* eslint-disable no-underscore-dangle */
 const express = require('express');
 const cors = require('cors');
+const slugify = require('slugify');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const AmazonStrategy = require('passport-amazon').Strategy;
@@ -21,6 +23,7 @@ const User = require('../../models/user/User');
 const UserProfileImage = require('../../models/user/UserProfileImage');
 
 let user = {};
+let tempUserCheck = [];
 
 const app = express();
 app.use(cors());
@@ -33,6 +36,29 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((user, cb) => {
   cb(null, user);
 });
+
+
+const getRandomArbitrary = (min, max) => Math.random() * (max - min) + min;
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const checkUsernameValid = async (username) => {
+  const res = await User.find({
+    username,
+  });
+  console.log('verify response:', res);
+  if (res.length > 0) {
+    console.log('res.length > 0:');
+    tempUserCheck = res;
+  } if (res.length === 0) {
+    console.log('res.length === 0');
+    tempUserCheck = res;
+  }
+};
 
 // Facebook Strategy
 passport.use(
@@ -83,6 +109,7 @@ passport.use(
       id: profileId,
     })
       .populate('profileImage');
+    console.log('tempUser:', tempUser);
     if (tempUser.length === 0) {
       let tempEmail = '';
       const image = photos[0].value;
@@ -109,16 +136,117 @@ passport.use(
           console.log('err:', err);
         });
 
+
+      let tempUsername = `${profile._json.login}`;
+      await checkUsernameValid(tempUsername);
+      while (true) {
+        if (tempUserCheck.length === 0) {
+          break;
+        }
+        tempUsername = `${profile._json.login}-${getRandomInt(0, 10000)}`;
+        await checkUsernameValid(tempUsername);
+      }
+
       const newUser = new User({
         id: profile.id,
         name: profile.displayName,
         email: tempEmail,
         quote: '',
-        username: profile._json.login,
+        username: tempUsername,
         password: '',
         profileImage: userImage._doc._id,
         isAdmin: false,
         origin: 'Github',
+        socialMedia: {
+          github: '',
+          linkedin: '',
+          twitter: '',
+        },
+      });
+
+      await newUser
+        .save()
+        .then(() => {
+          User.findOne({
+            _id: newUser._id,
+          })
+            .then((userInfo) => {
+              user = userInfo;
+            });
+        })
+        .catch((err) => {
+          console.log('err:', err);
+        });
+    } else {
+      user = tempUser[0];
+    }
+    return cb(null, profile);
+  }),
+);
+// Google Strategy
+passport.use(
+  new GoogleStrategy({
+    clientID: keys.GOOGLE.clientID,
+    clientSecret: keys.GOOGLE.clientSecret,
+    callbackURL: 'http://localhost:5000/auth/google/callback',
+  },
+  async (accessToken, refreshToken, profile, cb) => {
+    const profileId = profile.id;
+    let userImage = {};
+    const {
+      photos,
+    } = profile;
+    const tempUser = await User.find({
+      id: profileId,
+    })
+      .populate('profileImage');
+    if (tempUser.length === 0) {
+      let tempEmail = '';
+      const image = photos[0].value;
+      if (profile._json.email !== null || profile._json.email !== '') {
+        tempEmail = profile._json.email;
+      }
+      const newUserProfileImage = new UserProfileImage({
+        id: profile.id,
+        name: `${profile._json.name} profile picture`,
+        url: image,
+        origin: 'Google',
+      });
+      await newUserProfileImage
+        .save()
+        .then(async () => {
+          const img = await UserProfileImage.findOne({
+            id: profile.id,
+          });
+          userImage = {
+            ...img,
+          };
+        })
+        .catch((err) => {
+          console.log('err:', err);
+        });
+
+      let tempUsername = `${slugify(profile._json.name)}`;
+      await checkUsernameValid(tempUsername);
+      while (true) {
+        if (tempUserCheck.length === 0) {
+          break;
+        }
+        tempUsername = `${slugify(profile._json.name)}-${getRandomInt(0, 10000)}`;
+        await checkUsernameValid(tempUsername);
+      }
+
+
+      const newUser = new User({
+        id: profile.id,
+        name: profile._json.name,
+        email: tempEmail,
+        quote: '',
+        username: tempUsername,
+        password: '',
+        profileImage: userImage._doc._id,
+        isAdmin: false,
+        origin: 'Google',
         following: [],
         followed: [],
         socialMedia: {
@@ -131,12 +259,10 @@ passport.use(
         .save()
         .then(() => {
           User.findOne({
-            profileId,
+            id: profileId,
           })
             .then((userInfo) => {
-              console.log('GITHUB FIRST LOGIN userInfo:', userInfo);
               user = userInfo;
-              console.log('GITHUB FIRST LOGIN user:', user);
             });
         })
         .catch((err) => {
@@ -145,95 +271,6 @@ passport.use(
     } else {
       user = tempUser[0];
     }
-
-
-    return cb(null, profile);
-  }),
-);
-
-// Google Strategy
-passport.use(
-  new GoogleStrategy({
-    clientID: keys.GOOGLE.clientID,
-    clientSecret: keys.GOOGLE.clientSecret,
-    callbackURL: 'http://localhost:5000/auth/google/callback',
-  },
-  async (accessToken, refreshToken, profile, cb) => {
-    const profileId = profile.id;
-    const userImage = {};
-    const {
-      photos,
-    } = profile;
-    const tempUser = await User.find({
-      id: profileId,
-    })
-      .populate('profileImage');
-    console.log('OH BOY NIGGA profile.id:', profileId);
-    // if (tempUser.length === 0) {
-    //   let tempEmail = '';
-    //   const image = photos[0].value;
-    //   if (profile._json.email !== null) {
-    //     tempEmail = profile._json.email;
-    //   }
-    //   const newUserProfileImage = new UserProfileImage({
-    //     id: profile.id,
-    //     name: `${profile.displayName} profile picture`,
-    //     url: image,
-    //     origin: 'Github',
-    //   });
-    //   await newUserProfileImage
-    //     .save()
-    //     .then(async () => {
-    //       const img = await UserProfileImage.findOne({
-    //         id: profile.id,
-    //       });
-    //       userImage = {
-    //         ...img,
-    //       };
-    //     })
-    //     .catch((err) => {
-    //       console.log('err:', err);
-    //     });
-
-    //   const newUser = new User({
-    //     id: profile.id,
-    //     name: profile.displayName,
-    //     email: tempEmail,
-    //     quote: '',
-    //     username: profile._json.login,
-    //     password: '',
-    //     profileImage: userImage._doc._id,
-    //     isAdmin: false,
-    //     origin: 'Github',
-    //     following: [],
-    //     followed: [],
-    //     socialMedia: {
-    //       github: '',
-    //       linkedin: '',
-    //       twitter: '',
-    //     },
-    //   });
-    //   await newUser
-    //     .save()
-    //     .then(() => {
-    //       User.findOne({
-    //         profileId,
-    //       })
-    //         .then((userInfo) => {
-    //           console.log('GITHUB FIRST LOGIN userInfo:', userInfo);
-    //           user = userInfo;
-    //           console.log('GITHUB FIRST LOGIN user:', user);
-    //         });
-    //     })
-    //     .catch((err) => {
-    //       console.log('err:', err);
-    //     });
-    // } else {
-    //   user = tempUser[0];
-    // }
-    user = {
-      ...profile,
-    };
     return cb(null, profile);
   }),
 );
@@ -427,6 +464,7 @@ app.post('/user/refresh', (req, res) => {
 app.get('/logout', (req, res) => {
   console.log('logging out!');
   user = {};
+  console.log('user after logout:', user);
   res.json({
     user,
   });

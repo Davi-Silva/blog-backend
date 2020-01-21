@@ -74,12 +74,6 @@ router.put('/update', (req, res) => {
     linkedin,
     twitter,
   } = req.body;
-  console.log('userId:', userId);
-  console.log('email:', email);
-  console.log('quote:', quote);
-  console.log('github:', github);
-  console.log('linkedin:', linkedin);
-  console.log('twitter:', twitter);
 
   if (quote === undefined) {
     quote = '';
@@ -126,6 +120,77 @@ router.put('/update', (req, res) => {
         err,
       });
     });
+});
+
+router.post('/verify/following/author', async (req, res) => {
+  const {
+    userId,
+    authorId,
+  } = req.body;
+
+  const user = await User.findOne({ _id: userId });
+  console.log('user:', user);
+
+  console.log('user.following.indexOf(authorId):', user.followers.indexOf(authorId));
+
+  res.json({
+    following: user.following.indexOf(authorId),
+    followers: user.followers.indexOf(authorId),
+  });
+});
+
+router.put('/update/follow/author', async (req, res) => {
+  const {
+    userId,
+    authorId,
+  } = req.body;
+  const user = await User.findOne({ _id: userId });
+  const author = await User.findOne({ _id: authorId });
+
+  console.log('user.following:', user.following);
+  console.log('user.following.indexOf(authorId):', user.following.includes(`${authorId}`));
+
+  const userFollowingArray = user.following;
+  const authorFollowersArray = author.followers;
+  userFollowingArray.push(authorId);
+  authorFollowersArray.push(userId);
+  await User.updateOne({
+    _id: user,
+  }, {
+    following: userFollowingArray,
+  }, {
+    runValidators: true,
+  })
+    .then(() => {
+      isFollowing = true;
+    })
+    .catch((err) => {
+      res.json({
+        updated: false,
+        err,
+      });
+    });
+
+  await User.updateOne({
+    _id: authorId,
+  }, {
+    followers: authorFollowersArray,
+  }, {
+    runValidators: true,
+  })
+    .then(() => {
+      isFollowers = true;
+    })
+    .catch((err) => {
+      res.json({
+        updated: false,
+        err,
+      });
+    });
+
+  res.status(200).send({
+    ok: true,
+  });
 });
 
 module.exports = router;
