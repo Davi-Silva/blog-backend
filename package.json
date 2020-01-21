@@ -2,7 +2,7 @@
 	"name": "cryptic-activist-backend",
 	"version": "1.0.0",
 	"engines": {
-		"node": "12.13.0"
+		"node": "10.18.1"
 	},
 	"description": "Personal blog developed using React.js and Express.js",
 	"main": "index.js",
