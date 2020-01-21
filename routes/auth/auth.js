@@ -1,7 +1,9 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-shadow */
 /* eslint-disable no-underscore-dangle */
 const express = require('express');
 const cors = require('cors');
+const slugify = require('slugify');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const AmazonStrategy = require('passport-amazon').Strategy;
@@ -21,6 +23,7 @@ const User = require('../../models/user/User');
 const UserProfileImage = require('../../models/user/UserProfileImage');
 
 let user = {};
+let tempUserCheck = [];
 
 const app = express();
 app.use(cors());
@@ -33,6 +36,29 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((user, cb) => {
   cb(null, user);
 });
+
+
+const getRandomArbitrary = (min, max) => Math.random() * (max - min) + min;
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const checkUsernameValid = async (username) => {
+  const res = await User.find({
+    username,
+  });
+  console.log('verify response:', res);
+  if (res.length > 0) {
+    console.log('res.length > 0:');
+    tempUserCheck = res;
+  } if (res.length === 0) {
+    console.log('res.length === 0');
+    tempUserCheck = res;
+  }
+};
 
 // Facebook Strategy
 passport.use(
@@ -83,9 +109,7 @@ passport.use(
       id: profileId,
     })
       .populate('profileImage');
-
     console.log('tempUser:', tempUser);
-    console.log('tempUser:', tempUser[0]);
     if (tempUser.length === 0) {
       let tempEmail = '';
       const image = photos[0].value;
@@ -112,12 +136,23 @@ passport.use(
           console.log('err:', err);
         });
 
+
+      let tempUsername = `${profile._json.login}`;
+      await checkUsernameValid(tempUsername);
+      while (true) {
+        if (tempUserCheck.length === 0) {
+          break;
+        }
+        tempUsername = `${profile._json.login}-${getRandomInt(0, 10000)}`;
+        await checkUsernameValid(tempUsername);
+      }
+
       const newUser = new User({
         id: profile.id,
         name: profile.displayName,
         email: tempEmail,
         quote: '',
-        username: profile._json.login,
+        username: tempUsername,
         password: '',
         profileImage: userImage._doc._id,
         isAdmin: false,
@@ -128,16 +163,15 @@ passport.use(
           twitter: '',
         },
       });
+
       await newUser
         .save()
         .then(() => {
           User.findOne({
-            profileId,
+            _id: newUser._id,
           })
             .then((userInfo) => {
-              console.log('GITHUB FIRST LOGIN userInfo:', userInfo);
               user = userInfo;
-              console.log('GITHUB FIRST LOGIN user:', user);
             });
         })
         .catch((err) => {
@@ -146,12 +180,9 @@ passport.use(
     } else {
       user = tempUser[0];
     }
-
-
     return cb(null, profile);
   }),
 );
-
 // Google Strategy
 passport.use(
   new GoogleStrategy({
@@ -159,13 +190,87 @@ passport.use(
     clientSecret: keys.GOOGLE.clientSecret,
     callbackURL: 'https://cryptic-activist-backend.herokuapp.com/auth/google/callback',
   },
-  (accessToken, refreshToken, profile, cb) => {
-    console.log(chalk.blue(JSON.stringify(profile)));
-    console.log('accessToken: ', accessToken);
-    console.log('refreshToken:', refreshToken);
-    user = {
-      ...profile,
-    };
+  async (accessToken, refreshToken, profile, cb) => {
+    const profileId = profile.id;
+    let userImage = {};
+    const {
+      photos,
+    } = profile;
+    const tempUser = await User.find({
+      id: profileId,
+    })
+      .populate('profileImage');
+    if (tempUser.length === 0) {
+      let tempEmail = '';
+      const image = photos[0].value;
+      if (profile._json.email !== null || profile._json.email !== '') {
+        tempEmail = profile._json.email;
+      }
+      const newUserProfileImage = new UserProfileImage({
+        id: profile.id,
+        name: `${profile._json.name} profile picture`,
+        url: image,
+        origin: 'Google',
+      });
+      await newUserProfileImage
+        .save()
+        .then(async () => {
+          const img = await UserProfileImage.findOne({
+            id: profile.id,
+          });
+          userImage = {
+            ...img,
+          };
+        })
+        .catch((err) => {
+          console.log('err:', err);
+        });
+
+      let tempUsername = `${slugify(profile._json.name)}`;
+      await checkUsernameValid(tempUsername);
+      while (true) {
+        if (tempUserCheck.length === 0) {
+          break;
+        }
+        tempUsername = `${slugify(profile._json.name)}-${getRandomInt(0, 10000)}`;
+        await checkUsernameValid(tempUsername);
+      }
+
+
+      const newUser = new User({
+        id: profile.id,
+        name: profile._json.name,
+        email: tempEmail,
+        quote: '',
+        username: tempUsername,
+        password: '',
+        profileImage: userImage._doc._id,
+        isAdmin: false,
+        origin: 'Google',
+        following: [],
+        followed: [],
+        socialMedia: {
+          github: '',
+          linkedin: '',
+          twitter: '',
+        },
+      });
+      await newUser
+        .save()
+        .then(() => {
+          User.findOne({
+            id: profileId,
+          })
+            .then((userInfo) => {
+              user = userInfo;
+            });
+        })
+        .catch((err) => {
+          console.log('err:', err);
+        });
+    } else {
+      user = tempUser[0];
+    }
     return cb(null, profile);
   }),
 );
@@ -287,9 +392,9 @@ app.get(
   '/google/callback',
   passport.authenticate('google'),
   (req, res) => {
-    console.log('Google Profile Info', req.profile);
-    // res.redirect("https://hardcore-tesla-e87eac.netlify.com/profile");
-    res.redirect('https://hardcore-tesla-e87eac.netlify.com/profile');
+    // console.log('Google Profile Info', req.profile);
+    // res.redirect("http://localhost:3000/profile");
+    res.redirect('http://localhost:3000/profile');
   },
 );
 
@@ -359,6 +464,7 @@ app.post('/user/refresh', (req, res) => {
 app.get('/logout', (req, res) => {
   console.log('logging out!');
   user = {};
+  console.log('user after logout:', user);
   res.json({
     user,
   });

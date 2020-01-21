@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true,
+    required: false,
   },
   password: {
     type: String,
@@ -40,6 +40,14 @@ const UserSchema = new mongoose.Schema({
   },
   quote: {
     type: String,
+    required: false,
+  },
+  following: {
+    type: [],
+    required: false,
+  },
+  followers: {
+    type: [],
     required: false,
   },
   socialMedia: {

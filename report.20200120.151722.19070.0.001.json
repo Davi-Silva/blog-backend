@@ -1,0 +1,542 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20200120.151722.19070.0.001.json",
+    "dumpEventTime": "2020-01-20T15:17:24Z",
+    "dumpEventTimeStamp": "1579544244310",
+    "processId": 19070,
+    "cwd": "/home/davi/Documents/Dev/cryptic-activist/backend",
+    "commandLine": [
+      "/home/davi/.nvm/versions/node/v12.13.0/bin/node",
+      "app.js"
+    ],
+    "nodejsVersion": "v12.13.0",
+    "glibcVersionRuntime": "2.30",
+    "glibcVersionCompiler": "2.17",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "linux",
+    "componentVersions": {
+      "node": "12.13.0",
+      "v8": "7.7.299.13-node.12",
+      "uv": "1.32.0",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.39.2",
+      "napi": "5",
+      "llhttp": "1.1.4",
+      "http_parser": "2.8.0",
+      "openssl": "1.1.1d",
+      "cldr": "35.1",
+      "icu": "64.2",
+      "tz": "2019a",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "lts": "Erbium",
+      "headersUrl": "https://nodejs.org/download/release/v12.13.0/node-v12.13.0-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.13.0/node-v12.13.0.tar.gz"
+    },
+    "osName": "Linux",
+    "osRelease": "5.3.0-26-generic",
+    "osVersion": "#28-Ubuntu SMP Wed Dec 18 05:37:46 UTC 2019",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz",
+        "speed": 1197,
+        "user": 5198200,
+        "nice": 57400,
+        "sys": 1040700,
+        "idle": 92897200,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz",
+        "speed": 1197,
+        "user": 4062700,
+        "nice": 41300,
+        "sys": 707500,
+        "idle": 96780500,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz",
+        "speed": 1197,
+        "user": 5400800,
+        "nice": 54900,
+        "sys": 1046500,
+        "idle": 93424900,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz",
+        "speed": 1197,
+        "user": 3176000,
+        "nice": 15300,
+        "sys": 1255000,
+        "idle": 96982600,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz",
+        "speed": 1206,
+        "user": 5275800,
+        "nice": 63700,
+        "sys": 1042800,
+        "idle": 93780500,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz",
+        "speed": 1197,
+        "user": 3851200,
+        "nice": 31300,
+        "sys": 815100,
+        "idle": 96709700,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz",
+        "speed": 1197,
+        "user": 5178200,
+        "nice": 44700,
+        "sys": 1031200,
+        "idle": 91771600,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz",
+        "speed": 1197,
+        "user": 3930900,
+        "nice": 24300,
+        "sys": 684500,
+        "idle": 96594200,
+        "irq": 0
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "wlp3s0",
+        "internal": false,
+        "mac": "68:17:29:83:02:16",
+        "address": "192.168.0.13",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "::1",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "wlp3s0",
+        "internal": false,
+        "mac": "68:17:29:83:02:16",
+        "address": "2804:14d:b084:e37:19ef:8ded:79b0:74f4",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "wlp3s0",
+        "internal": false,
+        "mac": "68:17:29:83:02:16",
+        "address": "2804:14d:b084:e37:38b2:a406:1422:6ae7",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "wlp3s0",
+        "internal": false,
+        "mac": "68:17:29:83:02:16",
+        "address": "fe80::3047:60a8:b0ed:78ce",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 3
+      }
+    ],
+    "host": "davi-pc"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x0000000000b027f5",
+      "symbol": "report::TriggerNodeReport(v8::Isolate*, node::Environment*, char const*, char const*, std::string const&, v8::Local<v8::String>) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x00000000009d9fc3",
+      "symbol": "node::OnFatalError(char const*, char const*) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b37dbe",
+      "symbol": "v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, bool) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b38139",
+      "symbol": "v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, bool) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ce34f5",
+      "symbol": " [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ce3b86",
+      "symbol": "v8::internal::Heap::RecomputeLimits(v8::internal::GarbageCollector) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cefa1a",
+      "symbol": "v8::internal::Heap::PerformGarbageCollection(v8::internal::GarbageCollector, v8::GCCallbackFlags) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cf0925",
+      "symbol": "v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cf3338",
+      "symbol": "v8::internal::Heap::AllocateRawWithRetryOrFail(int, v8::internal::AllocationType, v8::internal::AllocationAlignment) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cb9c67",
+      "symbol": "v8::internal::Factory::NewFillerObject(int, bool, v8::internal::AllocationType) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x0000000000fefb9b",
+      "symbol": "v8::internal::Runtime_AllocateInYoungGeneration(int, unsigned long*, v8::internal::Isolate*) [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    },
+    {
+      "pc": "0x00000000013725d9",
+      "symbol": " [/home/davi/.nvm/versions/node/v12.13.0/bin/node]"
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 2155593728,
+    "totalCommittedMemory": 2151845408,
+    "usedMemory": 2147509024,
+    "availableMemory": 47063296,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 32568,
+        "capacity": 261872,
+        "used": 32296,
+        "available": 229576
+      },
+      "new_space": {
+        "memorySize": 4194304,
+        "committedMemory": 1210288,
+        "capacity": 2094976,
+        "used": 223552,
+        "available": 1871424
+      },
+      "old_space": {
+        "memorySize": 2144710656,
+        "committedMemory": 2144444136,
+        "capacity": 2142417672,
+        "used": 2141771920,
+        "available": 645752
+      },
+      "code_space": {
+        "memorySize": 688128,
+        "committedMemory": 583776,
+        "capacity": 465536,
+        "used": 465536,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 1576960,
+        "committedMemory": 1413104,
+        "capacity": 947520,
+        "used": 947520,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 4112384,
+        "committedMemory": 4112384,
+        "capacity": 4064648,
+        "used": 4064648,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 49152,
+        "committedMemory": 49152,
+        "capacity": 3552,
+        "used": 3552,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 2094976,
+        "used": 0,
+        "available": 2094976
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 82.5294,
+    "kernelCpuSeconds": 1.69354,
+    "cpuConsumptionPercent": 71.3754,
+    "maxRss": 2226302976,
+    "pageFaults": {
+      "IORequired": 174,
+      "IONotRequired": 606442
+    },
+    "fsActivity": {
+      "reads": 33976,
+      "writes": 16
+    }
+  },
+  "uvthreadResourceUsage": {
+    "userCpuSeconds": 33.8533,
+    "kernelCpuSeconds": 0.68083,
+    "cpuConsumptionPercent": 29.2662,
+    "fsActivity": {
+      "reads": 29240,
+      "writes": 16
+    }
+  },
+  "libuv": [
+  ],
+  "environmentVariables": {
+    "GJS_DEBUG_TOPICS": "JS ERROR;JS LOG",
+    "LESSOPEN": "| /usr/bin/lesspipe %s",
+    "npm_package_dependencies_passport_google_oauth20": "^2.0.0",
+    "LANGUAGE": "en",
+    "USER": "davi",
+    "LC_TIME": "pt_BR.UTF-8",
+    "npm_config_version_commit_hooks": "true",
+    "npm_config_user_agent": "yarn/1.21.1 npm/? node/v12.13.0 linux x64",
+    "npm_package_dependencies_bcryptjs": "^2.4.3",
+    "npm_config_bin_links": "true",
+    "npm_config_wrap_output": "",
+    "npm_package_bugs_url": "https://github.com/Davi-Silva/cryptic-activist-backend/issues",
+    "SSH_AGENT_PID": "2863",
+    "XDG_SESSION_TYPE": "x11",
+    "npm_node_execpath": "/home/davi/.nvm/versions/node/v12.13.0/bin/node",
+    "npm_config_init_version": "1.0.0",
+    "SHLVL": "2",
+    "QT4_IM_MODULE": "ibus",
+    "HOME": "/home/davi",
+    "OLDPWD": "/home/davi/Documents/Dev/cryptic-activist",
+    "DESKTOP_SESSION": "ubuntu",
+    "NVM_BIN": "/home/davi/.nvm/versions/node/v12.13.0/bin",
+    "npm_package_scripts_server": "cd backend && yarn run dev",
+    "npm_package_dependencies_passport_local": "^1.0.0",
+    "npm_config_init_license": "MIT",
+    "npm_package_dependencies_multer_s3": "^2.9.0",
+    "npm_package_engines_node": "12.13.0",
+    "GNOME_SHELL_SESSION_MODE": "ubuntu",
+    "GTK_MODULES": "gail:atk-bridge",
+    "YARN_WRAP_OUTPUT": "false",
+    "npm_config_version_tag_prefix": "v",
+    "LC_MONETARY": "pt_BR.UTF-8",
+    "MANAGERPID": "2697",
+    "LC_CTYPE": "pt_BR.UTF-8",
+    "npm_package_dependencies_passport_github": "^1.1.0",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+    "npm_package_devDependencies_husky": "^3.0.9",
+    "npm_package_dependencies_dotenv": "^8.1.0",
+    "npm_package_keywords_0": "course",
+    "COLORTERM": "truecolor",
+    "npm_package_description": "Personal blog developed using React.js and Express.js",
+    "npm_package_dependencies_concurrently": "^5.0.0",
+    "npm_package_keywords_1": "podcast",
+    "NVM_DIR": "/home/davi/.nvm",
+    "npm_package_readmeFilename": "README.md",
+    "npm_package_dependencies_passport_amazon": "^1.0.0",
+    "npm_package_dependencies_passport": "^0.4.0",
+    "npm_package_homepage": "https://github.com/Davi-Silva/cryptic-activist-backend#readme",
+    "npm_package_keywords_2": "personal",
+    "MANDATORY_PATH": "/usr/share/gconf/ubuntu.mandatory.path",
+    "IM_CONFIG_PHASE": "1",
+    "npm_package_scripts_dev": "yarn run nodemon app.js",
+    "npm_package_keywords_3": "blog",
+    "FORCE_COLOR": "2",
+    "GTK_IM_MODULE": "ibus",
+    "LOGNAME": "davi",
+    "npm_package_devDependencies_eslint_plugin_import": "^2.18.2",
+    "npm_package_lint_staged___js_0": "eslint --fix",
+    "JOURNAL_STREAM": "9:45569",
+    "_": "/usr/bin/yarn",
+    "npm_package_dependencies_express": "^4.17.1",
+    "npm_package_lint_staged___js_1": "git add .",
+    "XDG_SESSION_CLASS": "user",
+    "DEFAULTS_PATH": "/usr/share/gconf/ubuntu.default.path",
+    "npm_config_registry": "https://registry.yarnpkg.com",
+    "npm_package_dependencies_get_audio_duration": "^1.0.0",
+    "USERNAME": "davi",
+    "TERM": "xterm-256color",
+    "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated",
+    "npm_config_ignore_scripts": "",
+    "npm_package_scripts_start": "node app.js",
+    "WINDOWPATH": "2",
+    "npm_package_dependencies_multer": "^1.4.2",
+    "npm_package_dependencies_connect_flash": "^0.1.1",
+    "PATH": "/tmp/yarn--1579538714376-0.8697069892675793:/home/davi/Documents/Dev/cryptic-activist/backend/node_modules/.bin:/home/davi/.config/yarn/link/node_modules/.bin:/home/davi/.nvm/versions/node/v12.13.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/lib/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/bin/node_modules/npm/bin/node-gyp-bin:/tmp/yarn--1579538713979-0.5165830234669684:/home/davi/Documents/Dev/cryptic-activist/backend/node_modules/.bin:/home/davi/.config/yarn/link/node_modules/.bin:/home/davi/.nvm/versions/node/v12.13.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/lib/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/bin/node_modules/npm/bin/node-gyp-bin:/tmp/yarn--1579538713492-0.06875062321578929:/home/davi/Documents/Dev/cryptic-activist/node_modules/.bin:/home/davi/.config/yarn/link/node_modules/.bin:/home/davi/.nvm/versions/node/v12.13.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/lib/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/bin/node_modules/npm/bin/node-gyp-bin:/tmp/yarn--1579538707526-0.05744319343186932:/home/davi/Documents/Dev/cryptic-activist/node_modules/.bin:/home/davi/.config/yarn/link/node_modules/.bin:/home/davi/.yarn/bin:/home/davi/.nvm/versions/node/v12.13.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/lib/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/bin/node_modules/npm/bin/node-gyp-bin:/home/davi/.nvm/versions/node/v12.13.0/bin:/home/davi/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "NODE": "/home/davi/.nvm/versions/node/v12.13.0/bin/node",
+    "SESSION_MANAGER": "local/davi-pc:@/tmp/.ICE-unix/2949,unix/davi-pc:/tmp/.ICE-unix/2949",
+    "INVOCATION_ID": "b10ace9fc5c74cfe9541997720751cac",
+    "PAPERSIZE": "a4",
+    "npm_package_name": "cryptic-activist-backend",
+    "npm_package_dependencies_passport_instagram": "^1.0.0",
+    "npm_package_repository_type": "git",
+    "XDG_MENU_PREFIX": "gnome-",
+    "LC_ADDRESS": "pt_BR.UTF-8",
+    "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/fe8643be_2cb3_4a51_99aa_a40b2702d629",
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "npm_package_scripts_client": "cd frontend && yarn run start",
+    "npm_package_devDependencies_eslint_config_airbnb_base": "^14.0.0",
+    "DISPLAY": ":1",
+    "LANG": "en_US.UTF-8",
+    "XDG_CURRENT_DESKTOP": "ubuntu:GNOME",
+    "LC_TELEPHONE": "pt_BR.UTF-8",
+    "npm_package_devDependencies_eslint": "^6.6.0",
+    "XMODIFIERS": "@im=ibus",
+    "XDG_SESSION_DESKTOP": "ubuntu",
+    "XAUTHORITY": "/run/user/1000/gdm/Xauthority",
+    "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:",
+    "GNOME_TERMINAL_SERVICE": ":1.148",
+    "npm_lifecycle_script": "yarn run nodemon app.js",
+    "npm_package_main": "index.js",
+    "npm_package_dependencies_express_session": "^1.17.0",
+    "npm_package_dependencies_aws_sdk": "^2.548.0",
+    "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh",
+    "npm_package_devDependencies_concurrently": "^4.1.2",
+    "npm_package_scripts_test": "echo \"Error: no test specified\" && exit 1",
+    "npm_config_version_git_message": "v%s",
+    "npm_package_dependencies_http_proxy_middleware": "^0.20.0",
+    "npm_package_dependencies_chalk": "^2.4.2",
+    "SHELL": "/bin/bash",
+    "LC_NAME": "pt_BR.UTF-8",
+    "npm_lifecycle_event": "nodemon",
+    "npm_package_version": "1.0.0",
+    "npm_package_repository_url": "git+https://github.com/Davi-Silva/runnvbnvibnivb.git",
+    "npm_package_husky_hooks_pre_commit": "echo 'testing'",
+    "GDMSESSION": "ubuntu",
+    "npm_config_argv": "{\"remain\":[],\"cooked\":[\"run\",\"dev\"],\"original\":[\"run\",\"dev\"]}",
+    "npm_package_devDependencies_lint_staged": "^9.4.2",
+    "npm_package_dependencies_uuid": "^3.3.3",
+    "npm_package_dependencies_ejs": "^2.7.1",
+    "npm_package_dependencies_cors": "^2.8.5",
+    "LESSCLOSE": "/usr/bin/lesspipe %s %s",
+    "npm_package_dependencies_nodemon": "^1.19.3",
+    "npm_package_dependencies_lodash": "^4.17.15",
+    "LC_MEASUREMENT": "pt_BR.UTF-8",
+    "npm_config_version_git_tag": "true",
+    "npm_config_version_git_sign": "",
+    "npm_package_dependencies_passport_twitch_js": "^0.0.7",
+    "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1",
+    "GJS_DEBUG_OUTPUT": "stderr",
+    "LC_IDENTIFICATION": "pt_BR.UTF-8",
+    "npm_package_license": "ISC",
+    "npm_config_strict_ssl": "true",
+    "npm_package_dependencies_mongoose": "^5.7.4",
+    "QT_IM_MODULE": "ibus",
+    "npm_package_dependencies_passport_spotify": "^1.1.0",
+    "PWD": "/home/davi/Documents/Dev/cryptic-activist/backend",
+    "npm_execpath": "/usr/share/yarn/bin/yarn.js",
+    "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu:/etc/xdg",
+    "CLUTTER_IM_MODULE": "ibus",
+    "NVM_CD_FLAGS": "",
+    "XDG_DATA_DIRS": "/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop",
+    "npm_package_author_name": "Davi Silva",
+    "LC_NUMERIC": "pt_BR.UTF-8",
+    "npm_config_save_prefix": "^",
+    "npm_config_ignore_optional": "",
+    "LC_PAPER": "pt_BR.UTF-8",
+    "npm_package_dependencies_jsonwebtoken": "^8.5.1",
+    "VTE_VERSION": "5802",
+    "npm_package_dependencies_passport_facebook": "^3.0.0",
+    "INIT_CWD": "/home/davi/Documents/Dev/cryptic-activist",
+    "npm_package_dependencies_morgan": "^1.9.1",
+    "NODE_ENV": "development",
+    "APP_URL": "http://localhost:5000/",
+    "ATLAS_URI": "mongodb+srv://admin:1xwBerFazZqoXFzD@cryptic-activist-dywyj.mongodb.net/cryptic-activist-development?retryWrites=true&w=majority",
+    "AWS_ACCESS_KEY_ID": "AKIAUMMJLGMWOXKQOFS3",
+    "AWS_SECRET_ACCESS_KEY": "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",
+    "BUCKET_NAME": "course-blog-podcast-bucket",
+    "STORAGE_TYPE": "s3"
+  },
+  "userLimits": {
+    "core_file_size_blocks": {
+      "soft": 0,
+      "hard": "unlimited"
+    },
+    "data_seg_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "file_size_blocks": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_locked_memory_bytes": {
+      "soft": 67108864,
+      "hard": 67108864
+    },
+    "max_memory_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "open_files": {
+      "soft": 1048576,
+      "hard": 1048576
+    },
+    "stack_size_bytes": {
+      "soft": 8388608,
+      "hard": "unlimited"
+    },
+    "cpu_time_seconds": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_user_processes": {
+      "soft": 31078,
+      "hard": 31078
+    },
+    "virtual_memory_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    }
+  },
+  "sharedObjects": [
+    "linux-vdso.so.1",
+    "/lib/x86_64-linux-gnu/libdl.so.2",
+    "/lib/x86_64-linux-gnu/libstdc++.so.6",
+    "/lib/x86_64-linux-gnu/libm.so.6",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+    "/lib/x86_64-linux-gnu/libpthread.so.0",
+    "/lib/x86_64-linux-gnu/libc.so.6",
+    "/lib64/ld-linux-x86-64.so.2",
+    "/lib/x86_64-linux-gnu/libnss_files.so.2",
+    "/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2",
+    "/lib/x86_64-linux-gnu/libresolv.so.2",
+    "/lib/x86_64-linux-gnu/libnss_dns.so.2"
+  ]
+}
