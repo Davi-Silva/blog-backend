@@ -4,11 +4,11 @@ services:
   app:
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:crypticactivist.com"
+      - "traefik.frontend.rule=Host:api.crypticactivist.com"
 
   reverse-proxy:
     image: traefik:v2.0
-    command: --api --docker.exposedbydefault=false --api.insecure=true --providers.docker
+    command: --api.insecure=true --providers.docker
     ports:
       - "80:80"
       - "8080:8080"
