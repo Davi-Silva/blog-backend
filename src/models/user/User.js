@@ -34,10 +34,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  posts: {
-    type: [],
-    required: false,
-  },
+  posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+    }
+  ],
   quote: {
     type: String,
     required: false,

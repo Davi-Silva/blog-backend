@@ -89,7 +89,7 @@ app.post('/course/publish', (req, res) => {
       errorsMsg: errors,
     });
   } else {
-    const response = fetch('https://cryptic-activist-backend.herokuapp.com/courses/course/id');
+    const response = fetch('http://localhost:5000/courses/course/id');
     const id = uuidv4();
     const type = 'course';
     const published_on = Date.now();

@@ -70,6 +70,7 @@ app.post('/publish', async (req, res) => {
     cover,
     author,
   } = req.body;
+  console.log('uploaded cover:', cover)
 
   const errors = [];
   if (!isSlugValid
@@ -93,7 +94,7 @@ app.post('/publish', async (req, res) => {
     const id = uuidv4();
     const publishedOn = Date.now();
     const updatedOn = null;
-    if (isSlugValid) {
+    if (isSlugValixd) {
       const date = new Date();
       const fullSlug = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}/${slug}`;
       console.log('fullSlug:', fullSlug);
