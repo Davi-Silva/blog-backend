@@ -106,7 +106,6 @@ router.put('/update', (req, res) => {
   })
     .then(() => {
       res.status(200).send({
-        updated: true,
         quote,
         email,
         github,

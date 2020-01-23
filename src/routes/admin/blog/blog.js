@@ -94,7 +94,8 @@ app.post('/publish', async (req, res) => {
     const id = uuidv4();
     const publishedOn = Date.now();
     const updatedOn = null;
-    if (isSlugValixd) {
+    console.log('BEFORE IF isSlugValid:', isSlugValid)
+    if (isSlugValid) {
       const date = new Date();
       const fullSlug = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()}/${slug}`;
       console.log('fullSlug:', fullSlug);
