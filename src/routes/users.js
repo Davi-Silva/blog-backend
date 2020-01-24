@@ -146,13 +146,11 @@ router.put('/update/follow/author', async (req, res) => {
   const user = await User.findOne({ _id: userId });
   const author = await User.findOne({ _id: authorId });
 
-  console.log('user.following:', user.following);
-  console.log('user.following.indexOf(authorId):', user.following.includes(`${authorId}`));
-
   const userFollowingArray = user.following;
   const authorFollowersArray = author.followers;
   userFollowingArray.push(authorId);
   authorFollowersArray.push(userId);
+  console.log("user:", user)
   await User.updateOne({
     _id: user,
   }, {
@@ -188,7 +186,7 @@ router.put('/update/follow/author', async (req, res) => {
     });
 
   res.status(200).send({
-    ok: true,
+    authorId,
   });
 });
 
