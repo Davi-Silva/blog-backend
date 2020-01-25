@@ -128,8 +128,7 @@ router.post('/verify/following/author', async (req, res) => {
   } = req.body;
 
   const user = await User.findOne({ _id: userId });
-  console.log('user.following:', user.following)
-  console.log('user.followers:', user.followers)
+
   res.json({
     following: user.followers.indexOf(authorId),
     followers: user.following.indexOf(authorId),
@@ -141,8 +140,6 @@ router.put('/update/follow/author', async (req, res) => {
     userId,
     authorId,
   } = req.body;
-  console.log('userId:', userId)
-  console.log('authorId:', authorId)
   const user = await User.findOne({ _id: userId });
   const author = await User.findOne({ _id: authorId });
 
@@ -150,8 +147,6 @@ router.put('/update/follow/author', async (req, res) => {
   const authorFollowersArray = author.followers;
   userFollowingArray.push(authorId);
   authorFollowersArray.push(userId);
-  console.log("userFollowingArray:", userFollowingArray)
-  console.log("authorFollowersArray:", authorFollowersArray)
   await User.updateOne({
     _id: userId,
   }, {
@@ -196,56 +191,61 @@ router.put('/update/unfollow/author', async (req, res) => {
     userId,
     authorId,
   } = req.body;
-  console.log('userId:', userId)
-  console.log('authorId:', authorId)
+  console.log('-------------------------------------------')
+  console.log('UNFOLLOW userId:', userId)
+  console.log('UNFOLLOW authorId:', authorId)
   console.log('unfollowing...')
   const user = await User.findOne({ _id: userId });
   const author = await User.findOne({ _id: authorId });
 
-  let userFollowingArray = user.following;
-  let authorFollowersArray = author.followers;
-  console.log("BEFORE userFollowingArray:", userFollowingArray)
-  console.log("BEFORE authorFollowersArray:", authorFollowersArray)
-  userFollowingArray = userFollowingArray.splice(userFollowingArray.indexOf(userId))
-  authorFollowersArray = authorFollowersArray.splice(authorFollowersArray.indexOf(authorId))
-  console.log("AFTER userFollowingArray:", userFollowingArray)
-  console.log("AFTER authorFollowersArray:", authorFollowersArray)
-  // await User.updateOne({
-  //   _id: userId,
-  // }, {
-  //   following: userFollowingArray,
-  // }, {
-  //   runValidators: true,
-  // })
-  //   .then(() => {
-  //     isFollowing = true;
-  //   })
-  //   .catch((err) => {
-  //     res.json({
-  //       updated: false,
-  //       err,
-  //     });
-  //   });
+  let userFollowingArray = author.following;
+  let authorFollowersArray = user.followers;
+  console.log('-------------------------------------------')
+  console.log("UNFOLLOW BEFORE userFollowingArray:", userFollowingArray)
+  console.log("UNFOLLOW BEFORE authorFollowersArray:", authorFollowersArray)
+  console.log('-------------------------------------------')
+  userFollowingArray.splice(userFollowingArray.indexOf(authorId), 1)
+  authorFollowersArray.splice(authorFollowersArray.indexOf(userId), 1)
+  console.log('-------------------------------------------')
+  console.log("UNFOLLOW DONE userFollowingArray:", userFollowingArray)
+  console.log("UNFOLLOW DONE authorFollowersArray:", authorFollowersArray)
+  console.log('-------------------------------------------')
+  await User.updateOne({
+    _id: authorId,
+  }, {
+    following: authorFollowersArray,
+  }, {
+    runValidators: true,
+  })
+    .then(() => {
+      isFollowing = true;
+    })
+    .catch((err) => {
+      res.json({
+        updated: false,
+        err,
+      });
+    });
 
-  // await User.updateOne({
-  //   _id: authorId,
-  // }, {
-  //   followers: authorFollowersArray,
-  // }, {
-  //   runValidators: true,
-  // })
-  //   .then(() => {
-  //     isFollowers = true;
-  //   })
-  //   .catch((err) => {
-  //     res.json({
-  //       updated: false,
-  //       err,
-  //     });
-  //   });
+  await User.updateOne({
+    _id: userId,
+  }, {
+    followers: userFollowingArray,
+  }, {
+    runValidators: true,
+  })
+    .then(() => {
+      isFollowers = true;
+    })
+    .catch((err) => {
+      res.json({
+        updated: false,
+        err,
+      });
+    });
 
   res.status(200).send({
-    authorId,
+    userFollowingArray,
   });
 });
 

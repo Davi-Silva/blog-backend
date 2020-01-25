@@ -505,12 +505,12 @@ app.get('/get/category/newest/:category/:year/:month/:day/:slug', async (req, re
         }
       });
       postsList = postsList.reverse();
-      if (postsList.length === 0) {
-        console.log('EMPTY');
-        res.json({
-          found: false,
-        });
-      }
+      // if (postsList.length === 0) {
+      //   console.log('EMPTY');
+      //   res.json({
+      //     found: false,
+      //   });
+      // }
       if (postsList.length > 4) {
         postsList = postsList.slice(0, 4);
       }
