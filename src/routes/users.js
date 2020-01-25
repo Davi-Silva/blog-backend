@@ -128,13 +128,11 @@ router.post('/verify/following/author', async (req, res) => {
   } = req.body;
 
   const user = await User.findOne({ _id: userId });
-  console.log('user:', user);
-
-  console.log('user.following.indexOf(authorId):', user.followers.indexOf(authorId));
-
+  console.log('user.following:', user.following)
+  console.log('user.followers:', user.followers)
   res.json({
-    following: user.following.indexOf(authorId),
-    followers: user.followers.indexOf(authorId),
+    following: user.followers.indexOf(authorId),
+    followers: user.following.indexOf(authorId),
   });
 });
 
@@ -143,6 +141,8 @@ router.put('/update/follow/author', async (req, res) => {
     userId,
     authorId,
   } = req.body;
+  console.log('userId:', userId)
+  console.log('authorId:', authorId)
   const user = await User.findOne({ _id: userId });
   const author = await User.findOne({ _id: authorId });
 
@@ -150,9 +150,10 @@ router.put('/update/follow/author', async (req, res) => {
   const authorFollowersArray = author.followers;
   userFollowingArray.push(authorId);
   authorFollowersArray.push(userId);
-  console.log("user:", user)
+  console.log("userFollowingArray:", userFollowingArray)
+  console.log("authorFollowersArray:", authorFollowersArray)
   await User.updateOne({
-    _id: user,
+    _id: userId,
   }, {
     following: userFollowingArray,
   }, {
@@ -189,5 +190,64 @@ router.put('/update/follow/author', async (req, res) => {
     authorId,
   });
 });
+
+router.put('/update/unfollow/author', async (req, res) => {
+  const {
+    userId,
+    authorId,
+  } = req.body;
+  console.log('userId:', userId)
+  console.log('authorId:', authorId)
+  console.log('unfollowing...')
+  const user = await User.findOne({ _id: userId });
+  const author = await User.findOne({ _id: authorId });
+
+  let userFollowingArray = user.following;
+  let authorFollowersArray = author.followers;
+  console.log("BEFORE userFollowingArray:", userFollowingArray)
+  console.log("BEFORE authorFollowersArray:", authorFollowersArray)
+  userFollowingArray = userFollowingArray.splice(userFollowingArray.indexOf(userId))
+  authorFollowersArray = authorFollowersArray.splice(authorFollowersArray.indexOf(authorId))
+  console.log("AFTER userFollowingArray:", userFollowingArray)
+  console.log("AFTER authorFollowersArray:", authorFollowersArray)
+  // await User.updateOne({
+  //   _id: userId,
+  // }, {
+  //   following: userFollowingArray,
+  // }, {
+  //   runValidators: true,
+  // })
+  //   .then(() => {
+  //     isFollowing = true;
+  //   })
+  //   .catch((err) => {
+  //     res.json({
+  //       updated: false,
+  //       err,
+  //     });
+  //   });
+
+  // await User.updateOne({
+  //   _id: authorId,
+  // }, {
+  //   followers: authorFollowersArray,
+  // }, {
+  //   runValidators: true,
+  // })
+  //   .then(() => {
+  //     isFollowers = true;
+  //   })
+  //   .catch((err) => {
+  //     res.json({
+  //       updated: false,
+  //       err,
+  //     });
+  //   });
+
+  res.status(200).send({
+    authorId,
+  });
+});
+
 
 module.exports = router;
