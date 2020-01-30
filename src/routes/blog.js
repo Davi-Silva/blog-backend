@@ -2,6 +2,7 @@
 const express = require('express');
 
 const app = express();
+const router = express.Router()
 const cors = require('cors');
 const uuidv4 = require('uuid/v4');
 const multer = require('multer');
@@ -11,7 +12,7 @@ const multerConfig = require('../config/multer');
 
 app.use(cors());
 // app.use(authMiddleware);
-
+ 
 const Post = require('../models/blog/Post');
 const PostCover = require('../models/blog/PostCover');
 const User = require('../models/user/User');
@@ -330,6 +331,7 @@ app.get('/most/recent/post', async (req, res) => {
 
 app.get('/get/top-authors', async (req, res) => {
   User.find()
+    .populate('profileImage')
     .then((users) => {
       res.status(200).send(users);
     })
@@ -539,6 +541,14 @@ app.get('/get/categories/newest/:number', async (req, res) => {
       });
     });
 });
+
+app.get('/get/all/comments', (req, res) => {
+  const {
+    postId,
+  } = req.query;
+  console.log("postId", postId)
+});
+
 
 app.get('/get/tag/:tag', async (req, res) => {
   const { tag } = req.params;

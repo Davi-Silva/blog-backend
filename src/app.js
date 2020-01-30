@@ -56,6 +56,7 @@ app.use('/users', require('./routes/users'));
 app.use('/podcasts', require('./routes/podcasts'));
 app.use('/courses', require('./routes/courses'));
 app.use('/blog', require('./routes/blog'));
+app.use('/blog/contributor', require('./routes/contributor/blog'));
 // app.use('/admin/podcasts', require('./routes/admin/podcasts/podcasts'));
 // app.use('/admin/courses', require('./routes/admin/courses/courses'));
 app.use('/admin/blog', require('./routes/admin/blog/blog'));
