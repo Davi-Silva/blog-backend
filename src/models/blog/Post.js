@@ -34,6 +34,13 @@ const PostSchema = new mongoose.Schema({
     type: [],
     required: false,
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment',
+      required: false,
+    }
+  ],
   cover: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'PostCover',

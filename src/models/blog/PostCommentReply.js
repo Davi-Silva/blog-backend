@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const CommentReplySchema = new mongoose.Schema({
+const PostCommentReplySchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
@@ -42,6 +42,6 @@ const CommentReplySchema = new mongoose.Schema({
   },
 });
 
-const CommentReply = mongoose.model('Comment', CommentReplySchema);
+const PostCommentReply = mongoose.model('CommentReply', PostCommentReplySchema);
 
-module.exports = CommentReply;
+module.exports = PostCommentReply;

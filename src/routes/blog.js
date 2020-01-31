@@ -542,13 +542,12 @@ app.get('/get/categories/newest/:number', async (req, res) => {
     });
 });
 
-app.get('/get/all/comments', (req, res) => {
+app.get('/comments', (req, res) => {
   const {
     postId,
   } = req.query;
   console.log("postId", postId)
 });
-
 
 app.get('/get/tag/:tag', async (req, res) => {
   const { tag } = req.params;

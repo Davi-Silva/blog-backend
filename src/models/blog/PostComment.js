@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const CommentReply = require('./CommentReply');
+const PostCommentReply = require('./PostCommentReply')
 
-const CommentSchema = new mongoose.Schema({
+const PostCommentSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
@@ -25,7 +25,7 @@ const CommentSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-  dislike: {
+  dislikes: {
     type: Number,
     required: false,
   },
@@ -46,6 +46,6 @@ const CommentSchema = new mongoose.Schema({
   },
 });
 
-const Comment = mongoose.model('Comment', CommentSchema);
+const PostComment = mongoose.model('PostComment', PostCommentSchema);
 
-module.exports = Comment;
+module.exports = PostComment;

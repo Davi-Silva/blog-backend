@@ -109,6 +109,7 @@ app.post('/publish', async (req, res) => {
         slug: fullSlug,
         cover,
         tags,
+        comments: [],
         content,
         author,
         publishedOn,
