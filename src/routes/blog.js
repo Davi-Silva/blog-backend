@@ -14,6 +14,7 @@ app.use(cors());
 // app.use(authMiddleware);
  
 const Post = require('../models/blog/Post');
+const Comment = require('../models/blog/PostComment')
 const PostCover = require('../models/blog/PostCover');
 const User = require('../models/user/User');
 
@@ -522,6 +523,33 @@ app.get('/get/category/newest/:category/:year/:month/:day/:slug', async (req, re
       console.log(err);
     });
 });
+
+app.post('/comments/', async (req, res) => {
+  const {
+    comments
+  } = req.body;
+
+  console.log('comments:', comments)
+
+  Comment.find(comments)
+    .populate({
+      path: 'author',
+      populate: {
+        path: 'profileImage',
+        model: 'UserProfileImage',
+      },
+    })
+    .then((commentsArray) => {
+      res.json(commentsArray)
+    })
+    .catch((err) => {
+      res.json({
+        err,
+      })
+    })
+
+});
+
 
 app.get('/get/categories/newest/:number', async (req, res) => {
   const { number } = req.params;

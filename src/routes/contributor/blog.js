@@ -18,6 +18,10 @@ app.post('/comment/post', async (req, res) => {
     content,
   } = req.body;
 
+  console.log('postId:', postId)
+  console.log('userId:', userId)
+  console.log('content:', content)
+
   const errors = [];
   if (!postId || !userId || !content) {
     errors.push({
@@ -34,6 +38,7 @@ app.post('/comment/post', async (req, res) => {
     const id = uuidv4();
     const publishedOn = Date.now();
     const updatedOn = null;
+    let commentObj;
     let commentId;
     const newComment = new Comment({
       id,
@@ -49,6 +54,8 @@ app.post('/comment/post', async (req, res) => {
     await newComment
       .save()
       .then((comment) => {
+        console.log('comment:', comment)
+        commentObj = comment;
         commentId = comment._id;
       })
       .catch((err) => {
@@ -62,8 +69,21 @@ app.post('/comment/post', async (req, res) => {
       const PostObj = await Post.findOne({
         _id: postId,
       });
+
       let postObjComments = await PostObj.comments;
       console.log('commentId:', commentId)
+      
+      const CommentObj = await Comment.findOne({
+        _id: commentId,
+      }).populate({
+        path: 'author',
+        populate: {
+          path: 'profileImage',
+          model: 'UserProfileImage',
+        },
+      })
+      
+      console.log('CommentObj:', CommentObj)
 
       postObjComments.push(commentId)
       await Post.updateOne({
@@ -73,7 +93,7 @@ app.post('/comment/post', async (req, res) => {
       }, {
         runValidation: true,
       })
-      res.status(200).send({ok: true})
+      res.status(200).send(CommentObj)
     } catch(err) {
       console.log('err:', err)
       res.json({
