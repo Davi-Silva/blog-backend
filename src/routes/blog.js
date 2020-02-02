@@ -526,12 +526,14 @@ app.get('/get/category/newest/:category/:year/:month/:day/:slug', async (req, re
 
 app.post('/comments/', async (req, res) => {
   const {
-    comments
+    postId
   } = req.body;
 
-  console.log('comments:', comments)
+  console.log('comments:', postId)
 
-  Comment.find(comments)
+  Comment.find({
+    post: postId,
+  })
     .populate({
       path: 'author',
       populate: {
@@ -540,6 +542,7 @@ app.post('/comments/', async (req, res) => {
       },
     })
     .then((commentsArray) => {
+      console.log('commentsArray:', commentsArray)
       res.json(commentsArray)
     })
     .catch((err) => {
