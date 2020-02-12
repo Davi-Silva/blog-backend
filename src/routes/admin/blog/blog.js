@@ -243,7 +243,9 @@ app.delete('/delete/:id', (req, res) => {
 
 app.delete('/delete/cover/:id', async (req, res) => {
   const { id } = req.params;
-  const coverFile = await Post.findById(id);
+  const coverFile = await PostCover.findOne({
+    _id: id
+  });
   console.log('id:', id);
   console.log('coverFile:', coverFile);
   await coverFile.remove();

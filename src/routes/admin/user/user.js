@@ -5,6 +5,7 @@ const cors = require('cors');
 const uuidv4 = require('uuid/v4');
 const multer = require('multer');
 const multerConfig = require('../../../config/multer');
+const _ = require('lodash')
 
 app.use(cors());
 
@@ -54,13 +55,15 @@ app.get('/verify/admin/username/:username', (req, res) => {
     });
 });
 
-app.post('/register/admin', (req, res) => {
+app.post('/register/admin', async (req, res) => {
   const {
-    user,
-    password,
+    adminRegisterInfo,
+    profilePictureId,
   } = req.body;
+  console.log('adminRegisterInfo:', adminRegisterInfo)
+  console.log('profilePictureId:', profilePictureId)
   const errors = [];
-  if (!user || !password) {
+  if (!adminRegisterInfo || !profilePictureId) {
     errors.push({
       errorMsg: 'Please enter all fields.',
     });
@@ -71,46 +74,103 @@ app.post('/register/admin', (req, res) => {
       error: errors,
     });
   } else {
-    const id = uuidv4();
-    const newUser = new User({
-      id,
-      name: '',
-      username: user,
-      email: '',
-      password,
-      isAdmin: true,
-      origin: 'Local',
-    });
-    newUser
-      .save()
-      .then(() => {
-        res.status(200).send({
-          msg: 'New admin user has been successfully created.',
-          id,
-        });
+
+    try {
+      await UserProfileImage.updateOne({
+        id: profilePictureId,
+      }, {
+        name: `${adminRegisterInfo.name} profile picture`,
+      }, {
+        runValidators: true,
+      })
+
+      const profileImage = await UserProfileImage.findOne({
+        id: profilePictureId,
+      })
+
+      console.log('profileImage._id:', profileImage);
+      const id = uuidv4();
+      const newUser = new User({
+        id,
+        name: adminRegisterInfo.name,
+        username: adminRegisterInfo.user,
+        profileImage: profileImage,
+        email: '',
+        quote: '',
+        password: adminRegisterInfo.password,
+        isAdmin: true,
+        origin: 'Local',
+        socialMedia: {
+          github: '',
+          linkedin: '',
+          twitter: '',
+        },
       });
+      newUser
+        .save()
+        .then(async (user) => {
+          const userinfo = await User.findOne({
+            id: user.id,
+          })
+          .populate('profileImage')
+          console.log('userinfo:', userinfo)
+          res.status(200).send(userinfo);
+        });
+    } catch(err) {
+      console.log(err)
+    }
   }
+});
+
+app.post('/login/admin', (req, res) => {
+  const {
+    adminUser: username,
+    adminPassword: password,
+  } = req.body;
+  console.log('username:', username);
+  console.log('password:', password);
+  User.findOne({
+    username,
+    password
+  })
+    .populate('profileImage')
+    .then((user) => {
+      console.log('user:', user)
+      if (user === null || user === undefined) {
+        res.json({});
+      } else if (!_.isEmpty(user)) {
+        res.status(200).send(user);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.post('/upload/profile-image', multer(multerConfig).single('file'), async (req, res) => {
   const {
-    originalname: name,
-    size,
-    key,
-    location: url = '',
-  } = req.file;
-  const id = uuidv4();
-  console.log('id:', id);
-
-  const profileImage = await UserProfileImage.create({
     id,
-    name,
-    size,
-    key,
     url,
-  });
+  } = req.file;
+  console.log('id:', id);
+  console.log('url:', url);
 
-  return res.json(profileImage);
+  let name = '';
+  try {
+    const res = await User.findOne({
+      id
+    });
+    name = `${res.name} profile picture`;
+    const profileImage = await UserProfileImage.create({
+      id,
+      name,
+      url,
+      origin: 'Local'
+    });
+    return res.json(profileImage);
+  } catch(err) {
+    console.log(err)
+  }
 });
 
 app.put('/post/to/author', (req, res) => {

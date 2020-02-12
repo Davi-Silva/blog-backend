@@ -52,7 +52,7 @@ app.use(
 // Routes
 app.use('/auth', require('./routes/auth/auth'));
 // app.use("/", require("./routes/index"));
-app.use('/home', require('./routes/homepage'));
+app.use('/homepage', require('./routes/homepage'));
 app.use('/users', require('./routes/users'));
 app.use('/podcasts', require('./routes/podcasts'));
 app.use('/courses', require('./routes/courses'));

@@ -16,7 +16,6 @@ const chalk = require('chalk');
 const session = require('express-session');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/providers');
-
 const authConfig = require('../../config/auth');
 
 const User = require('../../models/user/User');
@@ -429,8 +428,6 @@ app.get(
 );
 
 app.get('/user', (req, res) => {
-  console.log('getting user data!');
-  console.log('user:', user);
   User.findOne({
     _id: user._id,
   })
@@ -442,6 +439,22 @@ app.get('/user', (req, res) => {
       res.json(err);
     });
 });
+
+app.get('/user/:id', (req, res) => {
+  const {id} = req.params;
+  console.log('id:', id)
+  User.findOne({
+    id,
+  })
+  .populate('profileImage')
+  .then((userInfo) => {
+    user = userInfo;
+    res.status(302).send(userInfo)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+})
 
 app.post('/user/refresh', (req, res) => {
   const {

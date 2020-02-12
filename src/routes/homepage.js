@@ -11,8 +11,9 @@ const Podcast = require('../models/podcast/Podcast');
 const Course = require('../models/course/Course');
 
 app.get('/get/blog/most-read', async (req, res) => {
-  Post.findOne()
+  Post.find()
   .sort('-howManyRead')
+  .limit(5)
   .then((posts) => {
     res.status(301).send(posts)
   })

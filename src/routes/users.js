@@ -6,6 +6,10 @@ const router = express.Router();
 
 // Load User model
 const User = require('../models/user/User');
+const multer = require('multer');
+const multerConfig = require('../config/multer');
+const uuidv4 = require('uuid/v4');
+const UserProfileImage = require('../models/user/UserProfileImage');
 
 const user = {};
 
@@ -191,25 +195,14 @@ router.put('/update/unfollow/author', async (req, res) => {
     userId,
     authorId,
   } = req.body;
-  console.log('-------------------------------------------')
-  console.log('UNFOLLOW userId:', userId)
-  console.log('UNFOLLOW authorId:', authorId)
-  console.log('unfollowing...')
   const user = await User.findOne({ _id: userId });
   const author = await User.findOne({ _id: authorId });
-
   let userFollowingArray = author.following;
   let authorFollowersArray = user.followers;
-  console.log('-------------------------------------------')
-  console.log("UNFOLLOW BEFORE userFollowingArray:", userFollowingArray)
-  console.log("UNFOLLOW BEFORE authorFollowersArray:", authorFollowersArray)
-  console.log('-------------------------------------------')
-  userFollowingArray.splice(userFollowingArray.indexOf(authorId), 1)
-  authorFollowersArray.splice(authorFollowersArray.indexOf(userId), 1)
-  console.log('-------------------------------------------')
-  console.log("UNFOLLOW DONE userFollowingArray:", userFollowingArray)
-  console.log("UNFOLLOW DONE authorFollowersArray:", authorFollowersArray)
-  console.log('-------------------------------------------')
+
+  userFollowingArray.splice(userFollowingArray.indexOf(authorId), 1);
+  authorFollowersArray.splice(authorFollowersArray.indexOf(userId), 1);
+
   await User.updateOne({
     _id: authorId,
   }, {
@@ -246,6 +239,39 @@ router.put('/update/unfollow/author', async (req, res) => {
 
   res.status(200).send({
     userFollowingArray,
+  });
+});
+
+router.post('/upload/profile-picture', multer(multerConfig).single('file'), async (req, res) => {
+  const {
+    originalname: name,
+    size,
+    key,
+    location: url = '',
+  } = req.file;
+  const id = uuidv4();
+
+  const profilePicture = await UserProfileImage.create({
+    id,
+    name,
+    size,
+    key,
+    url,
+    origin: 'Local',
+  });
+  console.log('profilePicture:', profilePicture)
+
+  return res.json(profilePicture);
+});
+
+router.delete('/delete/profile-picture/:id', async (req, res) => {
+  const { id } = req.params;
+  const profilePicture = await UserProfileImage.findOne({
+    id,
+  });
+  await profilePicture.remove();
+  return res.send({
+    msg: 'Blog Post cover file successfully deleted',
   });
 });
 
