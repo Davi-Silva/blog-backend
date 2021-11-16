@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/Davi-Silva/cryptic-activist-backend#readme",
   "dependencies": {
-    "aws-sdk": "^2.548.0",
+    "aws-sdk": "^2.814.0",
     "bcryptjs": "^2.4.3",
     "chalk": "^2.4.2",
     "concurrently": "^5.0.0",
